@@ -38,7 +38,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://lylikestudy.github.io/img/xxxx.png">
 <meta property="article:published_time" content="2024-10-15T12:33:28.000Z">
-<meta property="article:modified_time" content="2024-10-29T14:55:49.787Z">
+<meta property="article:modified_time" content="2024-10-29T16:39:40.313Z">
 <meta property="article:author" content="林羽">
 <meta property="article:tag" content="计算机网络">
 <meta name="twitter:card" content="summary">
@@ -178,7 +178,7 @@
       <div class="article-date">
   <a href="" class="article-date-link" data-aos="zoom-in">
     <time datetime="2024-10-15T12:33:28.000Z" itemprop="datePublished">2024-10-15</time>
-    <time style="display: none;" id="post-update-time">2024-10-29</time>
+    <time style="display: none;" id="post-update-time">2024-10-30</time>
   </a>
 </div>
 
@@ -297,9 +297,65 @@
 <li>HTTPS: 搜索引擎更倾向于优先展示 HTTPS 网站.</li>
 </ul>
 <hr>
-<h1 id="TCP"><a href="#TCP" class="headerlink" title="TCP"></a>TCP</h1><h2 id="到底什么是TCP连接？"><a href="#到底什么是TCP连接？" class="headerlink" title="到底什么是TCP连接？"></a>到底什么是TCP连接？</h2><p>根据 RFC793 定义，TCP的连接就是：TCP 为每个数据流初始化并维护的某些状态信息（这些信息包括 socket、序列号 和 窗口大小），称为连接。</p>
+<h1 id="TCP-和-UDP"><a href="#TCP-和-UDP" class="headerlink" title="TCP 和 UDP"></a>TCP 和 UDP</h1><h2 id="到底什么是TCP连接？"><a href="#到底什么是TCP连接？" class="headerlink" title="到底什么是TCP连接？"></a>到底什么是TCP连接？</h2><p>根据 RFC793 定义，TCP的连接就是：TCP 为每个数据流初始化并维护的某些状态信息（这些信息包括 socket、序列号 和 窗口大小），称为连接。</p>
 <p>这些信息主要是为了实现可靠性和流量控制机制。</p>
 <p>所以，TCP所谓的是，面向连接的并不是真的拉了一条线让端与端之间连起来，只是双方都维护了一个状态，通过每一次通信来维护状态的变更，使得看起来好像有一条线关联了对方。</p>
+<h2 id="TCP-是用来解决什么问题"><a href="#TCP-是用来解决什么问题" class="headerlink" title="TCP 是用来解决什么问题?"></a>TCP 是用来解决什么问题?</h2><p>TCP （Transmission Control Protocol）通过提供可靠传输、流量控制、拥塞控制和连接管理，解决了数据在不可靠的 IP 网络上的传输问题：</p>
+<ul>
+<li>可靠性传输：TCP 确保数据包在网络传输过程中不丢失、不重复，并且按顺序到达。通过确认（ACK）、重传机制以及序列号，TCP 能够保证数据在不可靠的 IP 网络上可靠传输。</li>
+<li>流量控制：TCP 通过滑动窗口机制调节发送方的数据发送速率，防止接收方因为处理能力有限而被数据流淹没。</li>
+<li>拥塞控制：TCP 通过拥塞避免算法（如慢启动、拥塞避免、快速重传和快速恢复）来防止网络过载，确保网络资源的公平使用和稳定性。</li>
+<li>连接管理：TCP 是面向连接的协议，采用三次握手（建立连接）和四次挥手（断开连接）机制来管理会话，确保通信的可靠性和状态的同步.</li>
+</ul>
+<h2 id="TCP-和-UDP-有什么区别"><a href="#TCP-和-UDP-有什么区别" class="headerlink" title="TCP 和 UDP 有什么区别?"></a>TCP 和 UDP 有什么区别?</h2><p>TCP 提供了可靠、面向连接的传输，适用于需要数据完整性和顺序的场景；</p>
+<p>UDP 提供了更轻量、面向报文的传输，适用于实时性要求高的场景。</p>
+<p>主要可以从五个方面看待不同：</p>
+<ol>
+<li>连接性：</li>
+</ol>
+<ul>
+<li>TCP：面向连接的协议。通信前需要建立连接（三次握手），通信结束后需要断开连接（四次挥手）。</li>
+<li>UDP：无连接的协议，不需要建立连接，直接发送数据包。</li>
+</ul>
+<ol start="2">
+<li>可靠性：</li>
+</ol>
+<ul>
+<li>TCP：可靠传输协议，通过确认机制、重传机制、序列号、流量控制 和 拥塞控制 确保数据不丢失、不重复、按顺序到达。</li>
+<li>UDP：不可靠传输协议，不提供确认和重传机制，数据包可能丢失、重复或乱序。</li>
+</ul>
+<ol start="3">
+<li>数据传输方式：</li>
+</ol>
+<ul>
+<li>TCP：面向字节流的协议。数据作为一个连续的流传输，可以按需分片和重组。</li>
+<li>UDP：面向报文的协议。数据作为独立的报文（数据包）传输，保留了应用层的消息边界。</li>
+</ul>
+<ol start="4">
+<li>性能：</li>
+</ol>
+<ul>
+<li>TCP：由于需要连接建立、确认和重传机制，传输速度相对较慢，但提供了可靠性。</li>
+<li>UDP：传输速度快，因为没用连接建立和维护的开销，也没用确认和重传机制。</li>
+</ul>
+<ol start="5">
+<li>应用场景：</li>
+</ol>
+<ul>
+<li>TCP：适用于需要可靠传输的应用，如网页浏览（HTTP&#x2F;HTTPS）、文件传输（FTP）、电子邮件（SMTP&#x2F;IMAP）等。</li>
+<li>UDP：适用于对速度要求高但对可靠性要求不高的应用，如视频直播，在线游戏、DNS查询等。</li>
+</ul>
+<p>​                                                                                                                                                                                         </p>
+<h2 id="为什么要-TCP，IP-层实现控制不行吗？"><a href="#为什么要-TCP，IP-层实现控制不行吗？" class="headerlink" title="为什么要 TCP，IP 层实现控制不行吗？"></a>为什么要 TCP，IP 层实现控制不行吗？</h2><blockquote>
+<p>IP 层对应的传输过程，存在路由的过程，会经过多个路由设备（不仅仅时，发送和接受两端的设备）。这样子的话，如果要把传输控制的内容加在 IP 层，那么中间的路由设备上都要关系这个传输控制，会明显降低传输效率，也会增加传输控制的复杂性。</p>
+<p>所以，在 IP 层上面加一层 TCP 层，专门复测对端的传输控制逻辑，效率会更高一些。</p>
+</blockquote>
+<p>主要是为了分层架构设计的灵活性和可扩展性。</p>
+<p>IP 层负责数据包的路由 和 传输，而TCP提供传输层可靠性服务，这种分离使得网络协议更加灵活和可扩展。</p>
+<p>基于 IP 层，如果需要可靠性服务，那么上层可以使用 TCP 协议，如果不需要可靠性服务，对实时性要求较高，且允许一定程度的数据丢失，可以使用 UDP。</p>
+<p>所以，这样设计可以在 IP 层之上构建其他传输协议（如 UDP、SCTP）,<strong>为不同应用提供更合适的传输服务，而无需修改 IP 层实现。</strong></p>
+<p>并且，一条数据在网络上传输需要经过很多设备，而设备之间需要靠 IP 层实现了控制，那么整体传输的效率会大打折扣，这样整体通信的信息都会变差。</p>
+<p>​    </p>
 
       
     </div>
@@ -357,7 +413,7 @@
   <h3 class="toc-title">文章目录</h3>
   <div class="sidebar-toc-wrapper toc-div-class" >
       
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-HTTP"><span class="toc-number">1.</span> <span class="toc-text">1. HTTP</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E7%9A%84-HTTP-%E7%8A%B6%E6%80%81%E7%A0%81%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F"><span class="toc-number">1.1.</span> <span class="toc-text">常见的 HTTP 状态码有哪些？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-%E8%AF%B7%E6%B1%82%E5%8C%85%E5%90%AB%E5%93%AA%E4%BA%9B%E5%86%85%E5%AE%B9%EF%BC%8C%E8%AF%B7%E6%B1%82%E5%A4%B4%E5%92%8C%E8%AF%B7%E6%B1%82%E4%BD%93%E6%9C%89%E5%93%AA%E4%BA%9B%E7%B1%BB%E5%9E%8B%EF%BC%9F"><span class="toc-number">1.2.</span> <span class="toc-text">HTTP 请求包含哪些内容，请求头和请求体有哪些类型？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%99%A4%E4%BA%86%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B%EF%BC%8C%E8%BF%98%E6%9C%89%E4%BB%80%E4%B9%88%E6%96%B9%E6%B3%95%E6%96%AD%E5%BC%80%E8%BF%9E%E6%8E%A5%EF%BC%9F"><span class="toc-number">1.3.</span> <span class="toc-text">除了四次挥手，还有什么方法断开连接？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-%E5%92%8C-HTTPS-%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="toc-number">1.4.</span> <span class="toc-text">HTTP 和 HTTPS 有什么区别？</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#TCP"><span class="toc-number">2.</span> <span class="toc-text">TCP</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%B0%E5%BA%95%E4%BB%80%E4%B9%88%E6%98%AFTCP%E8%BF%9E%E6%8E%A5%EF%BC%9F"><span class="toc-number">2.1.</span> <span class="toc-text">到底什么是TCP连接？</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-HTTP"><span class="toc-number">1.</span> <span class="toc-text">1. HTTP</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E7%9A%84-HTTP-%E7%8A%B6%E6%80%81%E7%A0%81%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F"><span class="toc-number">1.1.</span> <span class="toc-text">常见的 HTTP 状态码有哪些？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-%E8%AF%B7%E6%B1%82%E5%8C%85%E5%90%AB%E5%93%AA%E4%BA%9B%E5%86%85%E5%AE%B9%EF%BC%8C%E8%AF%B7%E6%B1%82%E5%A4%B4%E5%92%8C%E8%AF%B7%E6%B1%82%E4%BD%93%E6%9C%89%E5%93%AA%E4%BA%9B%E7%B1%BB%E5%9E%8B%EF%BC%9F"><span class="toc-number">1.2.</span> <span class="toc-text">HTTP 请求包含哪些内容，请求头和请求体有哪些类型？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%99%A4%E4%BA%86%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B%EF%BC%8C%E8%BF%98%E6%9C%89%E4%BB%80%E4%B9%88%E6%96%B9%E6%B3%95%E6%96%AD%E5%BC%80%E8%BF%9E%E6%8E%A5%EF%BC%9F"><span class="toc-number">1.3.</span> <span class="toc-text">除了四次挥手，还有什么方法断开连接？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-%E5%92%8C-HTTPS-%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="toc-number">1.4.</span> <span class="toc-text">HTTP 和 HTTPS 有什么区别？</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#TCP-%E5%92%8C-UDP"><span class="toc-number">2.</span> <span class="toc-text">TCP 和 UDP</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%B0%E5%BA%95%E4%BB%80%E4%B9%88%E6%98%AFTCP%E8%BF%9E%E6%8E%A5%EF%BC%9F"><span class="toc-number">2.1.</span> <span class="toc-text">到底什么是TCP连接？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TCP-%E6%98%AF%E7%94%A8%E6%9D%A5%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98"><span class="toc-number">2.2.</span> <span class="toc-text">TCP 是用来解决什么问题?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TCP-%E5%92%8C-UDP-%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB"><span class="toc-number">2.3.</span> <span class="toc-text">TCP 和 UDP 有什么区别?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81-TCP%EF%BC%8CIP-%E5%B1%82%E5%AE%9E%E7%8E%B0%E6%8E%A7%E5%88%B6%E4%B8%8D%E8%A1%8C%E5%90%97%EF%BC%9F"><span class="toc-number">2.4.</span> <span class="toc-text">为什么要 TCP，IP 层实现控制不行吗？</span></a></li></ol></li></ol>
       
   </div>
 </div>
@@ -443,10 +499,10 @@
     
       <div>
         <span class="icon-brush"></span>
-        23.4k
+        24.4k
         &nbsp;|&nbsp;
         <span class="icon-coffee"></span>
-        01:22
+        01:26
       </div>
     
     
@@ -476,7 +532,7 @@
   <h3 class="toc-title">文章目录</h3>
   <div class="sidebar-toc-wrapper toc-div-class" >
       
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-HTTP"><span class="toc-number">1.</span> <span class="toc-text">1. HTTP</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E7%9A%84-HTTP-%E7%8A%B6%E6%80%81%E7%A0%81%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F"><span class="toc-number">1.1.</span> <span class="toc-text">常见的 HTTP 状态码有哪些？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-%E8%AF%B7%E6%B1%82%E5%8C%85%E5%90%AB%E5%93%AA%E4%BA%9B%E5%86%85%E5%AE%B9%EF%BC%8C%E8%AF%B7%E6%B1%82%E5%A4%B4%E5%92%8C%E8%AF%B7%E6%B1%82%E4%BD%93%E6%9C%89%E5%93%AA%E4%BA%9B%E7%B1%BB%E5%9E%8B%EF%BC%9F"><span class="toc-number">1.2.</span> <span class="toc-text">HTTP 请求包含哪些内容，请求头和请求体有哪些类型？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%99%A4%E4%BA%86%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B%EF%BC%8C%E8%BF%98%E6%9C%89%E4%BB%80%E4%B9%88%E6%96%B9%E6%B3%95%E6%96%AD%E5%BC%80%E8%BF%9E%E6%8E%A5%EF%BC%9F"><span class="toc-number">1.3.</span> <span class="toc-text">除了四次挥手，还有什么方法断开连接？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-%E5%92%8C-HTTPS-%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="toc-number">1.4.</span> <span class="toc-text">HTTP 和 HTTPS 有什么区别？</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#TCP"><span class="toc-number">2.</span> <span class="toc-text">TCP</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%B0%E5%BA%95%E4%BB%80%E4%B9%88%E6%98%AFTCP%E8%BF%9E%E6%8E%A5%EF%BC%9F"><span class="toc-number">2.1.</span> <span class="toc-text">到底什么是TCP连接？</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-HTTP"><span class="toc-number">1.</span> <span class="toc-text">1. HTTP</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E7%9A%84-HTTP-%E7%8A%B6%E6%80%81%E7%A0%81%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F"><span class="toc-number">1.1.</span> <span class="toc-text">常见的 HTTP 状态码有哪些？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-%E8%AF%B7%E6%B1%82%E5%8C%85%E5%90%AB%E5%93%AA%E4%BA%9B%E5%86%85%E5%AE%B9%EF%BC%8C%E8%AF%B7%E6%B1%82%E5%A4%B4%E5%92%8C%E8%AF%B7%E6%B1%82%E4%BD%93%E6%9C%89%E5%93%AA%E4%BA%9B%E7%B1%BB%E5%9E%8B%EF%BC%9F"><span class="toc-number">1.2.</span> <span class="toc-text">HTTP 请求包含哪些内容，请求头和请求体有哪些类型？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%99%A4%E4%BA%86%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B%EF%BC%8C%E8%BF%98%E6%9C%89%E4%BB%80%E4%B9%88%E6%96%B9%E6%B3%95%E6%96%AD%E5%BC%80%E8%BF%9E%E6%8E%A5%EF%BC%9F"><span class="toc-number">1.3.</span> <span class="toc-text">除了四次挥手，还有什么方法断开连接？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-%E5%92%8C-HTTPS-%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="toc-number">1.4.</span> <span class="toc-text">HTTP 和 HTTPS 有什么区别？</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#TCP-%E5%92%8C-UDP"><span class="toc-number">2.</span> <span class="toc-text">TCP 和 UDP</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%B0%E5%BA%95%E4%BB%80%E4%B9%88%E6%98%AFTCP%E8%BF%9E%E6%8E%A5%EF%BC%9F"><span class="toc-number">2.1.</span> <span class="toc-text">到底什么是TCP连接？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TCP-%E6%98%AF%E7%94%A8%E6%9D%A5%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98"><span class="toc-number">2.2.</span> <span class="toc-text">TCP 是用来解决什么问题?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TCP-%E5%92%8C-UDP-%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB"><span class="toc-number">2.3.</span> <span class="toc-text">TCP 和 UDP 有什么区别?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81-TCP%EF%BC%8CIP-%E5%B1%82%E5%AE%9E%E7%8E%B0%E6%8E%A7%E5%88%B6%E4%B8%8D%E8%A1%8C%E5%90%97%EF%BC%9F"><span class="toc-number">2.4.</span> <span class="toc-text">为什么要 TCP，IP 层实现控制不行吗？</span></a></li></ol></li></ol>
       
   </div>
 </div>
