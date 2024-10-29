@@ -1,0 +1,720 @@
+
+  <!DOCTYPE html>
+  <html lang="zh-CN"  >
+  <head>
+  <meta charset="utf-8">
+  
+
+  
+
+  
+
+  
+  <script>window.icon_font = '4552607_tq6stt6tcg';window.clipboard_tips = {"success":"复制成功(*^▽^*)","fail":"复制失败 (ﾟ⊿ﾟ)ﾂ","copyright":{"enable":false,"count":50,"content":"本文版权：本博客所有文章除特别声明外，均采用 BY-NC-SA 许可协议。转载请注明出处！"}};</script>
+  
+  
+  <title>
+    openFeign（nacos）—— 知识点 |
+    
+    小羽博客
+  </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin><link rel="preload" as="style" href="https://fonts.googleapis.com/css?family=Mulish:400,400italic,700,700italic%7CNoto%20Serif%20SC:400,400italic,700,700italic&display=swap"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mulish:400,400italic,700,700italic%7CNoto%20Serif%20SC:400,400italic,700,700italic&display=swap" media="print" onload="this.media&#x3D;&#39;all&#39;">
+  
+    <link rel="preload" href="//at.alicdn.com/t/c/font_4552607_tq6stt6tcg.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  
+  
+    
+<link rel="stylesheet" href="../../../../css/loader.css">
+
+  
+  
+    <meta name="description" content="openFeign（nacos） 整理知识点">
+<meta property="og:type" content="article">
+<meta property="og:title" content="openFeign（nacos）—— 知识点">
+<meta property="og:url" content="https://lyxiaoyu0.github.io/2024/10/27/openFeign(nacos)/index.html">
+<meta property="og:site_name" content="小羽博客">
+<meta property="og:description" content="openFeign（nacos） 整理知识点">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lyxiaoyu0.github.io/img/0017-feign_liucheng.png">
+<meta property="article:published_time" content="2024-10-27T05:20:14.000Z">
+<meta property="article:modified_time" content="2024-11-01T10:56:08.241Z">
+<meta property="article:author" content="林羽">
+<meta property="article:tag" content="微服务">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lyxiaoyu0.github.io/img/0017-feign_liucheng.png">
+  
+  
+  
+    <link rel="shortcut icon" href="../../../../images/favicon.ico">
+  
+  
+<link rel="stylesheet" href="../../../../css/style.css">
+
+  <link rel="preload" href="https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  
+  
+  
+  
+    
+<script src="https://npm.webcache.cn/pace-js@1.2.4/pace.min.js"></script>
+
+  
+  
+    
+<link rel="stylesheet" href="https://npm.webcache.cn/@reimujs/aos@0.0.1/dist/aos.css">
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+  <body>
+    
+  <div id='loader'>
+    <div class="loading-left-bg loading-bg"></div>
+    <div class="loading-right-bg loading-bg"></div>
+    <div class="spinner-box">
+      <div class="loading-taichi">
+        <svg width="150" height="150" viewBox="0 0 1024 1024" class="icon" version="1.1" xmlns="https://www.w3.org/2000/svg" shape-rendering="geometricPrecision">
+          <path d="M303.5 432A80 80 0 0 1 291.5 592A80 80 0 0 1 303.5 432z" fill="#ff5252" />
+          <path d="M512 65A447 447 0 0 1 512 959L512 929A417 417 0 0 0 512 95A417 417 0 0 0 512 929L512 959A447 447 0 0 1 512 65z 
+         M512 95A417 417 0 0 1 929 512A208.5 208.5 0 0 1 720.5 720.5L720.5 592A80 80 0 0 0 720.5 432A80 80 0 0 0 720.5 592L720.5 720.5A208.5 208.5 0 0 1 512 512A208.5 208.5 0 0 0 303.5 303.5A208.5 208.5 0 0 0 95 512A417 417 0 0 1 512 95z" fill="#ff5252" />
+        </svg>
+      </div>
+      <div class="loading-word">小羽正在努力...</div>
+    </div>
+  </div>
+  </div>
+  <script>
+    var time = null;
+    var startLoading = () => {
+      time = Date.now();
+      document.getElementById('loader').classList.remove("loading");
+    }
+    var endLoading = () => {
+      if (!time) {
+        document.body.style.overflow = 'auto';
+        document.getElementById('loader').classList.add("loading");
+      } else {
+        if (Date.now() - time > 500) {
+          time = null;
+          document.body.style.overflow = 'auto';
+          document.getElementById('loader').classList.add("loading");
+        } else {
+          setTimeout(endLoading, 500 - (Date.now() - time));
+          time = null;
+        }
+      }
+    }
+    window.addEventListener('DOMContentLoaded', endLoading);
+    document.getElementById('loader').addEventListener('click', endLoading);
+  </script>
+
+<div id="copy-tooltip" style="pointer-events: none; opacity: 0; transition: all 0.2s ease; position: fixed;top: 50%;left: 50%;z-index: 999;transform: translate(-50%, -50%);color: white;background: rgba(0, 0, 0, 0.5);padding: 10px 15px;border-radius: 10px;">
+</div>
+
+
+    <div id="container">
+      <div id="wrap">
+        <div id="header-nav">
+  <nav id="main-nav">
+    
+      <span class="main-nav-link-wrap">
+        <div class="main-nav-icon icon-taichi"></div>
+        <a class="main-nav-link" href="../../../../index.html">首页</a>
+      </span>
+    
+      <span class="main-nav-link-wrap">
+        <div class="main-nav-icon icon-taichi"></div>
+        <a class="main-nav-link" href="../../../../archives">归档</a>
+      </span>
+    
+      <span class="main-nav-link-wrap">
+        <div class="main-nav-icon icon-taichi"></div>
+        <a class="main-nav-link" href="../../../../about">关于</a>
+      </span>
+    
+      <span class="main-nav-link-wrap">
+        <div class="main-nav-icon icon-taichi"></div>
+        <a class="main-nav-link" href="../../../../friend">友链</a>
+      </span>
+    
+    <a id="main-nav-toggle" class="nav-icon"></a>
+  </nav>
+  <nav id="sub-nav">
+    
+    
+    
+  </nav>
+</div>
+<header id="header">
+  
+    <img fetchpriority="high" src="/img/springcloud.png" alt="openFeign（nacos）—— 知识点">
+  
+  <div id="header-outer">
+    <div id="header-title">
+      
+        
+        
+          <a href="../../../../index.html" id="logo">
+            <h1 data-aos="slide-up">openFeign（nacos）—— 知识点</h1>
+          </a>
+        
+      
+      
+        
+        <h2 id="subtitle-wrap" data-aos="slide-down">
+          
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+        <div id="content">
+          
+          <section id="main"><article id="post-openFeign(nacos)" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-inner" data-aos="fade-up">
+    <div class="article-meta">
+      <div class="article-date">
+  <a href="" class="article-date-link" data-aos="zoom-in">
+    <time datetime="2024-10-27T05:20:14.000Z" itemprop="datePublished">2024-10-27</time>
+    <time style="display: none;" id="post-update-time">2024-11-01</time>
+  </a>
+</div>
+
+      
+  <div class="article-category">
+    <a class="article-category-link" href="categories/openFeign%EF%BC%88nacos%EF%BC%89-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/" data-aos="zoom-in">openFeign（nacos） 知识点整理</a>
+  </div>
+
+
+    </div>
+    <div class="hr-line"></div>
+    
+
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+      
+        <h1 id="1-基础概念"><a href="#1-基础概念" class="headerlink" title="1. 基础概念"></a>1. 基础概念</h1><h2 id="什么是-Feign"><a href="#什么是-Feign" class="headerlink" title="什么是 Feign"></a>什么是 Feign</h2><p>Feign 是一个声明式的 Web 服务客户端</p>
+<p>所谓的声明式就是指不需要编写复杂的关于 Http 请求的东西</p>
+<p>只需要声明一个一个接口，然后在这个接口上添加一些注解，这些注解包括了请求的方法（如 GET 和 POST）、请求的 URL 等信息</p>
+<p>Feign 在运行时通过注解和接口上定义的内容来动态构造和发送 Http 请求</p>
+<p>所以使用 Feign，开发者只需要定义服务接口并通过注解指明服务名和参数等信息，Feign 就能自动完成 Http 请求的构建、发送和结果处理</p>
+<p>Feign 也是 Spring Cloud Netflix 组件之一，结合 Spirng Cloud 的服务注册和发现、负载均衡等功能，能够让服务间的调用变得更加方便</p>
+<p>总体来说，Feign 的主要特点有：</p>
+<ul>
+<li>声明式的服务客户端，通过 Java 接口和注解构建服务客户端，简化了 Http 调用的使用过程，无需手动构建 HTTP 请求</li>
+<li>很好地融入了 SpringCloud 生态，可以使用 SpringCloud 负载均衡、服务熔断等能力</li>
+</ul>
+<blockquote>
+<p>为什么要有 Feign？</p>
+<p>在项目中，经常需要调用第三方提供的 Http 接口，如 HttpClient等，需要自己手动的去拼 url，当请求多了，也会变得很麻烦</p>
+<p>Feign 是一个声明式的 Http 框架，当需要调用 Http 接口时，需要声明一个接口，加一些注解就可以了，组装参数、发送 Http 请求等重复性的工作都交给 Feign来完成</p>
+</blockquote>
+<h2 id="Feign-的本质：动态代理-七大核心组件"><a href="#Feign-的本质：动态代理-七大核心组件" class="headerlink" title="Feign 的本质：动态代理 + 七大核心组件"></a>Feign 的本质：动态代理 + 七大核心组件</h2><p>Feign 的本质：动态代理 + 七大核心组件</p>
+<p>Feign 底层其实是基于 JDK 动态代理来的</p>
+<p><strong>Feign 一次 Http调用过程：</strong></p>
+<p><img src="/img/0017-feign_liucheng.png"></p>
+<ul>
+<li>首先就是前面说的，进入 FeignInvocationHandler，找到方法对应的 SynchronousMethodHandler，调用 invoke 方法实现</li>
+<li>之后根据 MethodMetadata 和 方法的入参，构建出一个 RequestTemplate，RequestTemplate 封装了 Http 请求的参数，在这个过程中，如果有请求体，那么会通过 Encoder 序列化</li>
+<li>然后调用 RequestInterceptor，通过 RequestInterceptor 对 RequestTemplate 进行拦截扩展，可以对请求数据再进行修改</li>
+<li>再然后将 RequestTemplate 转换成 Request，Request 其实跟 RequestTemplate 差不多，也是封装了 Http 请求的参数</li>
+<li>接下来通过 Client 去根据 Request 中封装的 Http 请求参数，发送 Http 请求，得到响应的 Response</li>
+<li>最后根据 Decoder，将响应体反序列化成方法返回值类型对象，返回</li>
+</ul>
+<h2 id="Feign-和-OpenFeign-的区别？"><a href="#Feign-和-OpenFeign-的区别？" class="headerlink" title="Feign 和 OpenFeign 的区别？"></a>Feign 和 OpenFeign 的区别？</h2><p>Feign 和 OpenFeign 都是用于简化服务之间的 HTTP 调用的工具，让我们可以更加方便地实现服务间的通信</p>
+<p><strong>Feign 最初是由 Netflix 开发的一个声明式 REST 客户端框架</strong>，它的目标是让微服务之间的调用像调用本地方法一样容易</p>
+<p>如果我们想调用其它服务的接口，可以创建一个接口，然后通过注解声明所需要调用的方法和路径，Feign 可以自动发送 Http 请求和接收响应，转换为方法返回值</p>
+<p>而 <strong>OpenFeign 是 Spring Cloud 在 Feign 的基础上进一步封装的</strong>，它整合了 Spring Cloud 的特性，使得我们可以更加简单地使用 Feign，包括如下几个方面：</p>
+<ul>
+<li>自动配置：OpenFeign 利用 Spring Boot 的自动装配机制，通过 @FeignClient 和 @ EnableFeignClinets 注解就可以创建一个 Feign 客户端，极大简化了 Feign 客户端的创建和配置过程</li>
+<li>负载均衡：与 Spring Cloud 等服务发现组件集成，可以轻松实现客户端负载均衡</li>
+<li>Hystrix集成：只需要简单的配置就可以快速集成 Hystrix，提高系统的容错性</li>
+</ul>
+<h1 id="2-基础使用"><a href="#2-基础使用" class="headerlink" title="2. 基础使用"></a>2. 基础使用</h1><p>以下代码为 springboot2.7.6版本的 基础代码奥</p>
+<ol>
+<li><h4 id="需要的依赖，服务提供者和调用者尽可能版本保证一致："><a href="#需要的依赖，服务提供者和调用者尽可能版本保证一致：" class="headerlink" title="需要的依赖，服务提供者和调用者尽可能版本保证一致："></a>需要的依赖，服务提供者和调用者尽可能版本保证一致：</h4></li>
+</ol>
+<p>（springboot3 的依赖版本自己搞定，应该都用最新的就没问题了）</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- openfeign --&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-openfeign<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">version</span>&gt;</span> 3.1.8<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"> <span class="comment">&lt;!-- 负载均衡（必须要有奥，不然跑不起来） --&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-loadbalancer<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.1.7<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"> <span class="comment">&lt;!-- nacos注册中心 --&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-alibaba-nacos-discovery<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">version</span>&gt;</span>2021.0.5.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"> <span class="comment">&lt;!-- nacos配置中心 --&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-alibaba-nacos-config<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">version</span>&gt;</span>2021.0.5.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>可以导入 httpclient5 提升性能：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- https://mvnrepository.com/artifact/org.apache.httpcomponents.client5/httpclient5 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.httpcomponents.client5<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>httpclient5<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>5.2.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><h4 id="配置-yml"><a href="#配置-yml" class="headerlink" title="配置 yml"></a>配置 yml</h4></li>
+</ol>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">profiles:</span></span><br><span class="line">    <span class="attr">active:</span> <span class="string">dev</span></span><br><span class="line">  <span class="attr">application:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">learn-service8001</span> <span class="comment"># 应用名称 --- nacos 注册服务名称默认用的就是这个</span></span><br><span class="line">  <span class="attr">cloud:</span></span><br><span class="line">    <span class="attr">nacos:</span> </span><br><span class="line">      <span class="comment"># 服务注册中心</span></span><br><span class="line">      <span class="attr">discovery:</span></span><br><span class="line">        <span class="attr">server-addr:</span> <span class="string">localhost:8848</span> <span class="comment"># 注册中心地址</span></span><br><span class="line">        <span class="attr">cluster-name:</span> <span class="string">HZ</span> <span class="comment"># 集群名</span></span><br><span class="line">        <span class="attr">namespace:</span> <span class="string">dev</span> <span class="comment"># 命名空间</span></span><br><span class="line">      <span class="comment"># 配置中心</span></span><br><span class="line">      <span class="attr">config:</span></span><br><span class="line">        <span class="attr">namespace:</span> <span class="string">dev</span> <span class="comment"># 命名空间</span></span><br><span class="line">        <span class="attr">server-addr:</span> <span class="string">localhost:8848</span> <span class="comment"># 注册中心地址</span></span><br><span class="line">        <span class="attr">file-extension:</span> <span class="string">yaml</span> <span class="comment"># 配置文件后缀</span></span><br><span class="line">        <span class="attr">import-check:</span> <span class="comment"># 引入检查</span></span><br><span class="line">          <span class="attr">enabled:</span> <span class="literal">false</span></span><br><span class="line">        <span class="attr">refresh-enabled:</span> <span class="literal">true</span> <span class="comment"># 刷新配置</span></span><br><span class="line">  <span class="attr">config:</span> <span class="comment"># 配置中心</span></span><br><span class="line">    <span class="attr">import:</span> <span class="string">optional:nacos:$&#123;spring.application.name&#125;-$&#123;spring.profiles.active&#125;.$&#123;spring.cloud.nacos.config.file-extension&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>切换 http 协议及其它配置（原本是不支持线程池的）：</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">feign:</span></span><br><span class="line">  <span class="attr">httpclient:</span> <span class="comment"># 切换 http 协议</span></span><br><span class="line">    <span class="attr">hc5:</span></span><br><span class="line">      <span class="attr">enabled:</span> <span class="literal">true</span> <span class="comment"># 这是2.x的写法</span></span><br><span class="line">    <span class="attr">max-connections:</span> <span class="number">200</span> <span class="comment"># 最大连接数</span></span><br><span class="line">    <span class="attr">max-connections-per-route:</span> <span class="number">50</span> <span class="comment"># 每个路由的最大连接数</span></span><br><span class="line">  <span class="attr">client:</span></span><br><span class="line">    <span class="attr">config:</span></span><br><span class="line">      <span class="attr">default:</span> <span class="comment"># 全局生效，想要局部生效，直接写调用的服务名</span></span><br><span class="line"><span class="comment">#        logger-level: full # 全部日志</span></span><br><span class="line">        <span class="attr">connectTimeout:</span> <span class="number">60000</span> <span class="comment"># 连接超时</span></span><br><span class="line">        <span class="attr">readTimeout:</span> <span class="number">60000</span> <span class="comment"># 读取超时</span></span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li><h4 id="服务提供者和调用者的启动类加注解：-EnableFeignClients"><a href="#服务提供者和调用者的启动类加注解：-EnableFeignClients" class="headerlink" title="服务提供者和调用者的启动类加注解：**@EnableFeignClients**"></a>服务提供者和调用者的启动类加注解：**<code>@EnableFeignClients</code>**</h4></li>
+</ol>
+<p>（</p>
+<p>当然下面抽取公共模块，启动类可能跟公共模块的包路径不太一样</p>
+<p>@EnableFeignClients（basePackages&#x3D;”看要扫的包”）</p>
+<p>）</p>
+<ol start="4">
+<li><h4 id="抽取需要远程调用的接口（公共模块包里写）："><a href="#抽取需要远程调用的接口（公共模块包里写）：" class="headerlink" title="抽取需要远程调用的接口（公共模块包里写）："></a>抽取需要远程调用的接口（公共模块包里写）：</h4></li>
+</ol>
+<p>直接粘贴接口的方法和请求方式路径即可</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@FeignClient(name = &quot;learn-service8001&quot;)</span> <span class="comment">// 服务名</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">LearningServiceApi</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     *  测试</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@PostMapping(&quot;/openfign/hc5&quot;)</span></span><br><span class="line">    ResultData <span class="title function_">openfignHc5</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li><h4 id="调用"><a href="#调用" class="headerlink" title="调用"></a>调用</h4></li>
+</ol>
+<p>直接正常调用就行了</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TestController</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> LearningServiceApi learningServiceApi;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping(&quot;/aaa/test&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">test</span><span class="params">()</span> &#123;</span><br><span class="line">        learningServiceApi.openfignHc5();</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;通过了&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="6">
+<li><h4 id="支持服务降级："><a href="#支持服务降级：" class="headerlink" title="支持服务降级："></a>支持服务降级：</h4></li>
+</ol>
+<p>也是在公共模块 common 包里面，api 包下创建一个 fallback 包，里面直接继承接口，实习降级垫底代码，然后在接口那个注解里面，指定降级的实现类就ok了</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LearningServiceApiFallBack</span> <span class="keyword">implements</span> <span class="title class_">LearningServiceApi</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> ResultData <span class="title function_">openfignHc5</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> ResultData.success(<span class="string">&quot;抱歉有点问题，稍后在试~&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>api 接口指定降级实现类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@FeignClient(name = &quot;learn-service8001&quot;, fallback = LearningServiceApiFallBack.class)</span> <span class="comment">// 服务名</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">LearningServiceApi</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     *  测试</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@PostMapping(&quot;/openfign/hc5&quot;)</span></span><br><span class="line">    ResultData <span class="title function_">openfignHc5</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="7">
+<li><h4 id="服务重试，默认是不会重试的，可以自己配置开启，但是重试是危险的，建议禁止重试，走降级即可"><a href="#服务重试，默认是不会重试的，可以自己配置开启，但是重试是危险的，建议禁止重试，走降级即可" class="headerlink" title="服务重试，默认是不会重试的，可以自己配置开启，但是重试是危险的，建议禁止重试，走降级即可"></a>服务重试，默认是不会重试的，可以自己配置开启，<strong>但是重试是危险的，建议禁止重试，走降级即可</strong></h4></li>
+<li><h4 id="openfeign请求响应压缩"><a href="#openfeign请求响应压缩" class="headerlink" title="openfeign请求响应压缩"></a>openfeign请求响应压缩</h4></li>
+</ol>
+<ul>
+<li><p>gzip是一种数据格式，采用用deflate算法压缩数据；gzip是一种流行的数据压缩算法，应用十分广泛，尤其是在Linux平台。</p>
+</li>
+<li><p>当GZIP压缩到一个纯文本数据时，效果是非常明显的，大约可以减少70％以上的数据大小。</p>
+</li>
+<li><p>网络数据经过压缩后实际上降低了网络传输的字节数，最明显的好处就是可以加快网页加载的速度。</p>
+</li>
+</ul>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">feign:</span></span><br><span class="line">  <span class="attr">compression:</span></span><br><span class="line">    <span class="attr">request:</span></span><br><span class="line">      <span class="attr">enabled:</span> <span class="literal">true</span> <span class="comment"># 开启请求压缩</span></span><br><span class="line">      <span class="attr">mime-types:</span> <span class="string">text/xml,application/xml,application/json</span> <span class="comment">#触发压缩数据格式</span></span><br><span class="line">      <span class="attr">min-request-size:</span> <span class="number">1</span> <span class="comment">#开启压缩的阈值，请求体大小，单位字节，默认2048，即是2k，这里为了演示效果设置成10字节</span></span><br><span class="line">    <span class="attr">response:</span></span><br><span class="line">      <span class="attr">enabled:</span> <span class="literal">true</span> <span class="comment"># 开启响应压缩</span></span><br></pre></td></tr></table></figure>
+
+<p>当然服务提供者和调用者都需要开：</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">server:</span></span><br><span class="line">  <span class="attr">compression:</span></span><br><span class="line">    <span class="attr">enabled:</span> <span class="literal">true</span> <span class="comment">#spring项目开启压缩</span></span><br><span class="line"><span class="comment">#    min-response-size: 2KB</span></span><br><span class="line">  <span class="attr">port:</span> <span class="number">8091</span></span><br></pre></td></tr></table></figure>
+
+<ol start="9">
+<li><h4 id="开启日志（没太大必要）上面也有提及"><a href="#开启日志（没太大必要）上面也有提及" class="headerlink" title="开启日志（没太大必要）上面也有提及"></a>开启日志（没太大必要）上面也有提及</h4></li>
+</ol>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">feign:</span></span><br><span class="line">  <span class="attr">client:</span></span><br><span class="line">    <span class="attr">config:</span></span><br><span class="line">      <span class="attr">default:</span> <span class="comment"># 全局生效，想要局部生效，直接写调用的服务名</span></span><br><span class="line"><span class="comment">#        logger-level: full # 全部日志</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>就不介绍自定义类了</p>
+<ol start="10">
+<li><h4 id="切换负载均衡策略"><a href="#切换负载均衡策略" class="headerlink" title="切换负载均衡策略"></a>切换负载均衡策略</h4></li>
+</ol>
+<p>默认的是：轮询</p>
+<p>我没试奥，这里我直接找的别人资料</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DepartConfig</span> &#123;</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="keyword">public</span> ReactorLoadBalancer&lt;ServiceInstance&gt; <span class="title function_">randomLoadBalancer</span><span class="params">(Environment environment,</span></span><br><span class="line"><span class="params">                                                                   LoadBalancerClientFactory factory)</span> &#123;</span><br><span class="line">        <span class="comment">//获取负载均衡客户端名称,即提供者服务名称</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">serverName</span> <span class="operator">=</span> environment.getProperty(LoadBalancerClientFactory.PROPERTY_NAME);</span><br><span class="line">        <span class="comment">//获取提供者微服务名称可用的实例列表</span></span><br><span class="line">        ObjectProvider&lt;ServiceInstanceListSupplier&gt; lazyProvider = factory.getLazyProvider(serverName, ServiceInstanceListSupplier.class);</span><br><span class="line">        <span class="comment">//从集合lazyProvider中获取指定serverName的实例,随机做负载均衡</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">RandomLoadBalancer</span>(lazyProvider, serverName);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>在 DepartConfig 类中未见<code>@Configuration</code>注解,在启动类中需添加</strong><code>@LoadBalancerClients(defaultConfiguration = DepartConfig.class)</code></li>
+</ul>
+<blockquote>
+<p>spring-cloud-loadbalancer 存在以下弊端</p>
+<p>负载均衡策略较少<br>仅支持轮询和随机策略,默认是轮询策略<br>更换负载均衡策略方式较为麻烦<br>生产环境下使用的负载均衡器,通常是 dubbo<br>dubbo 作为通讯客户端,负载均衡策略可供选择更加多样<br>无论是 openfegin 还是 resttemplate 建立通讯方式均是基于 http 协议进行<br>http 协议效率较低,生产环境下使用远程过程调用协议 RPC 效率会更高<br>基于 RPC 通讯协议的框架恰好就有dubbo,此外还有 gRPC 等</p>
+</blockquote>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        
+      
+      
+      
+      
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" rel="tag">微服务</a></li></ul>
+
+
+    </footer>
+  </div>
+  
+    
+  <nav id="article-nav" data-aos="fade-up">
+    
+      <div class="article-nav-link-wrap article-nav-link-left">
+        
+          <img data-src="/img/docker_logo.png" data-sizes="auto" alt="Docker_CentOS 安装使用指南" class="lazyload">
+        
+        <a href="../../../11/01/docker_use/"></a>
+        <div class="article-nav-caption">前一篇</div>
+        <h3 class="article-nav-title">
+          
+            Docker_CentOS 安装使用指南
+          
+        </h3>
+      </div>
+    
+    
+    <div class="article-nav-link-wrap article-nav-link-right">
+      
+        <img data-src="/img/springcloud.png" data-sizes="auto" alt="Gateway 知识点" class="lazyload">
+      
+      <a href="../../25/gateway_base/"></a>
+      <div class="article-nav-caption">后一篇</div>
+      <h3 class="article-nav-title">
+        
+          Gateway 知识点
+        
+      </h3>
+    </div>
+    
+  </nav>
+
+
+  
+</article>
+
+
+
+
+
+
+</section>
+          
+            <aside id="sidebar">
+  <div class="sidebar-wrapper wrap-sticky">
+    <div class="sidebar-wrap" data-aos="fade-up">
+      
+        <div class="sidebar-toc-sidebar"><div class="sidebar-toc">
+  <h3 class="toc-title">文章目录</h3>
+  <div class="sidebar-toc-wrapper toc-div-class" >
+      
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5"><span class="toc-number">1.</span> <span class="toc-text">1. 基础概念</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF-Feign"><span class="toc-number">1.1.</span> <span class="toc-text">什么是 Feign</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Feign-%E7%9A%84%E6%9C%AC%E8%B4%A8%EF%BC%9A%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86-%E4%B8%83%E5%A4%A7%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6"><span class="toc-number">1.2.</span> <span class="toc-text">Feign 的本质：动态代理 + 七大核心组件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Feign-%E5%92%8C-OpenFeign-%E7%9A%84%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="toc-number">1.3.</span> <span class="toc-text">Feign 和 OpenFeign 的区别？</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E5%9F%BA%E7%A1%80%E4%BD%BF%E7%94%A8"><span class="toc-number">2.</span> <span class="toc-text">2. 基础使用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%9C%80%E8%A6%81%E7%9A%84%E4%BE%9D%E8%B5%96%EF%BC%8C%E6%9C%8D%E5%8A%A1%E6%8F%90%E4%BE%9B%E8%80%85%E5%92%8C%E8%B0%83%E7%94%A8%E8%80%85%E5%B0%BD%E5%8F%AF%E8%83%BD%E7%89%88%E6%9C%AC%E4%BF%9D%E8%AF%81%E4%B8%80%E8%87%B4%EF%BC%9A"><span class="toc-number">2.0.0.1.</span> <span class="toc-text">需要的依赖，服务提供者和调用者尽可能版本保证一致：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE-yml"><span class="toc-number">2.0.0.2.</span> <span class="toc-text">配置 yml</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E6%8F%90%E4%BE%9B%E8%80%85%E5%92%8C%E8%B0%83%E7%94%A8%E8%80%85%E7%9A%84%E5%90%AF%E5%8A%A8%E7%B1%BB%E5%8A%A0%E6%B3%A8%E8%A7%A3%EF%BC%9A-EnableFeignClients"><span class="toc-number">2.0.0.3.</span> <span class="toc-text">服务提供者和调用者的启动类加注解：**@EnableFeignClients**</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8A%BD%E5%8F%96%E9%9C%80%E8%A6%81%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8%E7%9A%84%E6%8E%A5%E5%8F%A3%EF%BC%88%E5%85%AC%E5%85%B1%E6%A8%A1%E5%9D%97%E5%8C%85%E9%87%8C%E5%86%99%EF%BC%89%EF%BC%9A"><span class="toc-number">2.0.0.4.</span> <span class="toc-text">抽取需要远程调用的接口（公共模块包里写）：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B0%83%E7%94%A8"><span class="toc-number">2.0.0.5.</span> <span class="toc-text">调用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%94%AF%E6%8C%81%E6%9C%8D%E5%8A%A1%E9%99%8D%E7%BA%A7%EF%BC%9A"><span class="toc-number">2.0.0.6.</span> <span class="toc-text">支持服务降级：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E9%87%8D%E8%AF%95%EF%BC%8C%E9%BB%98%E8%AE%A4%E6%98%AF%E4%B8%8D%E4%BC%9A%E9%87%8D%E8%AF%95%E7%9A%84%EF%BC%8C%E5%8F%AF%E4%BB%A5%E8%87%AA%E5%B7%B1%E9%85%8D%E7%BD%AE%E5%BC%80%E5%90%AF%EF%BC%8C%E4%BD%86%E6%98%AF%E9%87%8D%E8%AF%95%E6%98%AF%E5%8D%B1%E9%99%A9%E7%9A%84%EF%BC%8C%E5%BB%BA%E8%AE%AE%E7%A6%81%E6%AD%A2%E9%87%8D%E8%AF%95%EF%BC%8C%E8%B5%B0%E9%99%8D%E7%BA%A7%E5%8D%B3%E5%8F%AF"><span class="toc-number">2.0.0.7.</span> <span class="toc-text">服务重试，默认是不会重试的，可以自己配置开启，但是重试是危险的，建议禁止重试，走降级即可</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#openfeign%E8%AF%B7%E6%B1%82%E5%93%8D%E5%BA%94%E5%8E%8B%E7%BC%A9"><span class="toc-number">2.0.0.8.</span> <span class="toc-text">openfeign请求响应压缩</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BC%80%E5%90%AF%E6%97%A5%E5%BF%97%EF%BC%88%E6%B2%A1%E5%A4%AA%E5%A4%A7%E5%BF%85%E8%A6%81%EF%BC%89%E4%B8%8A%E9%9D%A2%E4%B9%9F%E6%9C%89%E6%8F%90%E5%8F%8A"><span class="toc-number">2.0.0.9.</span> <span class="toc-text">开启日志（没太大必要）上面也有提及</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%87%E6%8D%A2%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%AD%96%E7%95%A5"><span class="toc-number">2.0.0.10.</span> <span class="toc-text">切换负载均衡策略</span></a></li></ol></li></ol></li></ol></li></ol>
+      
+  </div>
+</div>
+</div>
+        <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img data-src="/avatar/my_logo.jpg" data-sizes="auto" alt="林羽" class="lazyload">
+  <div class="sidebar-author-name">林羽</div>
+  <div class="sidebar-description"></div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>文章</div>
+    <div class="sidebar-state-number">12</div>
+  </div>
+  <div class="sidebar-state-category">
+    <div>分类</div>
+    <div class="sidebar-state-number">12</div>
+  </div>
+  <div class="sidebar-state-tag">
+    <div>标签</div>
+    <div class="sidebar-state-number">7</div>
+  </div>
+</div>
+<div class="sidebar-social">
+  
+</div>
+<div class="sidebar-menu">
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="../../../../index.html" aria-label="首页"></a>
+      <div class="sidebar-menu-icon icon-taichi"></div>
+      <div class="sidebar-menu-link">首页</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="../../../../archives" aria-label="归档"></a>
+      <div class="sidebar-menu-icon icon-taichi"></div>
+      <div class="sidebar-menu-link">归档</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="../../../../about" aria-label="关于"></a>
+      <div class="sidebar-menu-icon icon-taichi"></div>
+      <div class="sidebar-menu-link">关于</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="../../../../friend" aria-label="友链"></a>
+      <div class="sidebar-menu-icon icon-taichi"></div>
+      <div class="sidebar-menu-link">友链</div>
+    </div>
+  
+</div>
+</div>
+      
+      
+        <div class="sidebar-btn-wrapper" style="position:static">
+          <div class="sidebar-toc-btn current"></div>
+          <div class="sidebar-common-btn"></div>
+        </div>
+      
+    </div>
+  </div>
+
+  
+</aside>
+
+          
+        </div>
+        <footer id="footer">
+  <div style="width: 100%; overflow: hidden">
+    <div class="footer-line"></div>
+  </div>
+  <div id="footer-info">
+    
+    <div>
+      <span class="icon-copyright"></span>
+      2020-2024
+      <span class="footer-info-sep"></span>
+      林羽
+    </div>
+    
+    
+      <div>
+        <span class="icon-brush"></span>
+        116.6k
+        &nbsp;|&nbsp;
+        <span class="icon-coffee"></span>
+        07:29
+      </div>
+    
+    
+    
+    
+      <div>
+        <span class="icon-eye"></span>
+        <span id="busuanzi_container_site_pv">总访问量&nbsp;<span id="busuanzi_value_site_pv"></span></span>
+        &nbsp;|&nbsp;
+        <span class="icon-user"></span>
+        <span id="busuanzi_container_site_uv">总访客量&nbsp;<span id="busuanzi_value_site_uv"></span></span>
+      </div>
+    
+  </div>
+</footer>
+
+        <div class="sidebar-top">
+          <img src="/images/taichi.png" height="50" width="50" alt="backtop" />
+          <div class="arrow-up"></div>
+        </div>
+        <div id="mask"></div>
+      </div>
+      <nav id="mobile-nav">
+  <div class="sidebar-wrap">
+    
+      <div class="sidebar-toc-sidebar"><div class="sidebar-toc">
+  <h3 class="toc-title">文章目录</h3>
+  <div class="sidebar-toc-wrapper toc-div-class" >
+      
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5"><span class="toc-number">1.</span> <span class="toc-text">1. 基础概念</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF-Feign"><span class="toc-number">1.1.</span> <span class="toc-text">什么是 Feign</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Feign-%E7%9A%84%E6%9C%AC%E8%B4%A8%EF%BC%9A%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86-%E4%B8%83%E5%A4%A7%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6"><span class="toc-number">1.2.</span> <span class="toc-text">Feign 的本质：动态代理 + 七大核心组件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Feign-%E5%92%8C-OpenFeign-%E7%9A%84%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="toc-number">1.3.</span> <span class="toc-text">Feign 和 OpenFeign 的区别？</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E5%9F%BA%E7%A1%80%E4%BD%BF%E7%94%A8"><span class="toc-number">2.</span> <span class="toc-text">2. 基础使用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%9C%80%E8%A6%81%E7%9A%84%E4%BE%9D%E8%B5%96%EF%BC%8C%E6%9C%8D%E5%8A%A1%E6%8F%90%E4%BE%9B%E8%80%85%E5%92%8C%E8%B0%83%E7%94%A8%E8%80%85%E5%B0%BD%E5%8F%AF%E8%83%BD%E7%89%88%E6%9C%AC%E4%BF%9D%E8%AF%81%E4%B8%80%E8%87%B4%EF%BC%9A"><span class="toc-number">2.0.0.1.</span> <span class="toc-text">需要的依赖，服务提供者和调用者尽可能版本保证一致：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE-yml"><span class="toc-number">2.0.0.2.</span> <span class="toc-text">配置 yml</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E6%8F%90%E4%BE%9B%E8%80%85%E5%92%8C%E8%B0%83%E7%94%A8%E8%80%85%E7%9A%84%E5%90%AF%E5%8A%A8%E7%B1%BB%E5%8A%A0%E6%B3%A8%E8%A7%A3%EF%BC%9A-EnableFeignClients"><span class="toc-number">2.0.0.3.</span> <span class="toc-text">服务提供者和调用者的启动类加注解：**@EnableFeignClients**</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8A%BD%E5%8F%96%E9%9C%80%E8%A6%81%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8%E7%9A%84%E6%8E%A5%E5%8F%A3%EF%BC%88%E5%85%AC%E5%85%B1%E6%A8%A1%E5%9D%97%E5%8C%85%E9%87%8C%E5%86%99%EF%BC%89%EF%BC%9A"><span class="toc-number">2.0.0.4.</span> <span class="toc-text">抽取需要远程调用的接口（公共模块包里写）：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B0%83%E7%94%A8"><span class="toc-number">2.0.0.5.</span> <span class="toc-text">调用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%94%AF%E6%8C%81%E6%9C%8D%E5%8A%A1%E9%99%8D%E7%BA%A7%EF%BC%9A"><span class="toc-number">2.0.0.6.</span> <span class="toc-text">支持服务降级：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E9%87%8D%E8%AF%95%EF%BC%8C%E9%BB%98%E8%AE%A4%E6%98%AF%E4%B8%8D%E4%BC%9A%E9%87%8D%E8%AF%95%E7%9A%84%EF%BC%8C%E5%8F%AF%E4%BB%A5%E8%87%AA%E5%B7%B1%E9%85%8D%E7%BD%AE%E5%BC%80%E5%90%AF%EF%BC%8C%E4%BD%86%E6%98%AF%E9%87%8D%E8%AF%95%E6%98%AF%E5%8D%B1%E9%99%A9%E7%9A%84%EF%BC%8C%E5%BB%BA%E8%AE%AE%E7%A6%81%E6%AD%A2%E9%87%8D%E8%AF%95%EF%BC%8C%E8%B5%B0%E9%99%8D%E7%BA%A7%E5%8D%B3%E5%8F%AF"><span class="toc-number">2.0.0.7.</span> <span class="toc-text">服务重试，默认是不会重试的，可以自己配置开启，但是重试是危险的，建议禁止重试，走降级即可</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#openfeign%E8%AF%B7%E6%B1%82%E5%93%8D%E5%BA%94%E5%8E%8B%E7%BC%A9"><span class="toc-number">2.0.0.8.</span> <span class="toc-text">openfeign请求响应压缩</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BC%80%E5%90%AF%E6%97%A5%E5%BF%97%EF%BC%88%E6%B2%A1%E5%A4%AA%E5%A4%A7%E5%BF%85%E8%A6%81%EF%BC%89%E4%B8%8A%E9%9D%A2%E4%B9%9F%E6%9C%89%E6%8F%90%E5%8F%8A"><span class="toc-number">2.0.0.9.</span> <span class="toc-text">开启日志（没太大必要）上面也有提及</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%87%E6%8D%A2%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%AD%96%E7%95%A5"><span class="toc-number">2.0.0.10.</span> <span class="toc-text">切换负载均衡策略</span></a></li></ol></li></ol></li></ol></li></ol>
+      
+  </div>
+</div>
+</div>
+      <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img data-src="/avatar/my_logo.jpg" data-sizes="auto" alt="林羽" class="lazyload">
+  <div class="sidebar-author-name">林羽</div>
+  <div class="sidebar-description"></div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>文章</div>
+    <div class="sidebar-state-number">12</div>
+  </div>
+  <div class="sidebar-state-category">
+    <div>分类</div>
+    <div class="sidebar-state-number">12</div>
+  </div>
+  <div class="sidebar-state-tag">
+    <div>标签</div>
+    <div class="sidebar-state-number">7</div>
+  </div>
+</div>
+<div class="sidebar-social">
+  
+</div>
+<div class="sidebar-menu">
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="../../../../index.html" aria-label="首页"></a>
+      <div class="sidebar-menu-icon icon-taichi"></div>
+      <div class="sidebar-menu-link">首页</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="../../../../archives" aria-label="归档"></a>
+      <div class="sidebar-menu-icon icon-taichi"></div>
+      <div class="sidebar-menu-link">归档</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="../../../../about" aria-label="关于"></a>
+      <div class="sidebar-menu-icon icon-taichi"></div>
+      <div class="sidebar-menu-link">关于</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="../../../../friend" aria-label="友链"></a>
+      <div class="sidebar-menu-icon icon-taichi"></div>
+      <div class="sidebar-menu-link">友链</div>
+    </div>
+  
+</div>
+</div>
+    
+  </div>
+  
+    <div class="sidebar-btn-wrapper">
+      <div class="sidebar-toc-btn current"></div>
+      <div class="sidebar-common-btn"></div>
+    </div>
+  
+</nav>
+
+    </div>
+    
+    
+<script src="https://npm.webcache.cn/lazysizes@5.3.2/lazysizes.min.js"></script>
+
+
+<script src="https://npm.webcache.cn/clipboard@2.0.11/dist/clipboard.min.js"></script>
+
+
+
+<script src="../../../../js/script.js"></script>
+
+
+
+  
+<script src="../../../../js/aos.js"></script>
+
+  <script>
+    var aosInit = () => {
+      AOS.init({
+        duration: 1000,
+        easing: "ease",
+        once: true,
+        offset: 50,
+      });
+    };
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', aosInit);
+    } else {
+      aosInit();
+    }
+  </script>
+
+
+
+<script src="../../../../js/pjax_script.js" data-pjax></script>
+
+
+<script type="module" data-pjax>
+  import PhotoSwipeLightbox from "https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe-lightbox.esm.min.js";
+  
+  const pswp = () => {
+    if (_$$('.article-entry a.article-gallery-item').length > 0) {
+      new PhotoSwipeLightbox({
+        gallery: '.article-entry',
+        children: 'a.article-gallery-item',
+        pswpModule: () => import("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.esm.min.js")
+      }).init();
+    }
+    if(_$$('.article-gallery a.article-gallery-item').length > 0) {
+      new PhotoSwipeLightbox({
+        gallery: '.article-gallery',
+        children: 'a.article-gallery-item',
+        pswpModule: () => import("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.esm.min.js")
+      }).init();
+    }
+    window.lightboxStatus = 'done';
+    window.removeEventListener('lightbox:ready', pswp);
+  }
+  if(window.lightboxStatus === 'ready') {
+    pswp()
+  } else {
+    window.addEventListener('lightbox:ready', pswp);
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<script src="https://npm.webcache.cn/mouse-firework@0.0.4/dist/index.umd.js"></script>
+
+  <script>
+    firework(JSON.parse('{"excludeElements":["a","button"],"particles":[{"shape":"circle","move":["emit"],"easing":"easeOutExpo","colors":["#ff5252","#ff7c7c","#ffafaf","#ffd0d0"],"number":20,"duration":[1200,1800],"shapeOptions":{"radius":[16,32],"alpha":[0.3,0.5]}},{"shape":"circle","move":["diffuse"],"easing":"easeOutExpo","colors":["#ff0000"],"number":1,"duration":[1200,1800],"shapeOptions":{"radius":20,"alpha":[0.2,0.5],"lineWidth":6}}]}'))
+  </script>
+
+
+
+
+
+
+
+  
+<script src="https://npm.webcache.cn/quicklink@2.3.0/dist/quicklink.umd.js"></script>
+
+  <script data-pjax>
+    quicklink.listen({
+      timeout: 3000,
+      priority: true,
+      ignores: []
+    });
+  </script>
+
+
+<div id="lazy-script">
+  <div>
+    
+  </div>
+</div>
+
+
+  <script>
+    console.log(String.raw`%c 
+ ______     ______     __     __    __     __  __    
+/\  == \   /\  ___\   /\ \   /\ "-./  \   /\ \/\ \   
+\ \  __<   \ \  __\   \ \ \  \ \ \-./\ \  \ \ \_\ \  
+ \ \_\ \_\  \ \_____\  \ \_\  \ \_\ \ \_\  \ \_____\ 
+  \/_/ /_/   \/_____/   \/_/   \/_/  \/_/   \/_____/ 
+                                                  
+`,'color: #ff5252;')
+    console.log('%c Theme.Reimu v' + '0.3.1' + ' %c https://github.com/D-Sketon/hexo-theme-reimu ', 'color: white; background: #ff5252; padding:5px 0;', 'padding:4px;border:1px solid #ff5252;')
+  </script>
+  
+
+
+
+  
+<script src="https://npm.webcache.cn/busuanzi@2.3.0/bsz.pure.mini.js" async></script>
+
+
+
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then((registrations) => {
+      for (let registration of registrations) {
+        registration.unregister();
+      }
+    });
+  }
+</script>
+
+  <!-- hexo injector body_end start -->
+<script src="js/insert_highlight.js" data-pjax></script>
+<!-- hexo injector body_end end --></body>
+  </html>
+

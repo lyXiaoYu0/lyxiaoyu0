@@ -1,0 +1,892 @@
+
+  <!DOCTYPE html>
+  <html lang="zh-CN"  >
+  <head>
+  <meta charset="utf-8">
+  
+
+  
+
+  
+
+  
+  <script>window.icon_font = '4552607_tq6stt6tcg';window.clipboard_tips = {"success":"复制成功(*^▽^*)","fail":"复制失败 (ﾟ⊿ﾟ)ﾂ","copyright":{"enable":false,"count":50,"content":"本文版权：本博客所有文章除特别声明外，均采用 BY-NC-SA 许可协议。转载请注明出处！"}};</script>
+  
+  
+  <title>
+    Linux_centos7  知识点 |
+    
+    小羽博客
+  </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin><link rel="preload" as="style" href="https://fonts.googleapis.com/css?family=Mulish:400,400italic,700,700italic%7CNoto%20Serif%20SC:400,400italic,700,700italic&display=swap"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mulish:400,400italic,700,700italic%7CNoto%20Serif%20SC:400,400italic,700,700italic&display=swap" media="print" onload="this.media&#x3D;&#39;all&#39;">
+  
+    <link rel="preload" href="//at.alicdn.com/t/c/font_4552607_tq6stt6tcg.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  
+  
+    
+<link rel="stylesheet" href="../../../../css/loader.css">
+
+  
+  
+    <meta name="description" content="Linux_centos7 整理知识点">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux_centos7  知识点">
+<meta property="og:url" content="https://lyxiaoyu0.github.io/2024/10/10/linux_centos7/index.html">
+<meta property="og:site_name" content="小羽博客">
+<meta property="og:description" content="Linux_centos7 整理知识点">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lyxiaoyu0.github.io/img/0009-linux%E5%B8%B8%E8%A7%81%E6%8C%87%E4%BB%A4%E6%80%BB%E7%BB%93.jpg">
+<meta property="og:image" content="https://lyxiaoyu0.github.io/img/0010-linux_tar_1.jpg">
+<meta property="og:image" content="https://lyxiaoyu0.github.io/img/0011-linux_tar_%E7%AE%80%E8%AE%B0.jpg">
+<meta property="og:image" content="https://lyxiaoyu0.github.io/img/0012-vim.png">
+<meta property="og:image" content="https://lyxiaoyu0.github.io/img/0013-vim_vim.png">
+<meta property="og:image" content="https://lyxiaoyu0.github.io/img/0014-shell.jpg">
+<meta property="og:image" content="https://lyxiaoyu0.github.io/img/0015-%E7%B3%BB%E7%BB%9F%E6%9C%8D%E5%8A%A1.png">
+<meta property="article:published_time" content="2024-10-10T12:33:28.000Z">
+<meta property="article:modified_time" content="2024-11-01T02:47:32.102Z">
+<meta property="article:author" content="林羽">
+<meta property="article:tag" content="linux">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lyxiaoyu0.github.io/img/0009-linux%E5%B8%B8%E8%A7%81%E6%8C%87%E4%BB%A4%E6%80%BB%E7%BB%93.jpg">
+  
+  
+  
+    <link rel="shortcut icon" href="../../../../images/favicon.ico">
+  
+  
+<link rel="stylesheet" href="../../../../css/style.css">
+
+  <link rel="preload" href="https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  
+  
+  
+  
+    
+<script src="https://npm.webcache.cn/pace-js@1.2.4/pace.min.js"></script>
+
+  
+  
+    
+<link rel="stylesheet" href="https://npm.webcache.cn/@reimujs/aos@0.0.1/dist/aos.css">
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+  <body>
+    
+  <div id='loader'>
+    <div class="loading-left-bg loading-bg"></div>
+    <div class="loading-right-bg loading-bg"></div>
+    <div class="spinner-box">
+      <div class="loading-taichi">
+        <svg width="150" height="150" viewBox="0 0 1024 1024" class="icon" version="1.1" xmlns="https://www.w3.org/2000/svg" shape-rendering="geometricPrecision">
+          <path d="M303.5 432A80 80 0 0 1 291.5 592A80 80 0 0 1 303.5 432z" fill="#ff5252" />
+          <path d="M512 65A447 447 0 0 1 512 959L512 929A417 417 0 0 0 512 95A417 417 0 0 0 512 929L512 959A447 447 0 0 1 512 65z 
+         M512 95A417 417 0 0 1 929 512A208.5 208.5 0 0 1 720.5 720.5L720.5 592A80 80 0 0 0 720.5 432A80 80 0 0 0 720.5 592L720.5 720.5A208.5 208.5 0 0 1 512 512A208.5 208.5 0 0 0 303.5 303.5A208.5 208.5 0 0 0 95 512A417 417 0 0 1 512 95z" fill="#ff5252" />
+        </svg>
+      </div>
+      <div class="loading-word">小羽正在努力...</div>
+    </div>
+  </div>
+  </div>
+  <script>
+    var time = null;
+    var startLoading = () => {
+      time = Date.now();
+      document.getElementById('loader').classList.remove("loading");
+    }
+    var endLoading = () => {
+      if (!time) {
+        document.body.style.overflow = 'auto';
+        document.getElementById('loader').classList.add("loading");
+      } else {
+        if (Date.now() - time > 500) {
+          time = null;
+          document.body.style.overflow = 'auto';
+          document.getElementById('loader').classList.add("loading");
+        } else {
+          setTimeout(endLoading, 500 - (Date.now() - time));
+          time = null;
+        }
+      }
+    }
+    window.addEventListener('DOMContentLoaded', endLoading);
+    document.getElementById('loader').addEventListener('click', endLoading);
+  </script>
+
+<div id="copy-tooltip" style="pointer-events: none; opacity: 0; transition: all 0.2s ease; position: fixed;top: 50%;left: 50%;z-index: 999;transform: translate(-50%, -50%);color: white;background: rgba(0, 0, 0, 0.5);padding: 10px 15px;border-radius: 10px;">
+</div>
+
+
+    <div id="container">
+      <div id="wrap">
+        <div id="header-nav">
+  <nav id="main-nav">
+    
+      <span class="main-nav-link-wrap">
+        <div class="main-nav-icon icon-taichi"></div>
+        <a class="main-nav-link" href="../../../../index.html">首页</a>
+      </span>
+    
+      <span class="main-nav-link-wrap">
+        <div class="main-nav-icon icon-taichi"></div>
+        <a class="main-nav-link" href="../../../../archives">归档</a>
+      </span>
+    
+      <span class="main-nav-link-wrap">
+        <div class="main-nav-icon icon-taichi"></div>
+        <a class="main-nav-link" href="../../../../about">关于</a>
+      </span>
+    
+      <span class="main-nav-link-wrap">
+        <div class="main-nav-icon icon-taichi"></div>
+        <a class="main-nav-link" href="../../../../friend">友链</a>
+      </span>
+    
+    <a id="main-nav-toggle" class="nav-icon"></a>
+  </nav>
+  <nav id="sub-nav">
+    
+    
+    
+  </nav>
+</div>
+<header id="header">
+  
+    <img fetchpriority="high" src="/img/linux_logo.png" alt="Linux_centos7  知识点">
+  
+  <div id="header-outer">
+    <div id="header-title">
+      
+        
+        
+          <a href="../../../../index.html" id="logo">
+            <h1 data-aos="slide-up">Linux_centos7  知识点</h1>
+          </a>
+        
+      
+      
+        
+        <h2 id="subtitle-wrap" data-aos="slide-down">
+          
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+        <div id="content">
+          
+          <section id="main"><article id="post-linux_centos7" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-inner" data-aos="fade-up">
+    <div class="article-meta">
+      <div class="article-date">
+  <a href="" class="article-date-link" data-aos="zoom-in">
+    <time datetime="2024-10-10T12:33:28.000Z" itemprop="datePublished">2024-10-10</time>
+    <time style="display: none;" id="post-update-time">2024-11-01</time>
+  </a>
+</div>
+
+      
+  <div class="article-category">
+    <a class="article-category-link" href="categories/Linux-centos7-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/" data-aos="zoom-in">Linux_centos7 知识点整理</a>
+  </div>
+
+
+    </div>
+    <div class="hr-line"></div>
+    
+
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+      
+        <h1 id="1-Linux-的应用领域"><a href="#1-Linux-的应用领域" class="headerlink" title="1. Linux 的应用领域"></a>1. Linux 的应用领域</h1><ul>
+<li>企业环境的利用：最热门的当然是网络服务器；关键任务的应用（金融数据库、大型企业网管环境）；学术机构的高效能运算任务。</li>
+<li>个人环境的使用：桌面计算机；手机（安装其实就是Linux核心的一支）；嵌入式系统（操作系统直接嵌入在产品上，如一些手机，数字相机，包括router，switch，Firewalls）。</li>
+<li>云端运用：云程序（底层就是 Linux，云程序搭建出来的虚拟机也是 Linux）；端设备。</li>
+</ul>
+<h1 id="2-基础知识"><a href="#2-基础知识" class="headerlink" title="2. 基础知识"></a>2. 基础知识</h1><h2 id="目录配置和含义"><a href="#目录配置和含义" class="headerlink" title="目录配置和含义"></a>目录配置和含义</h2><ul>
+<li><p>&#x2F;bin：存放二进制可执行的文件</p>
+</li>
+<li><p>&#x2F;boot：存放系统引导时使用的各种文件</p>
+</li>
+<li><p>&#x2F;dev：存放设备文件</p>
+</li>
+<li><p>&#x2F;etc：存放系统配置文件</p>
+</li>
+<li><p>&#x2F;home：存放系统用户的文件</p>
+</li>
+<li><p>&#x2F;lib：存放程序运行所需的共享库和内核模块</p>
+</li>
+<li><p>&#x2F;opt：额外安装的可选应用包所放置的位置</p>
+</li>
+<li><p>&#x2F;(root, 根目录)：与开机系统有关，超级用户目录；</p>
+</li>
+<li><p>&#x2F;sbin：存放二进制可执行文件，只有root用户才能访问</p>
+</li>
+<li><p>&#x2F;tmp：存放临时文件</p>
+</li>
+<li><p>&#x2F;usr(unix software resource)： 与软件安装 &#x2F; 执行有关，存放系统应用程序；</p>
+</li>
+<li><p>&#x2F;var(variable)：与系统允许过程有关，存放运行时需要改变数据的文件，例如日志文件。</p>
+</li>
+</ul>
+<h1 id="3-常见的操作命令"><a href="#3-常见的操作命令" class="headerlink" title="3. 常见的操作命令"></a>3. 常见的操作命令</h1><p><img src="/img/0009-linux%E5%B8%B8%E8%A7%81%E6%8C%87%E4%BB%A4%E6%80%BB%E7%BB%93.jpg"></p>
+<blockquote>
+<p>不会就 —–&gt;   <strong>help</strong></p>
+<p>也可以 <strong>man</strong>  然后输入需要想要的指令</p>
+</blockquote>
+<blockquote>
+<p>查看所有进程：<strong>ps -ef</strong></p>
+<p>查看端口占用情况：<strong>netstat -ntlp</strong></p>
+<p>杀死进程：<strong>kill -QUIT 进程号</strong> || <strong>kill -9 进程号</strong></p>
+</blockquote>
+<h2 id="磁盘文件与文件系统管理"><a href="#磁盘文件与文件系统管理" class="headerlink" title="磁盘文件与文件系统管理"></a>磁盘文件与文件系统管理</h2><ul>
+<li>df 和 du<ul>
+<li>df ：列出文件系统的整体磁盘使用量</li>
+<li>du：评估文件系统的磁盘使用量（常用在推估目录所占容量）</li>
+</ul>
+</li>
+</ul>
+<h2 id="防火墙"><a href="#防火墙" class="headerlink" title="防火墙"></a>防火墙</h2><ul>
+<li>检查防火墙状态：sudo systemctl status firewalld</li>
+<li>停止防火墙服务：sudo systemctl stop firewalld</li>
+<li>禁止防火墙开机启动：sudo systemctl disable firewalld</li>
+<li>验证防火墙状态：sudo systemctl status firewalld</li>
+</ul>
+<blockquote>
+<p>只开放防火墙指定的端口：</p>
+<p><strong>sudo firewall-cmd –permanent –add-port&#x3D;80&#x2F;tcp</strong></p>
+<p><strong>sudo firewall-cmd –reload</strong></p>
+</blockquote>
+<h2 id="目录文件相关"><a href="#目录文件相关" class="headerlink" title="目录文件相关"></a>目录文件相关</h2><blockquote>
+<p><strong>.</strong>    代表此层目录</p>
+<p><strong>..</strong>    代表上一层目录</p>
+<p><strong>-</strong>     代表前一个工作目录</p>
+<p><strong>~</strong>    代表【目前用户身份】所在的家目录</p>
+<p><strong>~account</strong>   代表 account 这个用户的家目录（account 是个账号名称）</p>
+</blockquote>
+<ul>
+<li>cd：变换目录</li>
+<li>pwd：显示当前目录</li>
+<li>touch：创建文件</li>
+<li>mkdir：建立个新的目录<ul>
+<li>语法：mkdir [-p] dirName</li>
+<li>说明：-p ：确保目录名称存在，不存在的就创建一个。</li>
+</ul>
+</li>
+<li>rmdir：删除一个空的目录<ul>
+<li>语法：rmdir [-p] dirName</li>
+<li>说明：-p ： 当子目录被删除后使父目录为空目录的话，则一并删除<ul>
+<li>rmdir itcast  删除名为 itcast 的空目录</li>
+<li>rmdir -p itcast&#x2F;test 删除 itcast 目录中名为 test 的子目录</li>
+<li>rmdir itcast* 删除名称以 itcast 开始的空目录</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>cp：可以复制文件和目录 （复制目录可以用参数-r ，但是权限可能会变，一般用-a就好了）<ul>
+<li>语法： cp [-r] source dest</li>
+<li>说明：-r ：如果复制的目录需要使用此选项，此时将复制该目录下所有的子目录和文件</li>
+<li>举例：<ul>
+<li>cp hello.txt itcast&#x2F;         将hello.txt复制到itcast目录中</li>
+<li>cp hello.txt .&#x2F;hi.txt         将hello.txt复制到当前目录，并改名为hi.txt</li>
+<li>cp -r itcast&#x2F; .&#x2F;itheima&#x2F;    将itcast目录和目录下所有文件复制到itheima目录下</li>
+<li>cp -r itcast&#x2F;* .&#x2F;itheima&#x2F;   将itcast目录下所有文件复制到itheima目录下</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>rm：移除文件或目录（移除目录加 -f 强制，-r是递归删除 （**<code>rm -rf 这个命令慎用</code>**））<ul>
+<li>语法：rm [-rf] name</li>
+<li>说明：<ul>
+<li>-r：将目录及目录中所有文件（目录）逐一删除，即递归删除</li>
+<li>-f：无需确认，直接删除</li>
+</ul>
+</li>
+<li>举例：<ul>
+<li>rm -r itcast&#x2F;      删除名为 itcast 的目录和目录中所有文件，删除就需确认</li>
+<li>rm -rf itcast&#x2F;    无需确认，直接删除名为 itcast 的目录和目录中所有文件</li>
+<li>rm -f hello.txt   无需确认，直接删除 hello.txt 文件</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>mv：（移动文件与目录，或改名）就相当于剪切<ul>
+<li>语法：mv source dest</li>
+<li>举例：<ul>
+<li>mv hello.txt hi.txt         将 hello.txt 改名为 hi.txt</li>
+<li>mv hi.txt itheima&#x2F;         将文件 hi.txt 移动到itheima目录中</li>
+<li>mv hi.txt itheima&#x2F;hello.txt       将hi.txt移动到itheima目录中，并改名为hello.txt</li>
+<li>mv itcast&#x2F; itheima&#x2F;       如果 itheima 目录不存在，将 itcast 目录改名为 itheima</li>
+<li>mv itcast&#x2F; itheima&#x2F;       如果 itheima 目录存在，将 itcast 目录移动到 itheima 目录</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>tail： 查看文件末尾的内容<ul>
+<li>语法： tail [-f] fileName</li>
+<li>说明：-f ：动态读取文件末尾内容并显示，通常用于日志文件的内容输出。</li>
+<li>举例：<ul>
+<li>tail  fileName ：显示 文件末尾 10 行的内容</li>
+<li>tail -20 fileName：显示文件末尾 20 行内容</li>
+<li>tail -f fileName：动态读取 文件末尾内容并显示</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>cat：查看文件内容</li>
+<li>find ：在指定的目录下查找文件<ul>
+<li>语法：find dirName -option fileName</li>
+<li>举例：<ul>
+<li>find   .    -name  “*.java”     在当前目录及其子目录下查找 .java 结尾文件</li>
+<li>find   &#x2F;itcast  -name  “*.java”    在 &#x2F;itcast 目录及其子目录下查找 .java 结尾的文件</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>grep：从指定文件中查找指定的文本内容<ul>
+<li>语法：grep word fileName</li>
+<li>举例：<ul>
+<li>grep Hello HelloWorld.java    查找HelloWorld.java文件中 Hello 文本</li>
+<li>grep hello *.java      查找当前目录中所有 .java  文件中的 hello 文本</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="文件相关，vim编辑器"><a href="#文件相关，vim编辑器" class="headerlink" title="文件相关，vim编辑器"></a>文件相关，vim编辑器</h2><h3 id="压缩指令"><a href="#压缩指令" class="headerlink" title="压缩指令"></a>压缩指令</h3><blockquote>
+<p>常见的压缩文件扩展名（**<code>常用的gzip、bzip和最新的xz</code>**）：</p>
+<ul>
+<li>*.Z          compress 程序压缩的文件</li>
+<li>*.zip       zip 程序压缩的文件</li>
+<li>*.gz        gzip 程序压缩的文件</li>
+<li>*.bz2      bzip2 程序压缩的文件</li>
+<li>*.xz         xz 程序压缩的文件</li>
+<li>*.tar        tar 程序打包的数据，并没有压缩过：|</li>
+<li>*.tar.gz    tar 程序打包的文件，其中并且经过 gzip 的压缩</li>
+<li>*.tar.bz2  tar 程序打包的文件，其中并且经过 bzip2 的压缩</li>
+<li>*.tar.xz     tar 程序打包的文件，其中并且经过 xz 的压缩</li>
+</ul>
+</blockquote>
+<ul>
+<li>gzip这个压缩指令应用比较广:(1~9的压缩等级，越大压缩比越好，默认6）</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">[root@agent tmp]$ <span class="built_in">cd</span> /tmp</span><br><span class="line"><span class="comment">#du查看文件大小单位（k）</span></span><br><span class="line">[root@agent tmp]$ <span class="built_in">du</span> /etc/services </span><br><span class="line">656	/etc/services</span><br><span class="line"> </span><br><span class="line">[root@agent tmp]$ <span class="built_in">cp</span> /etc/services .</span><br><span class="line"><span class="comment">#压缩.</span></span><br><span class="line">[root@agent tmp]$ gzip -v services </span><br><span class="line">services:	 79.7% -- replaced with services.gz</span><br><span class="line">[root@agent tmp]$ ll /etc/services /tmp/services.gz </span><br><span class="line">-rw-r--r--. 1 root root 670457 Jul 31  2019 /etc/services</span><br><span class="line">-rw-r--r--. 1 root root 136133 Mar 30 04:57 /tmp/services.gz</span><br><span class="line"><span class="comment">#查看压缩</span></span><br><span class="line">[root@agent tmp]$ zcat services.gz </span><br><span class="line">[root@agent tmp]$ zmore services.gz </span><br><span class="line">[root@agent tmp]$ zless services.gz </span><br><span class="line"><span class="comment">#过滤压缩文件中http</span></span><br><span class="line">[root@agent tmp]$ zgrep -n <span class="string">&#x27;http&#x27;</span> services.gz </span><br><span class="line"> </span><br><span class="line"><span class="comment">#解压缩，但会将gz压缩包删掉</span></span><br><span class="line">[root@agent tmp]$ gzip -d services.gz </span><br><span class="line"> </span><br><span class="line"><span class="comment">#以最好的压缩比，并保留原来文件</span></span><br><span class="line">[root@agent tmp]$ gzip -9 -c services &gt;services.gz</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>同样的，bzip2，bzcat&#x2F;bzmore&#x2F;bzless&#x2F;bzgrep；这个压缩效果更好，都差不多。</p>
+</li>
+<li><p>xz，xzcat&#x2F;xzmore&#x2F;xzless&#x2F;xzgrep。这个压缩比更好，用法差不多</p>
+</li>
+</ul>
+<h3 id="打包指令"><a href="#打包指令" class="headerlink" title="打包指令"></a>打包指令</h3><p><img src="/img/0010-linux_tar_1.jpg"></p>
+<p><img src="/img/0011-linux_tar_%E7%AE%80%E8%AE%B0.jpg"></p>
+<p>要懂得经常备份&#x2F;etc下的东西，打包压缩是个很好的方式</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#检查压缩/etc 到root下所需的时间 很明显第一个花时间短，花时间长说明压缩比好</span></span><br><span class="line">[root@agent tmp]$ time tar -zcvf /root/etc.tar.gz /etc</span><br><span class="line">[root@agent tmp]$ time tar -jcvf /root/etc.tar.bz /etc</span><br><span class="line">[root@agent tmp]$ time tar -Jcvf /root/etc.tar.xz /etc</span><br></pre></td></tr></table></figure>
+
+<h3 id="vim-编辑器"><a href="#vim-编辑器" class="headerlink" title="vim 编辑器"></a>vim 编辑器</h3><p>vim可以看成vi的进阶版，可以有颜色，可以判断文本格式，很好用。（三种模式及互相切换方式如图）</p>
+<p><img src="/img/0012-vim.png"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#wget是下载网络是上文档的命令，这个文件是鸟哥给的一个host文件</span></span><br><span class="line">[root@agent tmp]$ wget http://linux.vbird.org/linux_basic/0310vi/hosts</span><br><span class="line">[root@agent tmp]$ vim hosts</span><br></pre></td></tr></table></figure>
+
+<p>基本操作：（区块选择要熟悉，挺好使的）</p>
+<ul>
+<li><p>i 在光标前插入；o 在下行插入，（进入插入模式）</p>
+</li>
+<li><p>按ESC键可以退出到命令行模式：在这边，u 撤销、CTRL+r 恢复、y 是复制，p 是粘贴，gg 到首行，G 到最后一列</p>
+</li>
+<li><p>x：删除光标所在的字符；dd 删除当前行；想删除全部  gg—&gt;V—&gt;G，然后d删除</p>
+</li>
+<li><p>在命令行模式下输入：（冒号），然后输入【（wq  保存退出）、q!  强制退出，不保存）、 w（保存）、  q（离开）】</p>
+</li>
+<li><p>:&#x2F;string快速定位；   :1,$ s&#x2F;str1&#x2F;str2&#x2F;g  用字符串 str2 替换正文中所有出现的字符串 str1</p>
+</li>
+</ul>
+<p><img src="/img/0013-vim_vim.png"></p>
+<h2 id="shell"><a href="#shell" class="headerlink" title="shell"></a>shell</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">查看shell环境变量</span></span><br><span class="line">[user1@agent ~]$ env</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">查看环境变量及自定义变量</span></span><br><span class="line">[user1@agent ~]$ set</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">将自定义变量转成环境变量</span></span><br><span class="line">[user1@agent ~]$ export name</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[user1@agent ~]$ alias lm=&#x27;rm -i&#x27;</span><br><span class="line">[user1@agent ~]$ alias |grep lm</span><br><span class="line">alias lm=&#x27;rm -i&#x27;</span><br><span class="line">[user1@agent ~]$ unalias lm</span><br><span class="line">[user1@agent ~]$ alias |grep lm</span><br><span class="line"><span class="meta prompt_"> </span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash"><span class="built_in">history</span>查看历史命令，可以尝试下</span></span><br><span class="line">[user1@agent ~]$ alias h=&#x27;history&#x27;</span><br><span class="line">[user1@agent ~]$ h</span><br><span class="line"><span class="meta prompt_"> </span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash"><span class="built_in">source</span>命令：读入环境配置文件的指令</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/img/0014-shell.jpg"></p>
+<h2 id="系统服务（daemons）"><a href="#系统服务（daemons）" class="headerlink" title="系统服务（daemons）"></a>系统服务（daemons）</h2><p><img src="/img/0015-%E7%B3%BB%E7%BB%9F%E6%9C%8D%E5%8A%A1.png"></p>
+<h2 id="yum"><a href="#yum" class="headerlink" title="yum"></a>yum</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#列出yum服务器上所提供的所有软件名称，</span></span><br><span class="line">[root@www packages]# yum list</span><br><span class="line"><span class="comment">#已经安装的软件</span></span><br><span class="line">Installed Packages</span><br><span class="line">GConf2.x86_64                             3.2.6-8.el7                  @anaconda</span><br><span class="line">GeoIP.x86_64                              1.5.0-13.el7                 @anaconda</span><br><span class="line">ModemManager.x86_64                       1.6.10-1.el7                 @anaconda</span><br><span class="line"><span class="comment">#还可以安装的软件</span></span><br><span class="line">Available Packages</span><br><span class="line">0ad.x86_64                                0.0.22-1.el7                 epel     </span><br><span class="line">0ad-data.noarch                           0.0.22-1.el7                 epel     </span><br><span class="line">0install.x86_64 </span><br><span class="line"><span class="comment">#注意利用通配符*（记不清软件名字的情况下）</span></span><br><span class="line">[root@www packages]# yum list  pam*                   </span><br><span class="line"> </span><br><span class="line"><span class="comment">#列出目前服务器可供本机升级的软件</span></span><br><span class="line">[root@www packages]# yum list updates</span><br><span class="line"> </span><br><span class="line"><span class="comment">#搜寻磁盘阵列（raid）相关的软件</span></span><br><span class="line">root@www packages]# yum search raid</span><br><span class="line"> </span><br><span class="line"><span class="comment">#找出mdadm这个软件的功能，查出的信息要会看哦 不会的单词百度哦</span></span><br><span class="line">[root@www packages]# yum info mdadm</span><br><span class="line"> </span><br><span class="line">Installed Packages</span><br><span class="line">Name        : mdadm</span><br><span class="line">Arch        : x86_64</span><br><span class="line">Version     : 4.1</span><br><span class="line">Release     : rc1_2.el7</span><br><span class="line">Size        : 1.0 M</span><br><span class="line">Repo        : installed</span><br><span class="line">From repo   : anaconda</span><br><span class="line">Summary     : The mdadm program controls Linux md devices (software RAID arrays)</span><br><span class="line">URL         : http://www.kernel.org/pub/linux/utils/raid/mdadm/</span><br><span class="line">License     : GPLv2+</span><br><span class="line">Description : The mdadm program is used to create, manage, and monitor Linux MD (software</span><br><span class="line">            : RAID) devices.  As such, it provides similar functionality to the raidtools</span><br><span class="line">            : package.  However, mdadm is a single program, and it can perform</span><br><span class="line">            : almost all <span class="built_in">functions</span> without a configuration file, though a configuration</span><br><span class="line">            : file can be used to <span class="built_in">help</span> with some common tasks.</span><br><span class="line"> </span><br><span class="line"><span class="comment">#找出提供passwd这个文件的软件有哪些，这样就可以针对性安装软件啦</span></span><br><span class="line">[root@www packages]# yum provides passwd</span><br><span class="line">Loaded plugins: fastestmirror, langpacks</span><br><span class="line">Loading mirror speeds from cached hostfile</span><br><span class="line">passwd-0.79-5.el7.x86_64 : An utility <span class="keyword">for</span> setting or changing passwords using PAM</span><br><span class="line">Repo        : base</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#可以不用加参数，这边加参数的话，下载默认就是yes了。</span></span><br><span class="line">[root@www packages]# yum install pam-devel -y</span><br><span class="line">[root@www packages]# yum update pam-devel</span><br><span class="line">[root@www packages]# yum remove pam-devel</span><br><span class="line"><span class="comment">#假如要全系统升级呢</span></span><br><span class="line">[root@www ~]# yum -y update</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="其余"><a href="#其余" class="headerlink" title="其余"></a>其余</h2><ul>
+<li><p>查看目录内容：<strong>ll</strong>  或 <strong>ls</strong></p>
+<ul>
+<li>**<code>ls</code>**：基础命令，用于列出目录内容，可以通过添加选项来改变输出格式。</li>
+<li>**<code>ll</code>**：<code>ls -l</code> 的别名，用于以长格式列出文件详情。</li>
+</ul>
+<blockquote>
+<h4 id="常用选项："><a href="#常用选项：" class="headerlink" title="常用选项："></a>常用选项：</h4><ul>
+<li><code>-a</code>：显示所有文件，包括隐藏文件（以<code>.</code>开头的文件）。</li>
+<li><code>-l</code>：以长格式（long listing format）显示文件详情，包括权限、链接数、属主、属组、大小、时间戳等。</li>
+<li><code>-h</code>：以人类可读的形式显示文件大小（例如，1K、234M、2G等）。</li>
+<li><code>-R</code>：递归地列出子目录中的文件。</li>
+<li><code>-t</code>：按时间排序文件。</li>
+</ul>
+</blockquote>
+</li>
+<li><p>语言系统</p>
+<ul>
+<li>查看当前支持的语系：<strong>local</strong></li>
+<li>修改：<strong>LANG&#x3D;en_US.utf8</strong></li>
+<li>第三个要更新LC_ALL： <strong>export LC_ALL&#x3D;en_US.utf8</strong></li>
+</ul>
+</li>
+<li><p>显示日期 |  日历  | 计算机：<strong>date</strong> |  <strong>cal</strong>  |  <strong>bc</strong></p>
+</li>
+<li><p>正常关机（有的系统需要切换 root 才可以执行，用命令： <strong>su -</strong>  ）</p>
+<ul>
+<li>将数据同步写入硬盘中的指令： <strong>sync</strong> （建议多执行几次）</li>
+<li>惯用的关机指令： <strong>shutdown</strong> | <strong>init 0</strong> | <strong>systemctl [shutdown -参数]</strong></li>
+<li>重新启动，关机：<strong>reboot</strong>  |  <strong>halt</strong>   | <strong>poweroff</strong>s</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#建议这样多保存再关机</span></span><br><span class="line"><span class="built_in">sync</span>;<span class="built_in">sync</span>;<span class="built_in">sync</span>;reboot</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>环境变量</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#查看shell环境变量</span></span><br><span class="line">[user1@agent ~]$ <span class="built_in">env</span></span><br><span class="line"><span class="comment">#查看环境变量及自定义变量</span></span><br><span class="line">[user1@agent ~]$ <span class="built_in">set</span></span><br><span class="line"><span class="comment">#将自定义变量转成环境变量</span></span><br><span class="line">[user1@agent ~]$ <span class="built_in">export</span> name</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+<hr>
+<h1 id="4-Linux-常见问题"><a href="#4-Linux-常见问题" class="headerlink" title="4. Linux 常见问题"></a>4. Linux 常见问题</h1><h2 id="Linux-无法通过curl获得服务器主页数据如何排查？"><a href="#Linux-无法通过curl获得服务器主页数据如何排查？" class="headerlink" title="Linux 无法通过curl获得服务器主页数据如何排查？"></a>Linux 无法通过curl获得服务器主页数据如何排查？</h2><ul>
+<li>关闭防火墙、看host文件中是否 ip 和域名绑定</li>
+</ul>
+<h2 id="两个同网段Linux服务器在不安装客户端情况下如何传递文件？"><a href="#两个同网段Linux服务器在不安装客户端情况下如何传递文件？" class="headerlink" title="两个同网段Linux服务器在不安装客户端情况下如何传递文件？"></a>两个同网段Linux服务器在不安装客户端情况下如何传递文件？</h2><ul>
+<li>scp 命令</li>
+</ul>
+<h2 id="Linux-命令"><a href="#Linux-命令" class="headerlink" title="Linux 命令"></a>Linux 命令</h2><ol>
+<li>查看文本文件头部 n 行</li>
+</ol>
+<ul>
+<li>head -n 200 filename  &#x2F;&#x2F; 200 可替换为任一数字</li>
+</ul>
+<ol start="2">
+<li>产看文本文件末尾 n 行</li>
+</ol>
+<ul>
+<li>tail -n 200 filename &#x2F;&#x2F; 200 可替换为任一数字</li>
+</ul>
+<ol start="3">
+<li>查看文本文件行数</li>
+</ol>
+<ul>
+<li>wc -l filename</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        
+      
+      
+      
+      
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="tags/linux/" rel="tag">linux</a></li></ul>
+
+
+    </footer>
+  </div>
+  
+    
+  <nav id="article-nav" data-aos="fade-up">
+    
+      <div class="article-nav-link-wrap article-nav-link-left">
+        
+          <img data-src="/img/computer-network-logo.png" data-sizes="auto" alt="计算机网络 知识点" class="lazyload">
+        
+        <a href="../../15/computer_network/"></a>
+        <div class="article-nav-caption">前一篇</div>
+        <h3 class="article-nav-title">
+          
+            计算机网络 知识点
+          
+        </h3>
+      </div>
+    
+    
+    <div class="article-nav-link-wrap article-nav-link-right">
+      
+        <img data-src="/img/mysql_logo.png" data-sizes="auto" alt="MySQL 知识点" class="lazyload">
+      
+      <a href="../../../09/25/mysql_index/"></a>
+      <div class="article-nav-caption">后一篇</div>
+      <h3 class="article-nav-title">
+        
+          MySQL 知识点
+        
+      </h3>
+    </div>
+    
+  </nav>
+
+
+  
+</article>
+
+
+
+
+
+
+</section>
+          
+            <aside id="sidebar">
+  <div class="sidebar-wrapper wrap-sticky">
+    <div class="sidebar-wrap" data-aos="fade-up">
+      
+        <div class="sidebar-toc-sidebar"><div class="sidebar-toc">
+  <h3 class="toc-title">文章目录</h3>
+  <div class="sidebar-toc-wrapper toc-div-class" >
+      
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-Linux-%E7%9A%84%E5%BA%94%E7%94%A8%E9%A2%86%E5%9F%9F"><span class="toc-number">1.</span> <span class="toc-text">1. Linux 的应用领域</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="toc-number">2.</span> <span class="toc-text">2. 基础知识</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%AE%E5%BD%95%E9%85%8D%E7%BD%AE%E5%92%8C%E5%90%AB%E4%B9%89"><span class="toc-number">2.1.</span> <span class="toc-text">目录配置和含义</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-%E5%B8%B8%E8%A7%81%E7%9A%84%E6%93%8D%E4%BD%9C%E5%91%BD%E4%BB%A4"><span class="toc-number">3.</span> <span class="toc-text">3. 常见的操作命令</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A3%81%E7%9B%98%E6%96%87%E4%BB%B6%E4%B8%8E%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86"><span class="toc-number">3.1.</span> <span class="toc-text">磁盘文件与文件系统管理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%98%B2%E7%81%AB%E5%A2%99"><span class="toc-number">3.2.</span> <span class="toc-text">防火墙</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%AE%E5%BD%95%E6%96%87%E4%BB%B6%E7%9B%B8%E5%85%B3"><span class="toc-number">3.3.</span> <span class="toc-text">目录文件相关</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E7%9B%B8%E5%85%B3%EF%BC%8Cvim%E7%BC%96%E8%BE%91%E5%99%A8"><span class="toc-number">3.4.</span> <span class="toc-text">文件相关，vim编辑器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%8B%E7%BC%A9%E6%8C%87%E4%BB%A4"><span class="toc-number">3.4.1.</span> <span class="toc-text">压缩指令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%93%E5%8C%85%E6%8C%87%E4%BB%A4"><span class="toc-number">3.4.2.</span> <span class="toc-text">打包指令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#vim-%E7%BC%96%E8%BE%91%E5%99%A8"><span class="toc-number">3.4.3.</span> <span class="toc-text">vim 编辑器</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#shell"><span class="toc-number">3.5.</span> <span class="toc-text">shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9F%E6%9C%8D%E5%8A%A1%EF%BC%88daemons%EF%BC%89"><span class="toc-number">3.6.</span> <span class="toc-text">系统服务（daemons）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#yum"><span class="toc-number">3.7.</span> <span class="toc-text">yum</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BD%99"><span class="toc-number">3.8.</span> <span class="toc-text">其余</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E9%80%89%E9%A1%B9%EF%BC%9A"><span class="toc-number">3.8.0.1.</span> <span class="toc-text">常用选项：</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-Linux-%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98"><span class="toc-number">4.</span> <span class="toc-text">4. Linux 常见问题</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Linux-%E6%97%A0%E6%B3%95%E9%80%9A%E8%BF%87curl%E8%8E%B7%E5%BE%97%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%BB%E9%A1%B5%E6%95%B0%E6%8D%AE%E5%A6%82%E4%BD%95%E6%8E%92%E6%9F%A5%EF%BC%9F"><span class="toc-number">4.1.</span> <span class="toc-text">Linux 无法通过curl获得服务器主页数据如何排查？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%A4%E4%B8%AA%E5%90%8C%E7%BD%91%E6%AE%B5Linux%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%9C%A8%E4%B8%8D%E5%AE%89%E8%A3%85%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%83%85%E5%86%B5%E4%B8%8B%E5%A6%82%E4%BD%95%E4%BC%A0%E9%80%92%E6%96%87%E4%BB%B6%EF%BC%9F"><span class="toc-number">4.2.</span> <span class="toc-text">两个同网段Linux服务器在不安装客户端情况下如何传递文件？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Linux-%E5%91%BD%E4%BB%A4"><span class="toc-number">4.3.</span> <span class="toc-text">Linux 命令</span></a></li></ol></li></ol>
+      
+  </div>
+</div>
+</div>
+        <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img data-src="/avatar/my_logo.jpg" data-sizes="auto" alt="林羽" class="lazyload">
+  <div class="sidebar-author-name">林羽</div>
+  <div class="sidebar-description"></div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>文章</div>
+    <div class="sidebar-state-number">12</div>
+  </div>
+  <div class="sidebar-state-category">
+    <div>分类</div>
+    <div class="sidebar-state-number">12</div>
+  </div>
+  <div class="sidebar-state-tag">
+    <div>标签</div>
+    <div class="sidebar-state-number">7</div>
+  </div>
+</div>
+<div class="sidebar-social">
+  
+</div>
+<div class="sidebar-menu">
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="../../../../index.html" aria-label="首页"></a>
+      <div class="sidebar-menu-icon icon-taichi"></div>
+      <div class="sidebar-menu-link">首页</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="../../../../archives" aria-label="归档"></a>
+      <div class="sidebar-menu-icon icon-taichi"></div>
+      <div class="sidebar-menu-link">归档</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="../../../../about" aria-label="关于"></a>
+      <div class="sidebar-menu-icon icon-taichi"></div>
+      <div class="sidebar-menu-link">关于</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="../../../../friend" aria-label="友链"></a>
+      <div class="sidebar-menu-icon icon-taichi"></div>
+      <div class="sidebar-menu-link">友链</div>
+    </div>
+  
+</div>
+</div>
+      
+      
+        <div class="sidebar-btn-wrapper" style="position:static">
+          <div class="sidebar-toc-btn current"></div>
+          <div class="sidebar-common-btn"></div>
+        </div>
+      
+    </div>
+  </div>
+
+  
+</aside>
+
+          
+        </div>
+        <footer id="footer">
+  <div style="width: 100%; overflow: hidden">
+    <div class="footer-line"></div>
+  </div>
+  <div id="footer-info">
+    
+    <div>
+      <span class="icon-copyright"></span>
+      2020-2024
+      <span class="footer-info-sep"></span>
+      林羽
+    </div>
+    
+    
+      <div>
+        <span class="icon-brush"></span>
+        116.6k
+        &nbsp;|&nbsp;
+        <span class="icon-coffee"></span>
+        07:29
+      </div>
+    
+    
+    
+    
+      <div>
+        <span class="icon-eye"></span>
+        <span id="busuanzi_container_site_pv">总访问量&nbsp;<span id="busuanzi_value_site_pv"></span></span>
+        &nbsp;|&nbsp;
+        <span class="icon-user"></span>
+        <span id="busuanzi_container_site_uv">总访客量&nbsp;<span id="busuanzi_value_site_uv"></span></span>
+      </div>
+    
+  </div>
+</footer>
+
+        <div class="sidebar-top">
+          <img src="/images/taichi.png" height="50" width="50" alt="backtop" />
+          <div class="arrow-up"></div>
+        </div>
+        <div id="mask"></div>
+      </div>
+      <nav id="mobile-nav">
+  <div class="sidebar-wrap">
+    
+      <div class="sidebar-toc-sidebar"><div class="sidebar-toc">
+  <h3 class="toc-title">文章目录</h3>
+  <div class="sidebar-toc-wrapper toc-div-class" >
+      
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-Linux-%E7%9A%84%E5%BA%94%E7%94%A8%E9%A2%86%E5%9F%9F"><span class="toc-number">1.</span> <span class="toc-text">1. Linux 的应用领域</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="toc-number">2.</span> <span class="toc-text">2. 基础知识</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%AE%E5%BD%95%E9%85%8D%E7%BD%AE%E5%92%8C%E5%90%AB%E4%B9%89"><span class="toc-number">2.1.</span> <span class="toc-text">目录配置和含义</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-%E5%B8%B8%E8%A7%81%E7%9A%84%E6%93%8D%E4%BD%9C%E5%91%BD%E4%BB%A4"><span class="toc-number">3.</span> <span class="toc-text">3. 常见的操作命令</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A3%81%E7%9B%98%E6%96%87%E4%BB%B6%E4%B8%8E%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86"><span class="toc-number">3.1.</span> <span class="toc-text">磁盘文件与文件系统管理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%98%B2%E7%81%AB%E5%A2%99"><span class="toc-number">3.2.</span> <span class="toc-text">防火墙</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%AE%E5%BD%95%E6%96%87%E4%BB%B6%E7%9B%B8%E5%85%B3"><span class="toc-number">3.3.</span> <span class="toc-text">目录文件相关</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E7%9B%B8%E5%85%B3%EF%BC%8Cvim%E7%BC%96%E8%BE%91%E5%99%A8"><span class="toc-number">3.4.</span> <span class="toc-text">文件相关，vim编辑器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%8B%E7%BC%A9%E6%8C%87%E4%BB%A4"><span class="toc-number">3.4.1.</span> <span class="toc-text">压缩指令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%93%E5%8C%85%E6%8C%87%E4%BB%A4"><span class="toc-number">3.4.2.</span> <span class="toc-text">打包指令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#vim-%E7%BC%96%E8%BE%91%E5%99%A8"><span class="toc-number">3.4.3.</span> <span class="toc-text">vim 编辑器</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#shell"><span class="toc-number">3.5.</span> <span class="toc-text">shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9F%E6%9C%8D%E5%8A%A1%EF%BC%88daemons%EF%BC%89"><span class="toc-number">3.6.</span> <span class="toc-text">系统服务（daemons）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#yum"><span class="toc-number">3.7.</span> <span class="toc-text">yum</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BD%99"><span class="toc-number">3.8.</span> <span class="toc-text">其余</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E9%80%89%E9%A1%B9%EF%BC%9A"><span class="toc-number">3.8.0.1.</span> <span class="toc-text">常用选项：</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-Linux-%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98"><span class="toc-number">4.</span> <span class="toc-text">4. Linux 常见问题</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Linux-%E6%97%A0%E6%B3%95%E9%80%9A%E8%BF%87curl%E8%8E%B7%E5%BE%97%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%BB%E9%A1%B5%E6%95%B0%E6%8D%AE%E5%A6%82%E4%BD%95%E6%8E%92%E6%9F%A5%EF%BC%9F"><span class="toc-number">4.1.</span> <span class="toc-text">Linux 无法通过curl获得服务器主页数据如何排查？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%A4%E4%B8%AA%E5%90%8C%E7%BD%91%E6%AE%B5Linux%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%9C%A8%E4%B8%8D%E5%AE%89%E8%A3%85%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%83%85%E5%86%B5%E4%B8%8B%E5%A6%82%E4%BD%95%E4%BC%A0%E9%80%92%E6%96%87%E4%BB%B6%EF%BC%9F"><span class="toc-number">4.2.</span> <span class="toc-text">两个同网段Linux服务器在不安装客户端情况下如何传递文件？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Linux-%E5%91%BD%E4%BB%A4"><span class="toc-number">4.3.</span> <span class="toc-text">Linux 命令</span></a></li></ol></li></ol>
+      
+  </div>
+</div>
+</div>
+      <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img data-src="/avatar/my_logo.jpg" data-sizes="auto" alt="林羽" class="lazyload">
+  <div class="sidebar-author-name">林羽</div>
+  <div class="sidebar-description"></div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>文章</div>
+    <div class="sidebar-state-number">12</div>
+  </div>
+  <div class="sidebar-state-category">
+    <div>分类</div>
+    <div class="sidebar-state-number">12</div>
+  </div>
+  <div class="sidebar-state-tag">
+    <div>标签</div>
+    <div class="sidebar-state-number">7</div>
+  </div>
+</div>
+<div class="sidebar-social">
+  
+</div>
+<div class="sidebar-menu">
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="../../../../index.html" aria-label="首页"></a>
+      <div class="sidebar-menu-icon icon-taichi"></div>
+      <div class="sidebar-menu-link">首页</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="../../../../archives" aria-label="归档"></a>
+      <div class="sidebar-menu-icon icon-taichi"></div>
+      <div class="sidebar-menu-link">归档</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="../../../../about" aria-label="关于"></a>
+      <div class="sidebar-menu-icon icon-taichi"></div>
+      <div class="sidebar-menu-link">关于</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="../../../../friend" aria-label="友链"></a>
+      <div class="sidebar-menu-icon icon-taichi"></div>
+      <div class="sidebar-menu-link">友链</div>
+    </div>
+  
+</div>
+</div>
+    
+  </div>
+  
+    <div class="sidebar-btn-wrapper">
+      <div class="sidebar-toc-btn current"></div>
+      <div class="sidebar-common-btn"></div>
+    </div>
+  
+</nav>
+
+    </div>
+    
+    
+<script src="https://npm.webcache.cn/lazysizes@5.3.2/lazysizes.min.js"></script>
+
+
+<script src="https://npm.webcache.cn/clipboard@2.0.11/dist/clipboard.min.js"></script>
+
+
+
+<script src="../../../../js/script.js"></script>
+
+
+
+  
+<script src="../../../../js/aos.js"></script>
+
+  <script>
+    var aosInit = () => {
+      AOS.init({
+        duration: 1000,
+        easing: "ease",
+        once: true,
+        offset: 50,
+      });
+    };
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', aosInit);
+    } else {
+      aosInit();
+    }
+  </script>
+
+
+
+<script src="../../../../js/pjax_script.js" data-pjax></script>
+
+
+<script type="module" data-pjax>
+  import PhotoSwipeLightbox from "https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe-lightbox.esm.min.js";
+  
+  const pswp = () => {
+    if (_$$('.article-entry a.article-gallery-item').length > 0) {
+      new PhotoSwipeLightbox({
+        gallery: '.article-entry',
+        children: 'a.article-gallery-item',
+        pswpModule: () => import("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.esm.min.js")
+      }).init();
+    }
+    if(_$$('.article-gallery a.article-gallery-item').length > 0) {
+      new PhotoSwipeLightbox({
+        gallery: '.article-gallery',
+        children: 'a.article-gallery-item',
+        pswpModule: () => import("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.esm.min.js")
+      }).init();
+    }
+    window.lightboxStatus = 'done';
+    window.removeEventListener('lightbox:ready', pswp);
+  }
+  if(window.lightboxStatus === 'ready') {
+    pswp()
+  } else {
+    window.addEventListener('lightbox:ready', pswp);
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<script src="https://npm.webcache.cn/mouse-firework@0.0.4/dist/index.umd.js"></script>
+
+  <script>
+    firework(JSON.parse('{"excludeElements":["a","button"],"particles":[{"shape":"circle","move":["emit"],"easing":"easeOutExpo","colors":["#ff5252","#ff7c7c","#ffafaf","#ffd0d0"],"number":20,"duration":[1200,1800],"shapeOptions":{"radius":[16,32],"alpha":[0.3,0.5]}},{"shape":"circle","move":["diffuse"],"easing":"easeOutExpo","colors":["#ff0000"],"number":1,"duration":[1200,1800],"shapeOptions":{"radius":20,"alpha":[0.2,0.5],"lineWidth":6}}]}'))
+  </script>
+
+
+
+
+
+
+
+  
+<script src="https://npm.webcache.cn/quicklink@2.3.0/dist/quicklink.umd.js"></script>
+
+  <script data-pjax>
+    quicklink.listen({
+      timeout: 3000,
+      priority: true,
+      ignores: []
+    });
+  </script>
+
+
+<div id="lazy-script">
+  <div>
+    
+  </div>
+</div>
+
+
+  <script>
+    console.log(String.raw`%c 
+ ______     ______     __     __    __     __  __    
+/\  == \   /\  ___\   /\ \   /\ "-./  \   /\ \/\ \   
+\ \  __<   \ \  __\   \ \ \  \ \ \-./\ \  \ \ \_\ \  
+ \ \_\ \_\  \ \_____\  \ \_\  \ \_\ \ \_\  \ \_____\ 
+  \/_/ /_/   \/_____/   \/_/   \/_/  \/_/   \/_____/ 
+                                                  
+`,'color: #ff5252;')
+    console.log('%c Theme.Reimu v' + '0.3.1' + ' %c https://github.com/D-Sketon/hexo-theme-reimu ', 'color: white; background: #ff5252; padding:5px 0;', 'padding:4px;border:1px solid #ff5252;')
+  </script>
+  
+
+
+
+  
+<script src="https://npm.webcache.cn/busuanzi@2.3.0/bsz.pure.mini.js" async></script>
+
+
+
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then((registrations) => {
+      for (let registration of registrations) {
+        registration.unregister();
+      }
+    });
+  }
+</script>
+
+  <!-- hexo injector body_end start -->
+<script src="js/insert_highlight.js" data-pjax></script>
+<!-- hexo injector body_end end --></body>
+  </html>
+

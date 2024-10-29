@@ -1,0 +1,1882 @@
+
+  <!DOCTYPE html>
+  <html lang="zh-CN"  >
+  <head>
+  <meta charset="utf-8">
+  
+
+  
+
+  
+
+  
+  <script>window.icon_font = '4552607_tq6stt6tcg';window.clipboard_tips = {"success":"复制成功(*^▽^*)","fail":"复制失败 (ﾟ⊿ﾟ)ﾂ","copyright":{"enable":false,"count":50,"content":"本文版权：本博客所有文章除特别声明外，均采用 BY-NC-SA 许可协议。转载请注明出处！"}};</script>
+  
+  
+  <title>
+    Nacos 知识点 |
+    
+    小羽博客
+  </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin><link rel="preload" as="style" href="https://fonts.googleapis.com/css?family=Mulish:400,400italic,700,700italic%7CNoto%20Serif%20SC:400,400italic,700,700italic&display=swap"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mulish:400,400italic,700,700italic%7CNoto%20Serif%20SC:400,400italic,700,700italic&display=swap" media="print" onload="this.media&#x3D;&#39;all&#39;">
+  
+    <link rel="preload" href="//at.alicdn.com/t/c/font_4552607_tq6stt6tcg.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  
+  
+    
+<link rel="stylesheet" href="../../../../css/loader.css">
+
+  
+  
+    <meta name="description" content="Nacos 整理知识点">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Nacos 知识点">
+<meta property="og:url" content="https://lyxiaoyu0.github.io/2024/11/01/nacos/index.html">
+<meta property="og:site_name" content="小羽博客">
+<meta property="og:description" content="Nacos 整理知识点">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lyxiaoyu0.github.io/img/0018-CAP.png">
+<meta property="og:image" content="https://lyxiaoyu0.github.io/img/0019-nacos%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83%E6%8C%87%E5%90%91%E9%85%8D%E7%BD%AE%E8%AF%B4%E6%98%8E.png">
+<meta property="og:image" content="https://lyxiaoyu0.github.io/img/0020-nacos%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B.png">
+<meta property="og:image" content="https://lyxiaoyu0.github.io/img/0021-nacos.png">
+<meta property="og:image" content="https://lyxiaoyu0.github.io/img/0022-nacos%E6%9C%8D%E5%8A%A1%E9%A2%86%E5%9F%9F%E6%A8%A1%E5%9E%8B.png">
+<meta property="article:published_time" content="2024-11-01T11:00:00.000Z">
+<meta property="article:modified_time" content="2024-11-01T15:29:58.110Z">
+<meta property="article:author" content="林羽">
+<meta property="article:tag" content="微服务">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lyxiaoyu0.github.io/img/0018-CAP.png">
+  
+  
+  
+    <link rel="shortcut icon" href="../../../../images/favicon.ico">
+  
+  
+<link rel="stylesheet" href="../../../../css/style.css">
+
+  <link rel="preload" href="https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  
+  
+  
+  
+    
+<script src="https://npm.webcache.cn/pace-js@1.2.4/pace.min.js"></script>
+
+  
+  
+    
+<link rel="stylesheet" href="https://npm.webcache.cn/@reimujs/aos@0.0.1/dist/aos.css">
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+  <body>
+    
+  <div id='loader'>
+    <div class="loading-left-bg loading-bg"></div>
+    <div class="loading-right-bg loading-bg"></div>
+    <div class="spinner-box">
+      <div class="loading-taichi">
+        <svg width="150" height="150" viewBox="0 0 1024 1024" class="icon" version="1.1" xmlns="https://www.w3.org/2000/svg" shape-rendering="geometricPrecision">
+          <path d="M303.5 432A80 80 0 0 1 291.5 592A80 80 0 0 1 303.5 432z" fill="#ff5252" />
+          <path d="M512 65A447 447 0 0 1 512 959L512 929A417 417 0 0 0 512 95A417 417 0 0 0 512 929L512 959A447 447 0 0 1 512 65z 
+         M512 95A417 417 0 0 1 929 512A208.5 208.5 0 0 1 720.5 720.5L720.5 592A80 80 0 0 0 720.5 432A80 80 0 0 0 720.5 592L720.5 720.5A208.5 208.5 0 0 1 512 512A208.5 208.5 0 0 0 303.5 303.5A208.5 208.5 0 0 0 95 512A417 417 0 0 1 512 95z" fill="#ff5252" />
+        </svg>
+      </div>
+      <div class="loading-word">小羽正在努力...</div>
+    </div>
+  </div>
+  </div>
+  <script>
+    var time = null;
+    var startLoading = () => {
+      time = Date.now();
+      document.getElementById('loader').classList.remove("loading");
+    }
+    var endLoading = () => {
+      if (!time) {
+        document.body.style.overflow = 'auto';
+        document.getElementById('loader').classList.add("loading");
+      } else {
+        if (Date.now() - time > 500) {
+          time = null;
+          document.body.style.overflow = 'auto';
+          document.getElementById('loader').classList.add("loading");
+        } else {
+          setTimeout(endLoading, 500 - (Date.now() - time));
+          time = null;
+        }
+      }
+    }
+    window.addEventListener('DOMContentLoaded', endLoading);
+    document.getElementById('loader').addEventListener('click', endLoading);
+  </script>
+
+<div id="copy-tooltip" style="pointer-events: none; opacity: 0; transition: all 0.2s ease; position: fixed;top: 50%;left: 50%;z-index: 999;transform: translate(-50%, -50%);color: white;background: rgba(0, 0, 0, 0.5);padding: 10px 15px;border-radius: 10px;">
+</div>
+
+
+    <div id="container">
+      <div id="wrap">
+        <div id="header-nav">
+  <nav id="main-nav">
+    
+      <span class="main-nav-link-wrap">
+        <div class="main-nav-icon icon-taichi"></div>
+        <a class="main-nav-link" href="../../../../index.html">首页</a>
+      </span>
+    
+      <span class="main-nav-link-wrap">
+        <div class="main-nav-icon icon-taichi"></div>
+        <a class="main-nav-link" href="../../../../archives">归档</a>
+      </span>
+    
+      <span class="main-nav-link-wrap">
+        <div class="main-nav-icon icon-taichi"></div>
+        <a class="main-nav-link" href="../../../../about">关于</a>
+      </span>
+    
+      <span class="main-nav-link-wrap">
+        <div class="main-nav-icon icon-taichi"></div>
+        <a class="main-nav-link" href="../../../../friend">友链</a>
+      </span>
+    
+    <a id="main-nav-toggle" class="nav-icon"></a>
+  </nav>
+  <nav id="sub-nav">
+    
+    
+    
+  </nav>
+</div>
+<header id="header">
+  
+    <img fetchpriority="high" src="/img/0023-nacos_logo.png" alt="Nacos 知识点">
+  
+  <div id="header-outer">
+    <div id="header-title">
+      
+        
+        
+          <a href="../../../../index.html" id="logo">
+            <h1 data-aos="slide-up">Nacos 知识点</h1>
+          </a>
+        
+      
+      
+        
+        <h2 id="subtitle-wrap" data-aos="slide-down">
+          
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+        <div id="content">
+          
+          <section id="main"><article id="post-nacos" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-inner" data-aos="fade-up">
+    <div class="article-meta">
+      <div class="article-date">
+  <a href="" class="article-date-link" data-aos="zoom-in">
+    <time datetime="2024-11-01T11:00:00.000Z" itemprop="datePublished">2024-11-01</time>
+    <time style="display: none;" id="post-update-time">2024-11-01</time>
+  </a>
+</div>
+
+      
+  <div class="article-category">
+    <a class="article-category-link" href="categories/Nacos-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/" data-aos="zoom-in">Nacos 知识点整理</a>
+  </div>
+
+
+    </div>
+    <div class="hr-line"></div>
+    
+
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+      
+        <blockquote>
+<p>官网文档：<a target="_blank" rel="noopener" href="https://nacos.io/zh-cn/docs/architecture.html">https://nacos.io/zh-cn/docs/architecture.html</a></p>
+</blockquote>
+<h1 id="1-基础概念"><a href="#1-基础概念" class="headerlink" title="1. 基础概念"></a>1. 基础概念</h1><ol>
+<li><strong>Nacos全称：</strong>Dynamic Naming and  Configuration Service  （翻译：动态命名和配置服务）</li>
+<li><strong>Nacos是什么：</strong>一个 <code>更易于构建云原生应用</code> 的<strong>动态服务发现</strong>、<strong>配置管理</strong>和<strong>服务管理平台</strong>。</li>
+<li>Nacos —-&gt;  注册中心 + 配置中心的组合</li>
+<li>等价于：<ul>
+<li>Nacos &#x3D; Eureka + Config + Bus</li>
+<li>Nacos &#x3D; <strong>Spring Cloud Consul</strong></li>
+</ul>
+</li>
+<li>能干什么：<ul>
+<li>替代 Eureka &#x2F; Consul 做服务注册中心</li>
+<li>替代 （Config + Bus）&#x2F; Consul 做服务配置中心和满足动态刷新广播通知</li>
+</ul>
+</li>
+<li>各种注册中心比较：</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th><strong>服务注册与发现框架</strong></th>
+<th><strong>CPA模型</strong></th>
+<th><strong>控制台管理</strong></th>
+<th><strong>社区活跃度</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Eureka</td>
+<td>AP</td>
+<td>支持</td>
+<td>低（2.x版本闭源）</td>
+</tr>
+<tr>
+<td>Zookeeper</td>
+<td>CP</td>
+<td>不支持</td>
+<td>中</td>
+</tr>
+<tr>
+<td>Consul</td>
+<td>CP</td>
+<td>支持</td>
+<td>高</td>
+</tr>
+<tr>
+<td>Nacos</td>
+<td>AP（Nacos默认是<strong>AP</strong>模式，但也可以调整切换为<strong>CP</strong>，我们一般用默认AP即可）</td>
+<td>支持</td>
+<td>高</td>
+</tr>
+</tbody></table>
+<blockquote>
+<h2 id="CAP-模型介绍："><a href="#CAP-模型介绍：" class="headerlink" title="CAP 模型介绍："></a><strong>CAP 模型介绍：</strong></h2><p>​		<strong>CAP</strong>定理指出，分布式系统无法同时保证<strong>一致性（Consistency）</strong>、<strong>可用性（Availability）</strong>和<strong>分区容错性（Partition tolerance）</strong>。在分区通信可能失败的情况下，通常需要在一致性与可用性之间做出选择。当追求一致性时，可能导致部分节点不可用；而保证可用性则可能牺牲一致性。CAP是理解分布式系统设计基础的重要理论。</p>
+<p><strong>分布式系统的三个指标：</strong></p>
+<p><img src="/img/0018-CAP.png"></p>
+<ul>
+<li><strong>分区容错（Partition tolerance）：</strong>大多数分布式系统都分布在多个子网络。每个子网络就叫做一个区（partition）。分区容错的意思是，区间通信可能失败。（比如，一台服务器放在中国，另一台服务器放在美国，这就是两个区，它们之间可能无法通信） ——– CAP理论要求 P 总是同时成立的</li>
+<li><strong>一致性（Consistency）：</strong>写操作之后的读操作，必须返回该值。</li>
+<li><strong>可用性（Availability）：</strong>只要收到用户的请求，服务器就必须给出回应。</li>
+</ul>
+<h4 id="Consistency-和-Availability-的矛盾，为什么-一致性-和-可用性-不能同时成立？"><a href="#Consistency-和-Availability-的矛盾，为什么-一致性-和-可用性-不能同时成立？" class="headerlink" title="Consistency 和 Availability 的矛盾，为什么 一致性 和 可用性 不能同时成立？"></a>Consistency 和 Availability 的矛盾，为什么 一致性 和 可用性 不能同时成立？</h4><p>因为通信可能失败（即：分区容错性），自己理解嗷，总结来说 CAP 只能同时成立两个，但是分布式架构中，要求 P 必须成立</p>
+</blockquote>
+<h1 id="2-简单使用"><a href="#2-简单使用" class="headerlink" title="2. 简单使用"></a>2. 简单使用</h1><h2 id="Nacos-Discovery-服务注册中心"><a href="#Nacos-Discovery-服务注册中心" class="headerlink" title="Nacos Discovery 服务注册中心"></a>Nacos Discovery 服务注册中心</h2><p>相应的依赖：</p>
+<ul>
+<li>spring-cloud-starter-alibaba-nacos-discovery：实现服务注册于发现</li>
+<li>spring-cloud-starter-alibaba-nacos-config：实现配置的动态变更</li>
+</ul>
+<p>！！！注意：2021 及以后的版本，nacos 的 <strong>负载均衡</strong> 使用必须用 <strong>Loadbalancer</strong> 而非曾今内置的 Ribbon </p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 负载均衡 --&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-loadbalancer<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.1.7<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line">   <span class="comment">&lt;!-- nacos注册中心 --&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-alibaba-nacos-discovery<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">version</span>&gt;</span>2021.0.5.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ol start="8">
+<li>yml 配置：</li>
+</ol>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">server:</span></span><br><span class="line">  <span class="attr">port:</span> <span class="number">9001</span></span><br><span class="line"></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">application:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">nacos-payment-provider</span> <span class="comment"># nacos 默认注册进去的服务名是这个</span></span><br><span class="line">  <span class="attr">cloud:</span></span><br><span class="line">    <span class="attr">nacos:</span></span><br><span class="line">      <span class="attr">discovery:</span></span><br><span class="line">        <span class="attr">server-addr:</span> <span class="string">localhost:8848</span> <span class="comment">#配置Nacos地址</span></span><br></pre></td></tr></table></figure>
+
+<p>启动类加注解：@EnableDiscoveryClient         &#x2F;&#x2F;  但是好像也可以不加</p>
+<p>负载均衡实现，看之前的 openFeign 的文章，里面有 <strong>Loadbalancer</strong> 实现负载均衡 和 切换负载均衡规则</p>
+<h2 id="Nacos-Config-服务配置中心"><a href="#Nacos-Config-服务配置中心" class="headerlink" title="Nacos Config 服务配置中心"></a>Nacos Config 服务配置中心</h2><ol>
+<li><strong>依赖(版本可以自己测一下)：</strong></li>
+</ol>
+<p>！！！必须有一个 <strong>bootstrap</strong> 依赖，作为nacos 依赖提前加载配置（ <code>application.yml </code> 之前）</p>
+<p>注册中心的依赖当然也要导一下了</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 负载均衡 --&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-loadbalancer<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.1.7<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"> <span class="comment">&lt;!--bootstrap--&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-bootstrap<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">   <span class="comment">&lt;!--nacos-config--&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-alibaba-nacos-config<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--nacos-discovery--&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-alibaba-nacos-discovery<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Nacos同Consul一样，在项目初始化时，要保证先从配置中心进行配置拉取，</li>
+<li>拉取配置之后，才能保证项目的正常启动，为了满足动态刷新和全局广播通知</li>
+<li>springboot中配置文件的加载是存在优先级顺序的，bootstrap优先级高于application</li>
+</ul>
+<ol start="2">
+<li><strong>yml 配置：</strong></li>
+</ol>
+<ul>
+<li><strong>bootstrap.yml ：</strong></li>
+</ul>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># nacos配置</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">application:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">nacos-config-client</span></span><br><span class="line">  <span class="attr">cloud:</span></span><br><span class="line">    <span class="attr">nacos:</span></span><br><span class="line">      <span class="attr">discovery:</span></span><br><span class="line">        <span class="attr">server-addr:</span> <span class="string">localhost:8848</span> <span class="comment">#Nacos服务注册中心地址</span></span><br><span class="line">      <span class="attr">config:</span></span><br><span class="line">        <span class="attr">server-addr:</span> <span class="string">localhost:8848</span> <span class="comment">#Nacos作为配置中心地址</span></span><br><span class="line">        <span class="attr">file-extension:</span> <span class="string">yaml</span> <span class="comment">#指定yaml格式的配置</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># nacos端配置文件DataId的命名规则是：</span></span><br><span class="line"><span class="comment"># $&#123;spring.application.name&#125;-$&#123;spring.profile.active&#125;.$&#123;spring.cloud.nacos.config.file-extension&#125;</span></span><br><span class="line"><span class="comment"># 本案例的DataID是:nacos-config-client-dev.yaml</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>application.yml :</strong></li>
+</ul>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">server:</span></span><br><span class="line">  <span class="attr">port:</span> <span class="number">3377</span></span><br><span class="line"></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">profiles:</span></span><br><span class="line">    <span class="attr">active:</span> <span class="string">dev</span> <span class="comment"># 表示开发环境</span></span><br><span class="line">       <span class="comment">#active: prod # 表示生产环境</span></span><br><span class="line">       <span class="comment">#active: test # 表示测试环境</span></span><br></pre></td></tr></table></figure>
+
+
+
+<ol start="3">
+<li><p><strong>主启动类：</strong>@EnableDiscoveryClient       —–&gt; 注解必须加嗷</p>
+</li>
+<li><p><strong>支持动态刷新</strong></p>
+</li>
+</ol>
+<p>一：<strong>注解形式支持动态刷新（写个配置类）：</strong> —-&gt; Spring Cloud 原生注解 @RefreshScope 实现配置自动更新（原生的，当然是 Consul 那个）</p>
+<p>抓到配置文件的配置</p>
+<ul>
+<li>利用注解实现动态刷新配置：@RefreshScope &#x2F;&#x2F;在控制器类加入注解使当前类下的配置支持Nacos的动态刷新功能。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Value;</span><br><span class="line"><span class="keyword">import</span> org.springframework.cloud.context.config.annotation.RefreshScope;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.GetMapping;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.RestController;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@auther</span> zzyy</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@create</span> 2023-11-27 15:51</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="meta">@RefreshScope</span> <span class="comment">//在控制器类加入@RefreshScope注解使当前类下的配置支持Nacos的动态刷新功能。</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">NacosConfigClientController</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;config.info&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String configInfo;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping(&quot;/config/info&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">getConfigInfo</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> configInfo;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>二：<strong>配置方式支持动态刷新（推荐）</strong></p>
+<p>Nacos 好像是自带配置刷新的</p>
+<ol start="5">
+<li><strong>Nacos 中的匹配规则：</strong></li>
+</ol>
+<ul>
+<li>设置 DataId 理论（Nacos中的dataid组成格式及SpringBoot配置文件中的匹配规则）：</li>
+</ul>
+<p>最终公式：${spring.application.name}-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}</p>
+<ul>
+<li><strong>prefix</strong> ：默认为 spring .application.name 值</li>
+<li><strong>spring.profiles.active</strong>：即为当前环境对应的 profile，可以通过配置项 spring.profile.active 来配置</li>
+<li><strong>file-extension</strong>：为配置内容的数据格式，可以通过配置项 spring.cloud.nacos.config.file-extension 来配置</li>
+<li>总结：</li>
+</ul>
+<p><img src="/img/0019-nacos%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83%E6%8C%87%E5%90%91%E9%85%8D%E7%BD%AE%E8%AF%B4%E6%98%8E.png"></p>
+<ul>
+<li>创建配置的话，直接在控制台创建即可，记得遵循配置规则</li>
+</ul>
+<ol start="6">
+<li><strong>历史配置：</strong></li>
+</ol>
+<ul>
+<li>Nacos会记录配置文件的历史版本默认保留30天，此外还有一键回滚功能，回滚操作将会触发配置更新</li>
+<li>控制台操作：直接看 <strong>配置管理</strong> 里面的历史版本，可以直接查询</li>
+</ul>
+<h2 id="Nacos-数据模型之-Namespace-Group-DataId"><a href="#Nacos-数据模型之-Namespace-Group-DataId" class="headerlink" title="Nacos 数据模型之 Namespace-Group-DataId"></a>Nacos 数据模型之 Namespace-Group-DataId</h2><blockquote>
+<p><strong>DataId</strong>：${spring.application.name}-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}</p>
+<p>当然你 Namespace 和 Group 设置的话，yml 必须去指定，不然用的就是默认的</p>
+</blockquote>
+<ul>
+<li><strong>多环境多项目管理：</strong><ul>
+<li>直接就是看文档：<a target="_blank" rel="noopener" href="https://nacos.io/zh-cn/docs/architecture.html">https://nacos.io/zh-cn/docs/architecture.html</a></li>
+</ul>
+</li>
+<li><strong>Namespace + Group + DataId 三者关系？为什么这么设计？</strong> <ul>
+<li><strong>Namespace</strong>：命名空间（代码 yml 不设置的话默认是 <code>public</code> ），可以用于环境隔离</li>
+<li><strong>Group</strong>：分组（控制台创建配置的时候，可以选分组，不设置的为默认分组：<code>DEFAULT_GROUP</code> ）</li>
+<li><strong>DataId</strong>：个人感觉，就是配置的标识</li>
+<li><strong>Server</strong>：你注册的服务（微服务）呗</li>
+</ul>
+</li>
+</ul>
+<p><img src="/img/0020-nacos%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B.png"></p>
+<blockquote>
+<p><strong>三者说明：</strong></p>
+<p><img src="/img/0021-nacos.png"></p>
+<ul>
+<li>是什么？</li>
+</ul>
+<p>—&gt; 类似 Java 里面的 package 名和类名，最外层的 <code>Namespace</code> 是可以用于区分部署环境的，<code>Group</code> 和 <code>DataID</code> 逻辑上区分两个目标对象</p>
+<ul>
+<li>默认值：</li>
+</ul>
+<p>—&gt; <strong>默认情况：Namespace&#x3D;public 、 Group&#x3D;DEFAULT_GROUP</strong></p>
+<p>Nacos 默认的命名空间是 public，<strong>Namespace</strong> 主要用来<strong>实现隔离。</strong></p>
+<p>比如，现在有三个环境：<code>开发dev</code>、<code>测试test</code>、<code>生产prod</code> ，可以创建三个 Namespace，不同的 Namespace 之间是隔离的。Group 默认是 DEFAULT_GROUP，Group 可以把不同的微服务划分到同一个分组里面去。</p>
+<ul>
+<li><p>Server 就是微服务：</p>
+<p>一个 Service 可以包含一个或多个 Cluster（集群），Nacos 默认 Cluster 是 DEFAULT，Cluster 是对指定微服务的一个虚拟划分。</p>
+</li>
+</ul>
+<p><img src="/img/0022-nacos%E6%9C%8D%E5%8A%A1%E9%A2%86%E5%9F%9F%E6%A8%A1%E5%9E%8B.png"></p>
+</blockquote>
+<h2 id="配置的优先级"><a href="#配置的优先级" class="headerlink" title="配置的优先级"></a>配置的优先级</h2><blockquote>
+<p>bootstrap.yml：用这玩意需要导依赖嗷（ spring-cloud-starter-bootstrap ）</p>
+</blockquote>
+<ul>
+<li><p><strong>本地配置文件：</strong> bootstrap.yml 先加载 application.yml后加载，application 也不会覆盖 bootstrap，而 application.yml 里面的内容可以动态替换。</p>
+</li>
+<li><p><strong>远程和本地配置文件的优先级：</strong>远程项目应用名配置文件 &gt; 远程扩展配置文件 &gt; 远程共享配置文件 &gt; 本地配置文件。</p>
+</li>
+</ul>
+<p><strong>Nacos 配置优先级：</strong></p>
+<p>Spring Cloud Alibaba Nacos Config 提供了三种配置能力从 Nacos 拉取相关的配置</p>
+<ul>
+<li>通过 spring.cloud.nacos.config.shared-configs[n].data-id 方式支持多个共享 dataId 配置</li>
+<li>通过 spring.cloud.nacos.config.extension-configs[n]-data-id 方式支持多个扩展 dataId 配置</li>
+<li>通过内部相关规则（应用名、应用名+Profile）自动生成相关的 dataId 配置</li>
+</ul>
+<p>当三种方式同时使用时，它们的优先级关系：A &lt; B &lt; C，同理，若在这三种方式中配置了同样的参数时，则会使用 C 配置的参数值</p>
+<h2 id="Nacos-配置文件加密：Jasypt"><a href="#Nacos-配置文件加密：Jasypt" class="headerlink" title="Nacos 配置文件加密：Jasypt"></a>Nacos 配置文件加密：Jasypt</h2><blockquote>
+<p>为什么要加密？</p>
+<ul>
+<li>在使用配置中心的时候，像账号、密码、密钥等信息，可能会经常的改动，如果你不加密，nacos 被攻破了，怎么办捏？</li>
+<li>当然也可以选择，将这些敏感的配置信息，放到环境变量里，直接从环境变量里去读，虽然也方便，但是管理的话，你还要管理环境变量里面的配置。</li>
+</ul>
+</blockquote>
+<ol>
+<li><h3 id="当然了，Nacos-本身肯定是提供了加密的：基于-SPI-的插件机制实现"><a href="#当然了，Nacos-本身肯定是提供了加密的：基于-SPI-的插件机制实现" class="headerlink" title="当然了，Nacos 本身肯定是提供了加密的：基于 SPI 的插件机制实现"></a>当然了，Nacos 本身肯定是提供了加密的：基于 SPI 的插件机制实现</h3></li>
+</ol>
+<p>插件的依赖包：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba.nacos<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>nacos-aes-encryption-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">version</span>&gt;</span>$&#123;nacos-aes-encryption-plugin.version&#125;<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>之后如果想对配置加密，需要创建名称为 <code>cipher-[加密算法名称]-dataId</code>这种规则的配置文件，例如<code>cipher-aes-application-dev.yml</code> ，之后不管你在配置中写上什么内容，都会被加密；在程序中读出来的都是被加密过的，需要你<strong>调用插件提供的解密方法解密</strong>，或者<strong>自定义加解密方法</strong>。</p>
+<p>但是，哥们这也太变态了吧，全加密？那岂不是我无论读取什么数据都要经过一次解密？有些不重要的信息，就算公开也无所谓，那我加密加什么哎，加了个寂寞？</p>
+<p>并且，还要升级到 2.x 版本才能使用，都做成插件了，还要区分版本哎~</p>
+<p>所以，当然有更好的肯定用更好的咯，对官方这种敷衍的行为做出强烈的谴责~</p>
+<ol start="2">
+<li><h3 id="Jasypt-加密"><a href="#Jasypt-加密" class="headerlink" title="Jasypt 加密"></a>Jasypt 加密</h3></li>
+</ol>
+<p>Jasypt 其实是一个专门用于加解密的库，对于像 Nacos 配置文件、本地配置文件等配置信息的加解密就是一个顺手的事儿；加密就很简单了，太多开源的包了，你也可以自己写，so easzy啦</p>
+<p>像我读取配置的时候，可以采用以下方式：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Value(&quot;$&#123;aestest.appKey&#125;&quot;)</span></span><br><span class="line"><span class="keyword">private</span> String appKey;</span><br></pre></td></tr></table></figure>
+
+<p>现成的 jasypt 直接用</p>
+<ul>
+<li>引入依赖：</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.github.ulisesbocchio<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jasypt-spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.0.5<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>在配置文件中进行相关配置：</li>
+</ul>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">jasypt:</span></span><br><span class="line">  <span class="attr">encryptor:</span></span><br><span class="line">    <span class="attr">password:</span> <span class="string">hello</span></span><br><span class="line">    <span class="attr">algorithm:</span> <span class="string">PBEWithMD5AndDES</span></span><br></pre></td></tr></table></figure>
+
+<p><code>algorithm</code>是加密算法，官方默认的加密算法是 <code>PBEWITHHMACSHA512ANDAES_256</code>，但是如果你用的是 JDK1.8，还用不了这个算法，JDK9以上才支持，所以可以把这个算法改成<code>PBEWithMD5AndDES</code>。</p>
+<p><code>password</code>是加解密的时候用到的密码，这个配置是不建议放到Nacos的，可以放到环境变量中，这样一来，就只有这一个参数放到环境变量了。</p>
+<ul>
+<li>生成加密字符串：</li>
+</ul>
+<p>Jasypt 默认用 <code>Enc(内容)</code>这样的格式来表示这是加密的配置，当然你可以通过配置来修改前缀和后缀，比如改成 <code>JASYPT[内容]</code>这种形式，其中<code>内容</code>部分是加密后的。</p>
+<p>加密串可以这样生成：</p>
+<p><strong>引入加密类：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Autowired</span></span><br><span class="line"><span class="keyword">private</span> StringEncryptor encryptor;</span><br></pre></td></tr></table></figure>
+
+<p><strong>生成加密内容：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@GetMapping(&quot;/encrypt&quot;)</span></span><br><span class="line"><span class="keyword">public</span> String <span class="title function_">encrypt</span><span class="params">(String content)</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="string">&quot;ENC(&quot;</span> + encryptor.encrypt(content) + <span class="string">&quot;)&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>最后将生成的加密串保存到 Nacos 或本地配置中，例如下面这样</li>
+</ul>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">aestest:</span></span><br><span class="line">  <span class="attr">appKey:</span> <span class="string">ENC(GT2vTn1+SdeFu90xH/vgw3uYTNyV5PGp)</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>直接使用<code>@Value</code>注解获取就行，和不加密的用法一模一样</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Value(&quot;$&#123;aestest.appKey&#125;&quot;)</span></span><br><span class="line"><span class="keyword">private</span> String appKey;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>原理<br>加密的原理没啥好说的，上面用的PBEWithMD5AndDES就是DES加密算法。</p>
+<p>而@Value注解直接拿到解密后的值，其实是实现了BeanFactoryPostProcessor接口，相当于利用 Spring Boot 的加载机制做了一个filter，在filter中查找 @Value注解，并且内容是以 Jasypt 指定的前后缀的配置项（例如ENC()），将找到的内容进行解密，再赋值解密后的值。</p>
+</blockquote>
+<h1 id="3-Nacos-Server-的运行启动"><a href="#3-Nacos-Server-的运行启动" class="headerlink" title="3. Nacos Server 的运行启动"></a>3. Nacos Server 的运行启动</h1><blockquote>
+<h4 id="Nacos-有两种运行模式："><a href="#Nacos-有两种运行模式：" class="headerlink" title="Nacos 有两种运行模式："></a><strong>Nacos 有两种运行模式：</strong></h4><ul>
+<li>standalone：单机运行模式（使用默认 Nacos 内置的一个嵌入式数据库 derby）</li>
+<li>cluster：集群运行模式（使用 mysql）</li>
+</ul>
+</blockquote>
+<h2 id="standalone-（单节点）模式"><a href="#standalone-（单节点）模式" class="headerlink" title="standalone （单节点）模式"></a>standalone （单节点）模式</h2><p>此模式一般用于 demo 和 测试，不用改任何配置，直接敲以下命令执行</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sh bin/startup.sh <span class="literal">-m</span> standalone</span><br></pre></td></tr></table></figure>
+
+<p>Windows 的话就是</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cmd</span> bin/startup.<span class="built_in">cmd</span> -m standalone</span><br></pre></td></tr></table></figure>
+
+<p>默认控制台地址： <a target="_blank" rel="noopener" href="http://cdh1:8848/nacos">http://cdh1:8848/nacos</a> </p>
+<p>默认账号和密码为：nacos nacos</p>
+<h2 id="cluster-（集群）模式"><a href="#cluster-（集群）模式" class="headerlink" title="cluster （集群）模式"></a>cluster （集群）模式</h2><p>测试环境，可以先用 standalone 模式撸起来，享受 coding 的快感，但是，生产环境可以使用 cluster 模式。</p>
+<p><strong>cluster 模式需要依赖 MySQL，然后改两个配置文件：</strong></p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">conf</span>/<span class="keyword">cluster</span>.<span class="keyword">conf</span></span><br><span class="line"><span class="keyword">conf</span>/application.properties</span><br></pre></td></tr></table></figure>
+
+<p>如下：</p>
+<ul>
+<li><p>cluster.conf，填入要运行 Nacos Server 机器的 ip：</p>
+</li>
+<li><p>192.168.100.155</p>
+</li>
+<li><p>192.168.100.156</p>
+</li>
+<li><p>修改NACOS_PATH&#x2F;conf&#x2F;application.properties，加入 MySQL 配置</p>
+</li>
+</ul>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">db.num</span>=<span class="string">1</span></span><br><span class="line"><span class="attr">db.url.0</span>=<span class="string">jdbc:mysql://localhost:3306/nacos_config?characterEncoding=utf8&amp;connectTimeout=1000&amp;socketTimeout=3000&amp;autoReconnect=true</span></span><br><span class="line"><span class="attr">db.user</span>=<span class="string">root</span></span><br><span class="line"><span class="attr">db.password</span>=<span class="string">1234</span></span><br></pre></td></tr></table></figure>
+
+<p>创建一个名为nacos_config的 database，将NACOS_PATH&#x2F;conf&#x2F;nacos-mysql.sql中的表结构导入刚才创建的库中，这几张表的用途就自己研究</p>
+<h2 id="Nacos-Server-的配置数据是存在哪里呢？"><a href="#Nacos-Server-的配置数据是存在哪里呢？" class="headerlink" title="Nacos Server 的配置数据是存在哪里呢？"></a>Nacos Server 的配置数据是存在哪里呢？</h2><p>不做其它配置只有两个地方： 内存Derby（nacos内置的） &#x2F; 本地数据库</p>
+<p> 有两个坑：Nacos Server 的数据源是用 Derby 还是 MySQL 完全是由其运行模式决定的</p>
+<ul>
+<li>standalone 的话仅会使用 Derby，即使在 application.properties 里边配置 MySQL 也照样无视；</li>
+</ul>
+<p><code>单节点用于测试：单节点启动的持久化配置在内置Derby数据库 ----&gt; NACOS_PATH/data，有个derby-data目录（这玩意我也看到 sql 文件了，好像也能用 mysql 搞？没试过，但是正常都是集群模式，单节点用于测试）</code></p>
+<ul>
+<li>cluster 模式会自动使用 MySQL，这时候如果没有 MySQL 的配置，是会报错的（<strong>注意：mysql8.0 以上好像是不支持的</strong>）。</li>
+</ul>
+<p><code>集群模式：当然是用mysql数据库了，主要是统一各个节点的配置，NACOS_PATH/conf/nacos-mysql.sql中的表结构导入创建的库，研究研究，到底是配置了什么东西 </code></p>
+<p>（</p>
+<p><strong>为什么要这样做？？？</strong></p>
+<ul>
+<li><p>防止 Nacos 宕机或重启后数据丢失,Nacos 支持将数据统一持久化到数据库 </p>
+</li>
+<li><p>Mysql(在不配置Nacos持久化到Mysql时,默认 Nacos 内置了一个嵌入式数据库derby,将一些数据保存到了内置的数据库上,多台 Nacos 就会出现多个内置数据库)。</p>
+</li>
+</ul>
+<p>）</p>
+<blockquote>
+<p>下面是 集群模式持久化存储的 sql 文件中的表结构（AI解析的，可以了解一下）：</p>
+<ul>
+<li><code>config_info</code> 表</li>
+</ul>
+<h4 id="表描述"><a href="#表描述" class="headerlink" title="表描述"></a>表描述</h4><p>存储配置信息的基本数据。</p>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>类型</th>
+<th>是否为空</th>
+<th>默认值</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>id</td>
+<td>bigint(20)</td>
+<td>否</td>
+<td>自增</td>
+<td>主键，唯一标识每条记录</td>
+</tr>
+<tr>
+<td>data_id</td>
+<td>varchar(255)</td>
+<td>否</td>
+<td>无</td>
+<td>配置项的唯一标识符</td>
+</tr>
+<tr>
+<td>group_id</td>
+<td>varchar(255)</td>
+<td>是</td>
+<td>NULL</td>
+<td>配置项所属的组</td>
+</tr>
+<tr>
+<td>content</td>
+<td>longtext</td>
+<td>否</td>
+<td>无</td>
+<td>配置项的内容</td>
+</tr>
+<tr>
+<td>md5</td>
+<td>varchar(32)</td>
+<td>是</td>
+<td>NULL</td>
+<td>配置内容的 MD5 值，用于快速校验</td>
+</tr>
+<tr>
+<td>gmt_create</td>
+<td>datetime</td>
+<td>否</td>
+<td>当前时间</td>
+<td>配置项的创建时间</td>
+</tr>
+<tr>
+<td>gmt_modified</td>
+<td>datetime</td>
+<td>否</td>
+<td>当前时间</td>
+<td>配置项的最后修改时间</td>
+</tr>
+<tr>
+<td>src_user</td>
+<td>text</td>
+<td>是</td>
+<td>NULL</td>
+<td>创建或修改配置项的用户</td>
+</tr>
+<tr>
+<td>src_ip</td>
+<td>varchar(50)</td>
+<td>是</td>
+<td>NULL</td>
+<td>创建或修改配置项的 IP 地址</td>
+</tr>
+<tr>
+<td>app_name</td>
+<td>varchar(128)</td>
+<td>是</td>
+<td>NULL</td>
+<td>应用名称</td>
+</tr>
+<tr>
+<td>tenant_id</td>
+<td>varchar(128)</td>
+<td>是</td>
+<td>空字符串</td>
+<td>租户字段，用于多租户支持</td>
+</tr>
+<tr>
+<td>c_desc</td>
+<td>varchar(256)</td>
+<td>是</td>
+<td>NULL</td>
+<td>配置描述</td>
+</tr>
+<tr>
+<td>c_use</td>
+<td>varchar(64)</td>
+<td>是</td>
+<td>NULL</td>
+<td>配置用途</td>
+</tr>
+<tr>
+<td>effect</td>
+<td>varchar(64)</td>
+<td>是</td>
+<td>NULL</td>
+<td>配置生效范围</td>
+</tr>
+<tr>
+<td>type</td>
+<td>varchar(64)</td>
+<td>是</td>
+<td>NULL</td>
+<td>配置类型</td>
+</tr>
+<tr>
+<td>c_schema</td>
+<td>text</td>
+<td>是</td>
+<td>NULL</td>
+<td>配置的 JSON Schema</td>
+</tr>
+<tr>
+<td>encrypted_data_key</td>
+<td>text</td>
+<td>否</td>
+<td>无</td>
+<td>加密数据的密钥</td>
+</tr>
+</tbody></table>
+<ul>
+<li><ol start="2">
+<li><code>config_info_aggr</code> 表</li>
+</ol>
+</li>
+</ul>
+<h4 id="表描述-1"><a href="#表描述-1" class="headerlink" title="表描述"></a>表描述</h4><p>存储聚合配置信息。</p>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>类型</th>
+<th>是否为空</th>
+<th>默认值</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>id</td>
+<td>bigint(20)</td>
+<td>否</td>
+<td>自增</td>
+<td>主键，唯一标识每条记录</td>
+</tr>
+<tr>
+<td>data_id</td>
+<td>varchar(255)</td>
+<td>否</td>
+<td>无</td>
+<td>配置项的唯一标识符</td>
+</tr>
+<tr>
+<td>group_id</td>
+<td>varchar(255)</td>
+<td>否</td>
+<td>无</td>
+<td>配置项所属的组</td>
+</tr>
+<tr>
+<td>datum_id</td>
+<td>varchar(255)</td>
+<td>否</td>
+<td>无</td>
+<td>聚合配置项的唯一标识符</td>
+</tr>
+<tr>
+<td>content</td>
+<td>longtext</td>
+<td>否</td>
+<td>无</td>
+<td>聚合配置项的内容</td>
+</tr>
+<tr>
+<td>gmt_modified</td>
+<td>datetime</td>
+<td>否</td>
+<td>无</td>
+<td>聚合配置项的最后修改时间</td>
+</tr>
+<tr>
+<td>app_name</td>
+<td>varchar(128)</td>
+<td>是</td>
+<td>NULL</td>
+<td>应用名称</td>
+</tr>
+<tr>
+<td>tenant_id</td>
+<td>varchar(128)</td>
+<td>是</td>
+<td>空字符串</td>
+<td>租户字段，用于多租户支持</td>
+</tr>
+</tbody></table>
+<ul>
+<li><ol start="3">
+<li><code>config_info_beta</code> 表</li>
+</ol>
+</li>
+</ul>
+<p>存储 Beta 版本的配置信息。</p>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>类型</th>
+<th>是否为空</th>
+<th>默认值</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>id</td>
+<td>bigint(20)</td>
+<td>否</td>
+<td>自增</td>
+<td>主键，唯一标识每条记录</td>
+</tr>
+<tr>
+<td>data_id</td>
+<td>varchar(255)</td>
+<td>否</td>
+<td>无</td>
+<td>配置项的唯一标识符</td>
+</tr>
+<tr>
+<td>group_id</td>
+<td>varchar(128)</td>
+<td>否</td>
+<td>无</td>
+<td>配置项所属的组</td>
+</tr>
+<tr>
+<td>app_name</td>
+<td>varchar(128)</td>
+<td>是</td>
+<td>NULL</td>
+<td>应用名称</td>
+</tr>
+<tr>
+<td>content</td>
+<td>longtext</td>
+<td>否</td>
+<td>无</td>
+<td>配置项的内容</td>
+</tr>
+<tr>
+<td>beta_ips</td>
+<td>varchar(1024)</td>
+<td>是</td>
+<td>NULL</td>
+<td>Beta 版本的 IP 地址列表</td>
+</tr>
+<tr>
+<td>md5</td>
+<td>varchar(32)</td>
+<td>是</td>
+<td>NULL</td>
+<td>配置内容的 MD5 值，用于快速校验</td>
+</tr>
+<tr>
+<td>gmt_create</td>
+<td>datetime</td>
+<td>否</td>
+<td>当前时间</td>
+<td>配置项的创建时间</td>
+</tr>
+<tr>
+<td>gmt_modified</td>
+<td>datetime</td>
+<td>否</td>
+<td>当前时间</td>
+<td>配置项的最后修改时间</td>
+</tr>
+<tr>
+<td>src_user</td>
+<td>text</td>
+<td>是</td>
+<td>NULL</td>
+<td>创建或修改配置项的用户</td>
+</tr>
+<tr>
+<td>src_ip</td>
+<td>varchar(50)</td>
+<td>是</td>
+<td>NULL</td>
+<td>创建或修改配置项的 IP 地址</td>
+</tr>
+<tr>
+<td>tenant_id</td>
+<td>varchar(128)</td>
+<td>是</td>
+<td>空字符串</td>
+<td>租户字段，用于多租户支持</td>
+</tr>
+<tr>
+<td>encrypted_data_key</td>
+<td>text</td>
+<td>否</td>
+<td>无</td>
+<td>加密数据的密钥</td>
+</tr>
+</tbody></table>
+<ul>
+<li><ol start="4">
+<li><code>config_info_tag</code> 表</li>
+</ol>
+</li>
+</ul>
+<p>存储带有标签的配置信息。</p>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>类型</th>
+<th>是否为空</th>
+<th>默认值</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>id</td>
+<td>bigint(20)</td>
+<td>否</td>
+<td>自增</td>
+<td>主键，唯一标识每条记录</td>
+</tr>
+<tr>
+<td>data_id</td>
+<td>varchar(255)</td>
+<td>否</td>
+<td>无</td>
+<td>配置项的唯一标识符</td>
+</tr>
+<tr>
+<td>group_id</td>
+<td>varchar(128)</td>
+<td>否</td>
+<td>无</td>
+<td>配置项所属的组</td>
+</tr>
+<tr>
+<td>tenant_id</td>
+<td>varchar(128)</td>
+<td>是</td>
+<td>空字符串</td>
+<td>租户字段，用于多租户支持</td>
+</tr>
+<tr>
+<td>tag_id</td>
+<td>varchar(128)</td>
+<td>否</td>
+<td>无</td>
+<td>标签的唯一标识符</td>
+</tr>
+<tr>
+<td>app_name</td>
+<td>varchar(128)</td>
+<td>是</td>
+<td>NULL</td>
+<td>应用名称</td>
+</tr>
+<tr>
+<td>content</td>
+<td>longtext</td>
+<td>否</td>
+<td>无</td>
+<td>配置项的内容</td>
+</tr>
+<tr>
+<td>md5</td>
+<td>varchar(32)</td>
+<td>是</td>
+<td>NULL</td>
+<td>配置内容的 MD5 值，用于快速校验</td>
+</tr>
+<tr>
+<td>gmt_create</td>
+<td>datetime</td>
+<td>否</td>
+<td>当前时间</td>
+<td>配置项的创建时间</td>
+</tr>
+<tr>
+<td>gmt_modified</td>
+<td>datetime</td>
+<td>否</td>
+<td>当前时间</td>
+<td>配置项的最后修改时间</td>
+</tr>
+<tr>
+<td>src_user</td>
+<td>text</td>
+<td>是</td>
+<td>NULL</td>
+<td>创建或修改配置项的用户</td>
+</tr>
+<tr>
+<td>src_ip</td>
+<td>varchar(50)</td>
+<td>是</td>
+<td>NULL</td>
+<td>创建或修改配置项的 IP 地址</td>
+</tr>
+</tbody></table>
+<ul>
+<li><ol start="5">
+<li><code>config_tags_relation</code> 表</li>
+</ol>
+</li>
+</ul>
+<p>存储配置项和标签的关系。</p>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>类型</th>
+<th>是否为空</th>
+<th>默认值</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>id</td>
+<td>bigint(20)</td>
+<td>否</td>
+<td>无</td>
+<td>配置项的唯一标识符</td>
+</tr>
+<tr>
+<td>tag_name</td>
+<td>varchar(128)</td>
+<td>否</td>
+<td>无</td>
+<td>标签名称</td>
+</tr>
+<tr>
+<td>tag_type</td>
+<td>varchar(64)</td>
+<td>是</td>
+<td>NULL</td>
+<td>标签类型</td>
+</tr>
+<tr>
+<td>data_id</td>
+<td>varchar(255)</td>
+<td>否</td>
+<td>无</td>
+<td>配置项的唯一标识符</td>
+</tr>
+<tr>
+<td>group_id</td>
+<td>varchar(128)</td>
+<td>否</td>
+<td>无</td>
+<td>配置项所属的组</td>
+</tr>
+<tr>
+<td>tenant_id</td>
+<td>varchar(128)</td>
+<td>是</td>
+<td>空字符串</td>
+<td>租户字段，用于多租户支持</td>
+</tr>
+<tr>
+<td>nid</td>
+<td>bigint(20)</td>
+<td>否</td>
+<td>自增</td>
+<td>主键，唯一标识每条记录</td>
+</tr>
+</tbody></table>
+<ul>
+<li><ol start="6">
+<li><code>group_capacity</code> 表</li>
+</ol>
+</li>
+</ul>
+<p>存储各 Group 的容量信息。</p>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>类型</th>
+<th>是否为空</th>
+<th>默认值</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>id</td>
+<td>bigint(20) unsigned</td>
+<td>否</td>
+<td>自增</td>
+<td>主键，唯一标识每条记录</td>
+</tr>
+<tr>
+<td>group_id</td>
+<td>varchar(128)</td>
+<td>否</td>
+<td>空字符串</td>
+<td>Group ID，空字符表示整个集群</td>
+</tr>
+<tr>
+<td>quota</td>
+<td>int(10) unsigned</td>
+<td>否</td>
+<td>0</td>
+<td>配额，0表示使用默认值</td>
+</tr>
+<tr>
+<td>usage</td>
+<td>int(10) unsigned</td>
+<td>否</td>
+<td>0</td>
+<td>使用量</td>
+</tr>
+<tr>
+<td>max_size</td>
+<td>int(10) unsigned</td>
+<td>否</td>
+<td>0</td>
+<td>单个配置大小上限，单位为字节，0表示使用默认值</td>
+</tr>
+<tr>
+<td>max_aggr_count</td>
+<td>int(10) unsigned</td>
+<td>否</td>
+<td>0</td>
+<td>聚合子配置最大个数，0表示使用默认值</td>
+</tr>
+<tr>
+<td>max_aggr_size</td>
+<td>int(10) unsigned</td>
+<td>否</td>
+<td>0</td>
+<td>单个聚合数据的子配置大小上限，单位为字节，0表示使用默认值</td>
+</tr>
+<tr>
+<td>max_history_count</td>
+<td>int(10) unsigned</td>
+<td>否</td>
+<td>0</td>
+<td>最大变更历史数量</td>
+</tr>
+<tr>
+<td>gmt_create</td>
+<td>datetime</td>
+<td>否</td>
+<td>当前时间</td>
+<td>创建时间</td>
+</tr>
+<tr>
+<td>gmt_modified</td>
+<td>datetime</td>
+<td>否</td>
+<td>当前时间</td>
+<td>修改时间</td>
+</tr>
+</tbody></table>
+<ul>
+<li><ol start="7">
+<li><code>his_config_info</code> 表</li>
+</ol>
+</li>
+</ul>
+<p>存储配置信息的历史记录。</p>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>类型</th>
+<th>是否为空</th>
+<th>默认值</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>id</td>
+<td>bigint(20) unsigned</td>
+<td>否</td>
+<td>无</td>
+<td>配置项的唯一标识符</td>
+</tr>
+<tr>
+<td>nid</td>
+<td>bigint(20) unsigned</td>
+<td>否</td>
+<td>自增</td>
+<td>主键，唯一标识每条记录</td>
+</tr>
+<tr>
+<td>data_id</td>
+<td>varchar(255)</td>
+<td>否</td>
+<td>无</td>
+<td>配置项的唯一标识符</td>
+</tr>
+<tr>
+<td>group_id</td>
+<td>varchar(128)</td>
+<td>否</td>
+<td>无</td>
+<td>配置项所属的组</td>
+</tr>
+<tr>
+<td>app_name</td>
+<td>varchar(128)</td>
+<td>是</td>
+<td>NULL</td>
+<td>应用名称</td>
+</tr>
+<tr>
+<td>content</td>
+<td>longtext</td>
+<td>否</td>
+<td>无</td>
+<td>配置项的内容</td>
+</tr>
+<tr>
+<td>md5</td>
+<td>varchar(32)</td>
+<td>是</td>
+<td>NULL</td>
+<td>配置内容的 MD5 值，用于快速校验</td>
+</tr>
+<tr>
+<td>gmt_create</td>
+<td>datetime</td>
+<td>否</td>
+<td>当前时间</td>
+<td>配置项的创建时间</td>
+</tr>
+<tr>
+<td>gmt_modified</td>
+<td>datetime</td>
+<td>否</td>
+<td>当前时间</td>
+<td>配置项的最后修改时间</td>
+</tr>
+<tr>
+<td>src_user</td>
+<td>text</td>
+<td>是</td>
+<td>NULL</td>
+<td>创建或修改配置项的用户</td>
+</tr>
+<tr>
+<td>src_ip</td>
+<td>varchar(50)</td>
+<td>是</td>
+<td>NULL</td>
+<td>创建或修改配置项的 IP 地址</td>
+</tr>
+<tr>
+<td>op_type</td>
+<td>char(10)</td>
+<td>是</td>
+<td>NULL</td>
+<td>操作类型</td>
+</tr>
+<tr>
+<td>tenant_id</td>
+<td>varchar(128)</td>
+<td>是</td>
+<td>空字符串</td>
+<td>租户字段，用于多租户支持</td>
+</tr>
+<tr>
+<td>encrypted_data_key</td>
+<td>text</td>
+<td>否</td>
+<td>无</td>
+<td>加密数据的密钥</td>
+</tr>
+</tbody></table>
+<ul>
+<li><ol start="8">
+<li><code>tenant_capacity</code> 表</li>
+</ol>
+</li>
+</ul>
+<p>存储租户的容量信息。</p>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>类型</th>
+<th>是否为空</th>
+<th>默认值</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>id</td>
+<td>bigint(20) unsigned</td>
+<td>否</td>
+<td>自增</td>
+<td>主键，唯一标识每条记录</td>
+</tr>
+<tr>
+<td>tenant_id</td>
+<td>varchar(128)</td>
+<td>否</td>
+<td>空字符串</td>
+<td>租户 ID</td>
+</tr>
+<tr>
+<td>quota</td>
+<td>int(10) unsigned</td>
+<td>否</td>
+<td>0</td>
+<td>配额，0表示使用默认值</td>
+</tr>
+<tr>
+<td>usage</td>
+<td>int(10) unsigned</td>
+<td>否</td>
+<td>0</td>
+<td>使用量</td>
+</tr>
+<tr>
+<td>max_size</td>
+<td>int(10) unsigned</td>
+<td>否</td>
+<td>0</td>
+<td>单个配置大小上限，单位为字节，0表示使用默认值</td>
+</tr>
+<tr>
+<td>max_aggr_count</td>
+<td>int(10) unsigned</td>
+<td>否</td>
+<td>0</td>
+<td>聚合子配置最大个数</td>
+</tr>
+<tr>
+<td>max_aggr_size</td>
+<td>int(10) unsigned</td>
+<td>否</td>
+<td>0</td>
+<td>单个聚合数据的子配置大小上限，单位为字节，0表示使用默认值</td>
+</tr>
+<tr>
+<td>max_history_count</td>
+<td>int(10) unsigned</td>
+<td>否</td>
+<td>0</td>
+<td>最大变更历史数量</td>
+</tr>
+<tr>
+<td>gmt_create</td>
+<td>datetime</td>
+<td>否</td>
+<td>当前时间</td>
+<td>创建时间</td>
+</tr>
+<tr>
+<td>gmt_modified</td>
+<td>datetime</td>
+<td>否</td>
+<td>当前时间</td>
+<td>修改时间</td>
+</tr>
+</tbody></table>
+<ul>
+<li><ol start="9">
+<li><code>tenant_info</code> 表</li>
+</ol>
+</li>
+</ul>
+<p>存储租户信息。</p>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>类型</th>
+<th>是否为空</th>
+<th>默认值</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>id</td>
+<td>bigint(20)</td>
+<td>否</td>
+<td>自增</td>
+<td>主键，唯一标识每条记录</td>
+</tr>
+<tr>
+<td>kp</td>
+<td>varchar(128)</td>
+<td>否</td>
+<td>无</td>
+<td>租户的唯一标识符</td>
+</tr>
+<tr>
+<td>tenant_id</td>
+<td>varchar(128)</td>
+<td>是</td>
+<td>空字符串</td>
+<td>租户 ID</td>
+</tr>
+<tr>
+<td>tenant_name</td>
+<td>varchar(128)</td>
+<td>是</td>
+<td>空字符串</td>
+<td>租户名称</td>
+</tr>
+<tr>
+<td>tenant_desc</td>
+<td>varchar(256)</td>
+<td>是</td>
+<td>NULL</td>
+<td>租户描述</td>
+</tr>
+<tr>
+<td>create_source</td>
+<td>varchar(32)</td>
+<td>是</td>
+<td>NULL</td>
+<td>创建来源</td>
+</tr>
+<tr>
+<td>gmt_create</td>
+<td>bigint(20)</td>
+<td>否</td>
+<td>无</td>
+<td>创建时间，时间戳格式</td>
+</tr>
+<tr>
+<td>gmt_modified</td>
+<td>bigint(20)</td>
+<td>否</td>
+<td>无</td>
+<td>修改时间，时间戳格式</td>
+</tr>
+</tbody></table>
+<ul>
+<li><ol start="10">
+<li><code>users</code> 表</li>
+</ol>
+</li>
+</ul>
+<p>存储用户信息。</p>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>类型</th>
+<th>是否为空</th>
+<th>默认值</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>username</td>
+<td>varchar(50)</td>
+<td>否</td>
+<td>无</td>
+<td>用户名，主键</td>
+</tr>
+<tr>
+<td>password</td>
+<td>varchar(500)</td>
+<td>否</td>
+<td>无</td>
+<td>密码</td>
+</tr>
+<tr>
+<td>enabled</td>
+<td>boolean</td>
+<td>否</td>
+<td>无</td>
+<td>用户是否启用</td>
+</tr>
+</tbody></table>
+<ul>
+<li><ol start="11">
+<li><code>roles</code> 表</li>
+</ol>
+</li>
+</ul>
+<p>存储用户角色信息。</p>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>类型</th>
+<th>是否为空</th>
+<th>默认值</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>username</td>
+<td>varchar(50)</td>
+<td>否</td>
+<td>无</td>
+<td>用户名</td>
+</tr>
+<tr>
+<td>role</td>
+<td>varchar(50)</td>
+<td>否</td>
+<td>无</td>
+<td>角色</td>
+</tr>
+</tbody></table>
+<ul>
+<li><ol start="12">
+<li><code>permissions</code> 表</li>
+</ol>
+</li>
+</ul>
+<p>存储角色权限信息。</p>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>类型</th>
+<th>是否为空</th>
+<th>默认值</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>role</td>
+<td>varchar(50)</td>
+<td>否</td>
+<td>无</td>
+<td>角色</td>
+</tr>
+<tr>
+<td>resource</td>
+<td>varchar(255)</td>
+<td>否</td>
+<td>无</td>
+<td>资源路径</td>
+</tr>
+<tr>
+<td>action</td>
+<td>varchar(8)</td>
+<td>否</td>
+<td>无</td>
+<td>动作，如 <code>GET</code>, <code>POST</code> 等</td>
+</tr>
+</tbody></table>
+</blockquote>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        
+      
+      
+      
+      
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" rel="tag">微服务</a></li></ul>
+
+
+    </footer>
+  </div>
+  
+    
+  <nav id="article-nav" data-aos="fade-up">
+    
+      <div class="article-nav-link-wrap article-nav-link-left">
+        
+          <img data-src="/img/MQ_logo.png" data-sizes="auto" alt="MQ 知识点" class="lazyload">
+        
+        <a href="../../03/MQ/"></a>
+        <div class="article-nav-caption">前一篇</div>
+        <h3 class="article-nav-title">
+          
+            MQ 知识点
+          
+        </h3>
+      </div>
+    
+    
+    <div class="article-nav-link-wrap article-nav-link-right">
+      
+        <img data-src="/img/docker_logo.png" data-sizes="auto" alt="Docker_CentOS 安装使用指南" class="lazyload">
+      
+      <a href="../docker_use/"></a>
+      <div class="article-nav-caption">后一篇</div>
+      <h3 class="article-nav-title">
+        
+          Docker_CentOS 安装使用指南
+        
+      </h3>
+    </div>
+    
+  </nav>
+
+
+  
+</article>
+
+
+
+
+
+
+</section>
+          
+            <aside id="sidebar">
+  <div class="sidebar-wrapper wrap-sticky">
+    <div class="sidebar-wrap" data-aos="fade-up">
+      
+        <div class="sidebar-toc-sidebar"><div class="sidebar-toc">
+  <h3 class="toc-title">文章目录</h3>
+  <div class="sidebar-toc-wrapper toc-div-class" >
+      
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5"><span class="toc-number">1.</span> <span class="toc-text">1. 基础概念</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#CAP-%E6%A8%A1%E5%9E%8B%E4%BB%8B%E7%BB%8D%EF%BC%9A"><span class="toc-number">1.1.</span> <span class="toc-text">CAP 模型介绍：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Consistency-%E5%92%8C-Availability-%E7%9A%84%E7%9F%9B%E7%9B%BE%EF%BC%8C%E4%B8%BA%E4%BB%80%E4%B9%88-%E4%B8%80%E8%87%B4%E6%80%A7-%E5%92%8C-%E5%8F%AF%E7%94%A8%E6%80%A7-%E4%B8%8D%E8%83%BD%E5%90%8C%E6%97%B6%E6%88%90%E7%AB%8B%EF%BC%9F"><span class="toc-number">1.1.0.1.</span> <span class="toc-text">Consistency 和 Availability 的矛盾，为什么 一致性 和 可用性 不能同时成立？</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8"><span class="toc-number">2.</span> <span class="toc-text">2. 简单使用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Nacos-Discovery-%E6%9C%8D%E5%8A%A1%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83"><span class="toc-number">2.1.</span> <span class="toc-text">Nacos Discovery 服务注册中心</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Nacos-Config-%E6%9C%8D%E5%8A%A1%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83"><span class="toc-number">2.2.</span> <span class="toc-text">Nacos Config 服务配置中心</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Nacos-%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B%E4%B9%8B-Namespace-Group-DataId"><span class="toc-number">2.3.</span> <span class="toc-text">Nacos 数据模型之 Namespace-Group-DataId</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E7%9A%84%E4%BC%98%E5%85%88%E7%BA%A7"><span class="toc-number">2.4.</span> <span class="toc-text">配置的优先级</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Nacos-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E5%8A%A0%E5%AF%86%EF%BC%9AJasypt"><span class="toc-number">2.5.</span> <span class="toc-text">Nacos 配置文件加密：Jasypt</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BD%93%E7%84%B6%E4%BA%86%EF%BC%8CNacos-%E6%9C%AC%E8%BA%AB%E8%82%AF%E5%AE%9A%E6%98%AF%E6%8F%90%E4%BE%9B%E4%BA%86%E5%8A%A0%E5%AF%86%E7%9A%84%EF%BC%9A%E5%9F%BA%E4%BA%8E-SPI-%E7%9A%84%E6%8F%92%E4%BB%B6%E6%9C%BA%E5%88%B6%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.5.1.</span> <span class="toc-text">当然了，Nacos 本身肯定是提供了加密的：基于 SPI 的插件机制实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Jasypt-%E5%8A%A0%E5%AF%86"><span class="toc-number">2.5.2.</span> <span class="toc-text">Jasypt 加密</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-Nacos-Server-%E7%9A%84%E8%BF%90%E8%A1%8C%E5%90%AF%E5%8A%A8"><span class="toc-number">3.</span> <span class="toc-text">3. Nacos Server 的运行启动</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Nacos-%E6%9C%89%E4%B8%A4%E7%A7%8D%E8%BF%90%E8%A1%8C%E6%A8%A1%E5%BC%8F%EF%BC%9A"><span class="toc-number">3.0.0.1.</span> <span class="toc-text">Nacos 有两种运行模式：</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#standalone-%EF%BC%88%E5%8D%95%E8%8A%82%E7%82%B9%EF%BC%89%E6%A8%A1%E5%BC%8F"><span class="toc-number">3.1.</span> <span class="toc-text">standalone （单节点）模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#cluster-%EF%BC%88%E9%9B%86%E7%BE%A4%EF%BC%89%E6%A8%A1%E5%BC%8F"><span class="toc-number">3.2.</span> <span class="toc-text">cluster （集群）模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Nacos-Server-%E7%9A%84%E9%85%8D%E7%BD%AE%E6%95%B0%E6%8D%AE%E6%98%AF%E5%AD%98%E5%9C%A8%E5%93%AA%E9%87%8C%E5%91%A2%EF%BC%9F"><span class="toc-number">3.3.</span> <span class="toc-text">Nacos Server 的配置数据是存在哪里呢？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A1%A8%E6%8F%8F%E8%BF%B0"><span class="toc-number">3.3.0.1.</span> <span class="toc-text">表描述</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A1%A8%E6%8F%8F%E8%BF%B0-1"><span class="toc-number">3.3.0.2.</span> <span class="toc-text">表描述</span></a></li></ol></li></ol></li></ol></li></ol>
+      
+  </div>
+</div>
+</div>
+        <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img data-src="/avatar/my_logo.jpg" data-sizes="auto" alt="林羽" class="lazyload">
+  <div class="sidebar-author-name">林羽</div>
+  <div class="sidebar-description"></div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>文章</div>
+    <div class="sidebar-state-number">12</div>
+  </div>
+  <div class="sidebar-state-category">
+    <div>分类</div>
+    <div class="sidebar-state-number">12</div>
+  </div>
+  <div class="sidebar-state-tag">
+    <div>标签</div>
+    <div class="sidebar-state-number">7</div>
+  </div>
+</div>
+<div class="sidebar-social">
+  
+</div>
+<div class="sidebar-menu">
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="../../../../index.html" aria-label="首页"></a>
+      <div class="sidebar-menu-icon icon-taichi"></div>
+      <div class="sidebar-menu-link">首页</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="../../../../archives" aria-label="归档"></a>
+      <div class="sidebar-menu-icon icon-taichi"></div>
+      <div class="sidebar-menu-link">归档</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="../../../../about" aria-label="关于"></a>
+      <div class="sidebar-menu-icon icon-taichi"></div>
+      <div class="sidebar-menu-link">关于</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="../../../../friend" aria-label="友链"></a>
+      <div class="sidebar-menu-icon icon-taichi"></div>
+      <div class="sidebar-menu-link">友链</div>
+    </div>
+  
+</div>
+</div>
+      
+      
+        <div class="sidebar-btn-wrapper" style="position:static">
+          <div class="sidebar-toc-btn current"></div>
+          <div class="sidebar-common-btn"></div>
+        </div>
+      
+    </div>
+  </div>
+
+  
+</aside>
+
+          
+        </div>
+        <footer id="footer">
+  <div style="width: 100%; overflow: hidden">
+    <div class="footer-line"></div>
+  </div>
+  <div id="footer-info">
+    
+    <div>
+      <span class="icon-copyright"></span>
+      2020-2024
+      <span class="footer-info-sep"></span>
+      林羽
+    </div>
+    
+    
+      <div>
+        <span class="icon-brush"></span>
+        116.6k
+        &nbsp;|&nbsp;
+        <span class="icon-coffee"></span>
+        07:29
+      </div>
+    
+    
+    
+    
+      <div>
+        <span class="icon-eye"></span>
+        <span id="busuanzi_container_site_pv">总访问量&nbsp;<span id="busuanzi_value_site_pv"></span></span>
+        &nbsp;|&nbsp;
+        <span class="icon-user"></span>
+        <span id="busuanzi_container_site_uv">总访客量&nbsp;<span id="busuanzi_value_site_uv"></span></span>
+      </div>
+    
+  </div>
+</footer>
+
+        <div class="sidebar-top">
+          <img src="/images/taichi.png" height="50" width="50" alt="backtop" />
+          <div class="arrow-up"></div>
+        </div>
+        <div id="mask"></div>
+      </div>
+      <nav id="mobile-nav">
+  <div class="sidebar-wrap">
+    
+      <div class="sidebar-toc-sidebar"><div class="sidebar-toc">
+  <h3 class="toc-title">文章目录</h3>
+  <div class="sidebar-toc-wrapper toc-div-class" >
+      
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5"><span class="toc-number">1.</span> <span class="toc-text">1. 基础概念</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#CAP-%E6%A8%A1%E5%9E%8B%E4%BB%8B%E7%BB%8D%EF%BC%9A"><span class="toc-number">1.1.</span> <span class="toc-text">CAP 模型介绍：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Consistency-%E5%92%8C-Availability-%E7%9A%84%E7%9F%9B%E7%9B%BE%EF%BC%8C%E4%B8%BA%E4%BB%80%E4%B9%88-%E4%B8%80%E8%87%B4%E6%80%A7-%E5%92%8C-%E5%8F%AF%E7%94%A8%E6%80%A7-%E4%B8%8D%E8%83%BD%E5%90%8C%E6%97%B6%E6%88%90%E7%AB%8B%EF%BC%9F"><span class="toc-number">1.1.0.1.</span> <span class="toc-text">Consistency 和 Availability 的矛盾，为什么 一致性 和 可用性 不能同时成立？</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8"><span class="toc-number">2.</span> <span class="toc-text">2. 简单使用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Nacos-Discovery-%E6%9C%8D%E5%8A%A1%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83"><span class="toc-number">2.1.</span> <span class="toc-text">Nacos Discovery 服务注册中心</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Nacos-Config-%E6%9C%8D%E5%8A%A1%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83"><span class="toc-number">2.2.</span> <span class="toc-text">Nacos Config 服务配置中心</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Nacos-%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B%E4%B9%8B-Namespace-Group-DataId"><span class="toc-number">2.3.</span> <span class="toc-text">Nacos 数据模型之 Namespace-Group-DataId</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E7%9A%84%E4%BC%98%E5%85%88%E7%BA%A7"><span class="toc-number">2.4.</span> <span class="toc-text">配置的优先级</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Nacos-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E5%8A%A0%E5%AF%86%EF%BC%9AJasypt"><span class="toc-number">2.5.</span> <span class="toc-text">Nacos 配置文件加密：Jasypt</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BD%93%E7%84%B6%E4%BA%86%EF%BC%8CNacos-%E6%9C%AC%E8%BA%AB%E8%82%AF%E5%AE%9A%E6%98%AF%E6%8F%90%E4%BE%9B%E4%BA%86%E5%8A%A0%E5%AF%86%E7%9A%84%EF%BC%9A%E5%9F%BA%E4%BA%8E-SPI-%E7%9A%84%E6%8F%92%E4%BB%B6%E6%9C%BA%E5%88%B6%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.5.1.</span> <span class="toc-text">当然了，Nacos 本身肯定是提供了加密的：基于 SPI 的插件机制实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Jasypt-%E5%8A%A0%E5%AF%86"><span class="toc-number">2.5.2.</span> <span class="toc-text">Jasypt 加密</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-Nacos-Server-%E7%9A%84%E8%BF%90%E8%A1%8C%E5%90%AF%E5%8A%A8"><span class="toc-number">3.</span> <span class="toc-text">3. Nacos Server 的运行启动</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Nacos-%E6%9C%89%E4%B8%A4%E7%A7%8D%E8%BF%90%E8%A1%8C%E6%A8%A1%E5%BC%8F%EF%BC%9A"><span class="toc-number">3.0.0.1.</span> <span class="toc-text">Nacos 有两种运行模式：</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#standalone-%EF%BC%88%E5%8D%95%E8%8A%82%E7%82%B9%EF%BC%89%E6%A8%A1%E5%BC%8F"><span class="toc-number">3.1.</span> <span class="toc-text">standalone （单节点）模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#cluster-%EF%BC%88%E9%9B%86%E7%BE%A4%EF%BC%89%E6%A8%A1%E5%BC%8F"><span class="toc-number">3.2.</span> <span class="toc-text">cluster （集群）模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Nacos-Server-%E7%9A%84%E9%85%8D%E7%BD%AE%E6%95%B0%E6%8D%AE%E6%98%AF%E5%AD%98%E5%9C%A8%E5%93%AA%E9%87%8C%E5%91%A2%EF%BC%9F"><span class="toc-number">3.3.</span> <span class="toc-text">Nacos Server 的配置数据是存在哪里呢？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A1%A8%E6%8F%8F%E8%BF%B0"><span class="toc-number">3.3.0.1.</span> <span class="toc-text">表描述</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A1%A8%E6%8F%8F%E8%BF%B0-1"><span class="toc-number">3.3.0.2.</span> <span class="toc-text">表描述</span></a></li></ol></li></ol></li></ol></li></ol>
+      
+  </div>
+</div>
+</div>
+      <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img data-src="/avatar/my_logo.jpg" data-sizes="auto" alt="林羽" class="lazyload">
+  <div class="sidebar-author-name">林羽</div>
+  <div class="sidebar-description"></div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>文章</div>
+    <div class="sidebar-state-number">12</div>
+  </div>
+  <div class="sidebar-state-category">
+    <div>分类</div>
+    <div class="sidebar-state-number">12</div>
+  </div>
+  <div class="sidebar-state-tag">
+    <div>标签</div>
+    <div class="sidebar-state-number">7</div>
+  </div>
+</div>
+<div class="sidebar-social">
+  
+</div>
+<div class="sidebar-menu">
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="../../../../index.html" aria-label="首页"></a>
+      <div class="sidebar-menu-icon icon-taichi"></div>
+      <div class="sidebar-menu-link">首页</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="../../../../archives" aria-label="归档"></a>
+      <div class="sidebar-menu-icon icon-taichi"></div>
+      <div class="sidebar-menu-link">归档</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="../../../../about" aria-label="关于"></a>
+      <div class="sidebar-menu-icon icon-taichi"></div>
+      <div class="sidebar-menu-link">关于</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="../../../../friend" aria-label="友链"></a>
+      <div class="sidebar-menu-icon icon-taichi"></div>
+      <div class="sidebar-menu-link">友链</div>
+    </div>
+  
+</div>
+</div>
+    
+  </div>
+  
+    <div class="sidebar-btn-wrapper">
+      <div class="sidebar-toc-btn current"></div>
+      <div class="sidebar-common-btn"></div>
+    </div>
+  
+</nav>
+
+    </div>
+    
+    
+<script src="https://npm.webcache.cn/lazysizes@5.3.2/lazysizes.min.js"></script>
+
+
+<script src="https://npm.webcache.cn/clipboard@2.0.11/dist/clipboard.min.js"></script>
+
+
+
+<script src="../../../../js/script.js"></script>
+
+
+
+  
+<script src="../../../../js/aos.js"></script>
+
+  <script>
+    var aosInit = () => {
+      AOS.init({
+        duration: 1000,
+        easing: "ease",
+        once: true,
+        offset: 50,
+      });
+    };
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', aosInit);
+    } else {
+      aosInit();
+    }
+  </script>
+
+
+
+<script src="../../../../js/pjax_script.js" data-pjax></script>
+
+
+<script type="module" data-pjax>
+  import PhotoSwipeLightbox from "https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe-lightbox.esm.min.js";
+  
+  const pswp = () => {
+    if (_$$('.article-entry a.article-gallery-item').length > 0) {
+      new PhotoSwipeLightbox({
+        gallery: '.article-entry',
+        children: 'a.article-gallery-item',
+        pswpModule: () => import("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.esm.min.js")
+      }).init();
+    }
+    if(_$$('.article-gallery a.article-gallery-item').length > 0) {
+      new PhotoSwipeLightbox({
+        gallery: '.article-gallery',
+        children: 'a.article-gallery-item',
+        pswpModule: () => import("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.esm.min.js")
+      }).init();
+    }
+    window.lightboxStatus = 'done';
+    window.removeEventListener('lightbox:ready', pswp);
+  }
+  if(window.lightboxStatus === 'ready') {
+    pswp()
+  } else {
+    window.addEventListener('lightbox:ready', pswp);
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<script src="https://npm.webcache.cn/mouse-firework@0.0.4/dist/index.umd.js"></script>
+
+  <script>
+    firework(JSON.parse('{"excludeElements":["a","button"],"particles":[{"shape":"circle","move":["emit"],"easing":"easeOutExpo","colors":["#ff5252","#ff7c7c","#ffafaf","#ffd0d0"],"number":20,"duration":[1200,1800],"shapeOptions":{"radius":[16,32],"alpha":[0.3,0.5]}},{"shape":"circle","move":["diffuse"],"easing":"easeOutExpo","colors":["#ff0000"],"number":1,"duration":[1200,1800],"shapeOptions":{"radius":20,"alpha":[0.2,0.5],"lineWidth":6}}]}'))
+  </script>
+
+
+
+
+
+
+
+  
+<script src="https://npm.webcache.cn/quicklink@2.3.0/dist/quicklink.umd.js"></script>
+
+  <script data-pjax>
+    quicklink.listen({
+      timeout: 3000,
+      priority: true,
+      ignores: []
+    });
+  </script>
+
+
+<div id="lazy-script">
+  <div>
+    
+  </div>
+</div>
+
+
+  <script>
+    console.log(String.raw`%c 
+ ______     ______     __     __    __     __  __    
+/\  == \   /\  ___\   /\ \   /\ "-./  \   /\ \/\ \   
+\ \  __<   \ \  __\   \ \ \  \ \ \-./\ \  \ \ \_\ \  
+ \ \_\ \_\  \ \_____\  \ \_\  \ \_\ \ \_\  \ \_____\ 
+  \/_/ /_/   \/_____/   \/_/   \/_/  \/_/   \/_____/ 
+                                                  
+`,'color: #ff5252;')
+    console.log('%c Theme.Reimu v' + '0.3.1' + ' %c https://github.com/D-Sketon/hexo-theme-reimu ', 'color: white; background: #ff5252; padding:5px 0;', 'padding:4px;border:1px solid #ff5252;')
+  </script>
+  
+
+
+
+  
+<script src="https://npm.webcache.cn/busuanzi@2.3.0/bsz.pure.mini.js" async></script>
+
+
+
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then((registrations) => {
+      for (let registration of registrations) {
+        registration.unregister();
+      }
+    });
+  }
+</script>
+
+  <!-- hexo injector body_end start -->
+<script src="js/insert_highlight.js" data-pjax></script>
+<!-- hexo injector body_end end --></body>
+  </html>
+

@@ -3,7 +3,7 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: 林羽博客
+title: 小羽博客
 subtitle: '林羽会努力的'
 description: ''
 keywords: 'blog'
@@ -13,7 +13,8 @@ timezone: 'Asia/Shanghai'
 
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
-url: https://lylikestudy.github.io/project # 设置为自己仓库的地址
+url: https://lyxiaoyu0.github.io # 设置为自己仓库的地址
+root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
 pretty_urls:
@@ -106,5 +107,13 @@ theme: reimu
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
   type: 'git'
-  repo: git@github.com:lyLikeStudy/lylikestudy.github.io.git
+  repo:
+    github: git@github.com:lyXiaoYu0/lyxiaoyu0.github.io.git
+#    8.154.41.174: githexo@121.43.209.57:/home/githexo/repos/blog.git
   branch: master
+
+
+
+
+
+  # ===========================================================================================
