@@ -1,0 +1,692 @@
+
+  <!DOCTYPE html>
+  <html lang="zh-CN"  >
+  <head>
+  <meta charset="utf-8">
+  
+
+  
+
+  
+
+  
+  <script>window.icon_font = '4552607_tq6stt6tcg';window.clipboard_tips = {"success":"复制成功(*^▽^*)","fail":"复制失败 (ﾟ⊿ﾟ)ﾂ","copyright":{"enable":false,"count":50,"content":"本文版权：本博客所有文章除特别声明外，均采用 BY-NC-SA 许可协议。转载请注明出处！"}};</script>
+  
+  
+  <title>
+    计算机网络 知识点 |
+    
+    小羽博客
+  </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin><link rel="preload" as="style" href="https://fonts.googleapis.com/css?family=Mulish:400,400italic,700,700italic%7CNoto%20Serif%20SC:400,400italic,700,700italic&display=swap"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mulish:400,400italic,700,700italic%7CNoto%20Serif%20SC:400,400italic,700,700italic&display=swap" media="print" onload="this.media&#x3D;&#39;all&#39;">
+  
+    <link rel="preload" href="//at.alicdn.com/t/c/font_4552607_tq6stt6tcg.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  
+  
+    
+<link rel="stylesheet" href="../../../../css/loader.css">
+
+  
+  
+    <meta name="description" content="计算机网络 整理知识点">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计算机网络 知识点">
+<meta property="og:url" content="http://lylikestudy.github.io/2024/10/15/computer_network/index.html">
+<meta property="og:site_name" content="小羽博客">
+<meta property="og:description" content="计算机网络 整理知识点">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://lylikestudy.github.io/img/xxxx.png">
+<meta property="article:published_time" content="2024-10-15T12:33:28.000Z">
+<meta property="article:modified_time" content="2024-10-29T14:55:49.787Z">
+<meta property="article:author" content="林羽">
+<meta property="article:tag" content="计算机网络">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://lylikestudy.github.io/img/xxxx.png">
+  
+  
+  
+    <link rel="shortcut icon" href="../../../../images/favicon.ico">
+  
+  
+<link rel="stylesheet" href="../../../../css/style.css">
+
+  <link rel="preload" href="https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  
+  
+  
+  
+    
+<script src="https://npm.webcache.cn/pace-js@1.2.4/pace.min.js"></script>
+
+  
+  
+    
+<link rel="stylesheet" href="https://npm.webcache.cn/@reimujs/aos@0.0.1/dist/aos.css">
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+  <body>
+    
+  <div id='loader'>
+    <div class="loading-left-bg loading-bg"></div>
+    <div class="loading-right-bg loading-bg"></div>
+    <div class="spinner-box">
+      <div class="loading-taichi">
+        <svg width="150" height="150" viewBox="0 0 1024 1024" class="icon" version="1.1" xmlns="https://www.w3.org/2000/svg" shape-rendering="geometricPrecision">
+          <path d="M303.5 432A80 80 0 0 1 291.5 592A80 80 0 0 1 303.5 432z" fill="#ff5252" />
+          <path d="M512 65A447 447 0 0 1 512 959L512 929A417 417 0 0 0 512 95A417 417 0 0 0 512 929L512 959A447 447 0 0 1 512 65z 
+         M512 95A417 417 0 0 1 929 512A208.5 208.5 0 0 1 720.5 720.5L720.5 592A80 80 0 0 0 720.5 432A80 80 0 0 0 720.5 592L720.5 720.5A208.5 208.5 0 0 1 512 512A208.5 208.5 0 0 0 303.5 303.5A208.5 208.5 0 0 0 95 512A417 417 0 0 1 512 95z" fill="#ff5252" />
+        </svg>
+      </div>
+      <div class="loading-word">小羽正在努力...</div>
+    </div>
+  </div>
+  </div>
+  <script>
+    var time = null;
+    var startLoading = () => {
+      time = Date.now();
+      document.getElementById('loader').classList.remove("loading");
+    }
+    var endLoading = () => {
+      if (!time) {
+        document.body.style.overflow = 'auto';
+        document.getElementById('loader').classList.add("loading");
+      } else {
+        if (Date.now() - time > 500) {
+          time = null;
+          document.body.style.overflow = 'auto';
+          document.getElementById('loader').classList.add("loading");
+        } else {
+          setTimeout(endLoading, 500 - (Date.now() - time));
+          time = null;
+        }
+      }
+    }
+    window.addEventListener('DOMContentLoaded', endLoading);
+    document.getElementById('loader').addEventListener('click', endLoading);
+  </script>
+
+<div id="copy-tooltip" style="pointer-events: none; opacity: 0; transition: all 0.2s ease; position: fixed;top: 50%;left: 50%;z-index: 999;transform: translate(-50%, -50%);color: white;background: rgba(0, 0, 0, 0.5);padding: 10px 15px;border-radius: 10px;">
+</div>
+
+
+    <div id="container">
+      <div id="wrap">
+        <div id="header-nav">
+  <nav id="main-nav">
+    
+      <span class="main-nav-link-wrap">
+        <div class="main-nav-icon icon-taichi"></div>
+        <a class="main-nav-link" href="../../../../index.html">首页</a>
+      </span>
+    
+      <span class="main-nav-link-wrap">
+        <div class="main-nav-icon icon-taichi"></div>
+        <a class="main-nav-link" href="../../../../archives">归档</a>
+      </span>
+    
+      <span class="main-nav-link-wrap">
+        <div class="main-nav-icon icon-taichi"></div>
+        <a class="main-nav-link" href="../../../../about">关于</a>
+      </span>
+    
+      <span class="main-nav-link-wrap">
+        <div class="main-nav-icon icon-taichi"></div>
+        <a class="main-nav-link" href="../../../../friend">友链</a>
+      </span>
+    
+    <a id="main-nav-toggle" class="nav-icon"></a>
+  </nav>
+  <nav id="sub-nav">
+    
+    
+    
+  </nav>
+</div>
+<header id="header">
+  
+    <img fetchpriority="high" src="/img/computer-network-logo.png" alt="计算机网络 知识点">
+  
+  <div id="header-outer">
+    <div id="header-title">
+      
+        
+        
+          <a href="../../../../index.html" id="logo">
+            <h1 data-aos="slide-up">计算机网络 知识点</h1>
+          </a>
+        
+      
+      
+        
+        <h2 id="subtitle-wrap" data-aos="slide-down">
+          
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+        <div id="content">
+          
+          <section id="main"><article id="post-computer_network" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-inner" data-aos="fade-up">
+    <div class="article-meta">
+      <div class="article-date">
+  <a href="" class="article-date-link" data-aos="zoom-in">
+    <time datetime="2024-10-15T12:33:28.000Z" itemprop="datePublished">2024-10-15</time>
+    <time style="display: none;" id="post-update-time">2024-10-29</time>
+  </a>
+</div>
+
+      
+  <div class="article-category">
+    <a class="article-category-link" href="categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/" data-aos="zoom-in">计算机网络 知识点整理</a>
+  </div>
+
+
+    </div>
+    <div class="hr-line"></div>
+    
+
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+      
+        <p><img src="/img/xxxx.png"></p>
+<h1 id="1-HTTP"><a href="#1-HTTP" class="headerlink" title="1. HTTP"></a>1. HTTP</h1><h2 id="常见的-HTTP-状态码有哪些？"><a href="#常见的-HTTP-状态码有哪些？" class="headerlink" title="常见的 HTTP 状态码有哪些？"></a>常见的 HTTP 状态码有哪些？</h2><p>http状态码主要包括五类：</p>
+<p>第一类为 1xx：表示信息，例如 103 表示缓存预热。</p>
+<p>第二类为 2xx：一般表示请求成功，例如常见的 200。</p>
+<p>第三类为 3xx：表示重定向。</p>
+<p>第四类为 4xx：表示客户端错误，例如 404。</p>
+<p>第五类为 5xx：表示服务器错误。</p>
+<h2 id="HTTP-请求包含哪些内容，请求头和请求体有哪些类型？"><a href="#HTTP-请求包含哪些内容，请求头和请求体有哪些类型？" class="headerlink" title="HTTP 请求包含哪些内容，请求头和请求体有哪些类型？"></a>HTTP 请求包含哪些内容，请求头和请求体有哪些类型？</h2><p><strong>HTTP 请求由以下机构部分组成：</strong></p>
+<ul>
+<li><strong>请求头（Request Headers）</strong>：包含各种键值对，用于传递客户端环境、请求内容、认证信息等。</li>
+<li><strong>请求行（Request Line）</strong>：包含请求方法（如GET、POST）、请求的资源路径（如 **<code>/index.html</code>**）、以及HTTP协议版本（如：HTTP&#x2F;1.1）。</li>
+<li><strong>空行（Blank Line）</strong>：用于分隔请求头和请求体。</li>
+<li><strong>请求体（Request Body</strong>）：仅在 POST、PUT等方法中存在，包含需要发送到服务器的数据。</li>
+</ul>
+<p><strong>常见的请求头类型：</strong></p>
+<ul>
+<li><strong>通用头部（General Headers）</strong>：适用于请求和响应，如 **<code>Cache-ControlQ、Connection</code>**等。</li>
+<li><strong>请求头部（Request Headers）</strong>：特定于请求的头部，如 **<code>Host、User-Agent、Accept、Authorization</code>**等。</li>
+<li><strong>实体头部（Entity Headers）</strong>：描述请求体的头部，如 **<code>Content-Type、Content-Length</code>**。</li>
+</ul>
+<p><strong>请求体的类型：</strong></p>
+<ul>
+<li><strong>表单数据（Form Data）</strong>：**<code>application/x-www-form-urlencoded</code>**，用于提交表单数据。</li>
+<li><strong>多部分数据（Multipart Data）</strong>：**<code>multipart/form-data</code>**，用于上传文件或复杂表单数据。</li>
+<li><strong>JSON数据</strong>：**<code>application/json</code>**，用于提交 JSON 格式数据。</li>
+<li><strong>XML数据</strong>：**<code>application/xml</code>**，用于提交 XML 格式的数据。</li>
+<li><strong>文本数据</strong>：**<code>text/plain</code>**，用于提交纯文本数据。</li>
+</ul>
+<blockquote>
+<p>扩展知识：</p>
+<p><strong>请求方式：</strong></p>
+<ul>
+<li><strong>GET</strong>：请求指定的路径，通常用于获取数据，不包含请求体。</li>
+<li><strong>POST</strong>：向服务器提交数据，通常用于表单提交，数据在请求体中。</li>
+<li><strong>PUT</strong>：用于更新资源，数据也在请求体中。</li>
+<li><strong>DELETE：</strong>请求删除指定资源。</li>
+</ul>
+<p><strong>请求头部：</strong></p>
+<ul>
+<li>Host：请求指定的主机名及端口，HTTP&#x2F;1.1 中必须包含。</li>
+<li>User-Agent：标识客户端信息，通常用于服务器端的统计和个性化服务。</li>
+<li>Accept：指定客户端可接受的媒体类型，服务器可以根据此头部返回合适的内容。</li>
+<li>Authorization：用于身份验证。包含凭证信息，如 <strong><code>Basic 或 Bearer</code></strong> token。</li>
+</ul>
+<p><strong>请求体：</strong></p>
+<ul>
+<li>application&#x2F;x-www-form-urlencoded：键值对形式的表单数据，通常用在简单表单提交。</li>
+<li>multipart&#x2F;form-data：处理复杂表单，包含文件上传，内容按边界分割。</li>
+<li>自定义数据格式：根据 API 需求，可能需要提交 XML、JSON、甚至是二进制数据。不同的 Conent-Type 可以标识不同数据格式。</li>
+</ul>
+<p><strong>性能与安全：</strong></p>
+<ul>
+<li><strong>缓存机制：</strong>通常 Cache-Control 和 ETag 等头部，客户端和服务器可以有效管理缓存，减少不必要的请求。</li>
+<li>压缩：Content-Encoding 头部可以指定压缩方式，如 gzip，以减少数据传输。</li>
+<li>安全性：Authorization 和 Cookie 等头部涉及身份验证和会话管理，应注意保护敏感信息，防止中间人攻击等安全威胁。</li>
+</ul>
+</blockquote>
+<h2 id="除了四次挥手，还有什么方法断开连接？"><a href="#除了四次挥手，还有什么方法断开连接？" class="headerlink" title="除了四次挥手，还有什么方法断开连接？"></a>除了四次挥手，还有什么方法断开连接？</h2><ul>
+<li>RST (Reset)标志：</li>
+</ul>
+<p>使用 TCP  RST 标志可以强制立即终止连接。发送方可以直接发送带有 RST 标志的 TCP 报文，通知对方立即断开连接。</p>
+<ul>
+<li>超时（Timeout）：</li>
+</ul>
+<p>如果连接一段时间内没用任何数据包传输，连接双方可以依据设定的超时时间自动断开连接。</p>
+<blockquote>
+<p>扩展知识：</p>
+<p>RST 的应用场景：</p>
+<ul>
+<li>异常关闭：当遇到程序异常或攻击时，RST 可用于立即中止连接，不经过正常的四次挥手。例如，在入侵检测系统中，RST 可用于主动切断可疑连接。</li>
+<li>防火墙：有些防火墙或安全设备都会通过发送 RST 来强制终止不允许的连接。</li>
+</ul>
+</blockquote>
+<h2 id="HTTP-和-HTTPS-有什么区别？"><a href="#HTTP-和-HTTPS-有什么区别？" class="headerlink" title="HTTP 和 HTTPS 有什么区别？"></a>HTTP 和 HTTPS 有什么区别？</h2><ol>
+<li>数据传输安全性：</li>
+</ol>
+<ul>
+<li>HTTP：数据以明文传输，容易被窃听、篡改。</li>
+<li>HTTPS：通过 SSL&#x2F;TLS 协议对数据进行加密传输，提供数据机密性和完整性保障。</li>
+</ul>
+<ol start="2">
+<li>端口号：</li>
+</ol>
+<ul>
+<li>HTTP：默认使用端口 80。</li>
+<li>HTTPS：默认使用端口 443。</li>
+</ul>
+<ol start="3">
+<li>性能：</li>
+</ol>
+<ul>
+<li>HTTP：无加密过程，连接建立速度稍快。</li>
+<li>HTTPS：基于 HTTP 上又加了 SSL （Secure Sockets Layer）或 TLS（Transport Layzer Security）协议来实现的加密传输解密过程增加了计算开销，握手时间较长，但现代硬件和协议优化已使性能差距减小.</li>
+</ul>
+<ol start="4">
+<li>SEO 影响:</li>
+</ol>
+<ul>
+<li>HTTP: 搜索引擎一般会降低未加密站点的排名.</li>
+<li>HTTPS: 搜索引擎更倾向于优先展示 HTTPS 网站.</li>
+</ul>
+<hr>
+<h1 id="TCP"><a href="#TCP" class="headerlink" title="TCP"></a>TCP</h1><h2 id="到底什么是TCP连接？"><a href="#到底什么是TCP连接？" class="headerlink" title="到底什么是TCP连接？"></a>到底什么是TCP连接？</h2><p>根据 RFC793 定义，TCP的连接就是：TCP 为每个数据流初始化并维护的某些状态信息（这些信息包括 socket、序列号 和 窗口大小），称为连接。</p>
+<p>这些信息主要是为了实现可靠性和流量控制机制。</p>
+<p>所以，TCP所谓的是，面向连接的并不是真的拉了一条线让端与端之间连起来，只是双方都维护了一个状态，通过每一次通信来维护状态的变更，使得看起来好像有一条线关联了对方。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        
+      
+      
+      
+      
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag">计算机网络</a></li></ul>
+
+
+    </footer>
+  </div>
+  
+    
+  <nav id="article-nav" data-aos="fade-up">
+    
+    
+    <div class="article-nav-link-wrap article-nav-link-right">
+      
+        <img data-src="/img/linux_logo.png" data-sizes="auto" alt="Linux_centos7  知识点" class="lazyload">
+      
+      <a href="../../10/linux_centos7/"></a>
+      <div class="article-nav-caption">后一篇</div>
+      <h3 class="article-nav-title">
+        
+          Linux_centos7  知识点
+        
+      </h3>
+    </div>
+    
+  </nav>
+
+
+  
+</article>
+
+
+
+
+
+
+</section>
+          
+            <aside id="sidebar">
+  <div class="sidebar-wrapper wrap-sticky">
+    <div class="sidebar-wrap" data-aos="fade-up">
+      
+        <div class="sidebar-toc-sidebar"><div class="sidebar-toc">
+  <h3 class="toc-title">文章目录</h3>
+  <div class="sidebar-toc-wrapper toc-div-class" >
+      
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-HTTP"><span class="toc-number">1.</span> <span class="toc-text">1. HTTP</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E7%9A%84-HTTP-%E7%8A%B6%E6%80%81%E7%A0%81%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F"><span class="toc-number">1.1.</span> <span class="toc-text">常见的 HTTP 状态码有哪些？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-%E8%AF%B7%E6%B1%82%E5%8C%85%E5%90%AB%E5%93%AA%E4%BA%9B%E5%86%85%E5%AE%B9%EF%BC%8C%E8%AF%B7%E6%B1%82%E5%A4%B4%E5%92%8C%E8%AF%B7%E6%B1%82%E4%BD%93%E6%9C%89%E5%93%AA%E4%BA%9B%E7%B1%BB%E5%9E%8B%EF%BC%9F"><span class="toc-number">1.2.</span> <span class="toc-text">HTTP 请求包含哪些内容，请求头和请求体有哪些类型？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%99%A4%E4%BA%86%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B%EF%BC%8C%E8%BF%98%E6%9C%89%E4%BB%80%E4%B9%88%E6%96%B9%E6%B3%95%E6%96%AD%E5%BC%80%E8%BF%9E%E6%8E%A5%EF%BC%9F"><span class="toc-number">1.3.</span> <span class="toc-text">除了四次挥手，还有什么方法断开连接？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-%E5%92%8C-HTTPS-%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="toc-number">1.4.</span> <span class="toc-text">HTTP 和 HTTPS 有什么区别？</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#TCP"><span class="toc-number">2.</span> <span class="toc-text">TCP</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%B0%E5%BA%95%E4%BB%80%E4%B9%88%E6%98%AFTCP%E8%BF%9E%E6%8E%A5%EF%BC%9F"><span class="toc-number">2.1.</span> <span class="toc-text">到底什么是TCP连接？</span></a></li></ol></li></ol>
+      
+  </div>
+</div>
+</div>
+        <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img data-src="/avatar/my_logo.jpg" data-sizes="auto" alt="林羽" class="lazyload">
+  <div class="sidebar-author-name">林羽</div>
+  <div class="sidebar-description"></div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>文章</div>
+    <div class="sidebar-state-number">3</div>
+  </div>
+  <div class="sidebar-state-category">
+    <div>分类</div>
+    <div class="sidebar-state-number">3</div>
+  </div>
+  <div class="sidebar-state-tag">
+    <div>标签</div>
+    <div class="sidebar-state-number">3</div>
+  </div>
+</div>
+<div class="sidebar-social">
+  
+</div>
+<div class="sidebar-menu">
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="../../../../index.html" aria-label="首页"></a>
+      <div class="sidebar-menu-icon icon-taichi"></div>
+      <div class="sidebar-menu-link">首页</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="../../../../archives" aria-label="归档"></a>
+      <div class="sidebar-menu-icon icon-taichi"></div>
+      <div class="sidebar-menu-link">归档</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="../../../../about" aria-label="关于"></a>
+      <div class="sidebar-menu-icon icon-taichi"></div>
+      <div class="sidebar-menu-link">关于</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="../../../../friend" aria-label="友链"></a>
+      <div class="sidebar-menu-icon icon-taichi"></div>
+      <div class="sidebar-menu-link">友链</div>
+    </div>
+  
+</div>
+</div>
+      
+      
+        <div class="sidebar-btn-wrapper" style="position:static">
+          <div class="sidebar-toc-btn current"></div>
+          <div class="sidebar-common-btn"></div>
+        </div>
+      
+    </div>
+  </div>
+
+  
+</aside>
+
+          
+        </div>
+        <footer id="footer">
+  <div style="width: 100%; overflow: hidden">
+    <div class="footer-line"></div>
+  </div>
+  <div id="footer-info">
+    
+    <div>
+      <span class="icon-copyright"></span>
+      2020-2024
+      <span class="footer-info-sep"></span>
+      林羽
+    </div>
+    
+    
+      <div>
+        <span class="icon-brush"></span>
+        23.4k
+        &nbsp;|&nbsp;
+        <span class="icon-coffee"></span>
+        01:22
+      </div>
+    
+    
+    
+    
+      <div>
+        <span class="icon-eye"></span>
+        <span id="busuanzi_container_site_pv">总访问量&nbsp;<span id="busuanzi_value_site_pv"></span></span>
+        &nbsp;|&nbsp;
+        <span class="icon-user"></span>
+        <span id="busuanzi_container_site_uv">总访客量&nbsp;<span id="busuanzi_value_site_uv"></span></span>
+      </div>
+    
+  </div>
+</footer>
+
+        <div class="sidebar-top">
+          <img src="/images/taichi.png" height="50" width="50" alt="backtop" />
+          <div class="arrow-up"></div>
+        </div>
+        <div id="mask"></div>
+      </div>
+      <nav id="mobile-nav">
+  <div class="sidebar-wrap">
+    
+      <div class="sidebar-toc-sidebar"><div class="sidebar-toc">
+  <h3 class="toc-title">文章目录</h3>
+  <div class="sidebar-toc-wrapper toc-div-class" >
+      
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-HTTP"><span class="toc-number">1.</span> <span class="toc-text">1. HTTP</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E7%9A%84-HTTP-%E7%8A%B6%E6%80%81%E7%A0%81%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F"><span class="toc-number">1.1.</span> <span class="toc-text">常见的 HTTP 状态码有哪些？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-%E8%AF%B7%E6%B1%82%E5%8C%85%E5%90%AB%E5%93%AA%E4%BA%9B%E5%86%85%E5%AE%B9%EF%BC%8C%E8%AF%B7%E6%B1%82%E5%A4%B4%E5%92%8C%E8%AF%B7%E6%B1%82%E4%BD%93%E6%9C%89%E5%93%AA%E4%BA%9B%E7%B1%BB%E5%9E%8B%EF%BC%9F"><span class="toc-number">1.2.</span> <span class="toc-text">HTTP 请求包含哪些内容，请求头和请求体有哪些类型？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%99%A4%E4%BA%86%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B%EF%BC%8C%E8%BF%98%E6%9C%89%E4%BB%80%E4%B9%88%E6%96%B9%E6%B3%95%E6%96%AD%E5%BC%80%E8%BF%9E%E6%8E%A5%EF%BC%9F"><span class="toc-number">1.3.</span> <span class="toc-text">除了四次挥手，还有什么方法断开连接？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-%E5%92%8C-HTTPS-%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="toc-number">1.4.</span> <span class="toc-text">HTTP 和 HTTPS 有什么区别？</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#TCP"><span class="toc-number">2.</span> <span class="toc-text">TCP</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%B0%E5%BA%95%E4%BB%80%E4%B9%88%E6%98%AFTCP%E8%BF%9E%E6%8E%A5%EF%BC%9F"><span class="toc-number">2.1.</span> <span class="toc-text">到底什么是TCP连接？</span></a></li></ol></li></ol>
+      
+  </div>
+</div>
+</div>
+      <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img data-src="/avatar/my_logo.jpg" data-sizes="auto" alt="林羽" class="lazyload">
+  <div class="sidebar-author-name">林羽</div>
+  <div class="sidebar-description"></div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>文章</div>
+    <div class="sidebar-state-number">3</div>
+  </div>
+  <div class="sidebar-state-category">
+    <div>分类</div>
+    <div class="sidebar-state-number">3</div>
+  </div>
+  <div class="sidebar-state-tag">
+    <div>标签</div>
+    <div class="sidebar-state-number">3</div>
+  </div>
+</div>
+<div class="sidebar-social">
+  
+</div>
+<div class="sidebar-menu">
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="../../../../index.html" aria-label="首页"></a>
+      <div class="sidebar-menu-icon icon-taichi"></div>
+      <div class="sidebar-menu-link">首页</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="../../../../archives" aria-label="归档"></a>
+      <div class="sidebar-menu-icon icon-taichi"></div>
+      <div class="sidebar-menu-link">归档</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="../../../../about" aria-label="关于"></a>
+      <div class="sidebar-menu-icon icon-taichi"></div>
+      <div class="sidebar-menu-link">关于</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="../../../../friend" aria-label="友链"></a>
+      <div class="sidebar-menu-icon icon-taichi"></div>
+      <div class="sidebar-menu-link">友链</div>
+    </div>
+  
+</div>
+</div>
+    
+  </div>
+  
+    <div class="sidebar-btn-wrapper">
+      <div class="sidebar-toc-btn current"></div>
+      <div class="sidebar-common-btn"></div>
+    </div>
+  
+</nav>
+
+    </div>
+    
+    
+<script src="https://npm.webcache.cn/lazysizes@5.3.2/lazysizes.min.js"></script>
+
+
+<script src="https://npm.webcache.cn/clipboard@2.0.11/dist/clipboard.min.js"></script>
+
+
+
+<script src="../../../../js/script.js"></script>
+
+
+
+  
+<script src="../../../../js/aos.js"></script>
+
+  <script>
+    var aosInit = () => {
+      AOS.init({
+        duration: 1000,
+        easing: "ease",
+        once: true,
+        offset: 50,
+      });
+    };
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', aosInit);
+    } else {
+      aosInit();
+    }
+  </script>
+
+
+
+<script src="../../../../js/pjax_script.js" data-pjax></script>
+
+
+<script type="module" data-pjax>
+  import PhotoSwipeLightbox from "https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe-lightbox.esm.min.js";
+  
+  const pswp = () => {
+    if (_$$('.article-entry a.article-gallery-item').length > 0) {
+      new PhotoSwipeLightbox({
+        gallery: '.article-entry',
+        children: 'a.article-gallery-item',
+        pswpModule: () => import("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.esm.min.js")
+      }).init();
+    }
+    if(_$$('.article-gallery a.article-gallery-item').length > 0) {
+      new PhotoSwipeLightbox({
+        gallery: '.article-gallery',
+        children: 'a.article-gallery-item',
+        pswpModule: () => import("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.esm.min.js")
+      }).init();
+    }
+    window.lightboxStatus = 'done';
+    window.removeEventListener('lightbox:ready', pswp);
+  }
+  if(window.lightboxStatus === 'ready') {
+    pswp()
+  } else {
+    window.addEventListener('lightbox:ready', pswp);
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<script src="https://npm.webcache.cn/mouse-firework@0.0.4/dist/index.umd.js"></script>
+
+  <script>
+    firework(JSON.parse('{"excludeElements":["a","button"],"particles":[{"shape":"circle","move":["emit"],"easing":"easeOutExpo","colors":["#ff5252","#ff7c7c","#ffafaf","#ffd0d0"],"number":20,"duration":[1200,1800],"shapeOptions":{"radius":[16,32],"alpha":[0.3,0.5]}},{"shape":"circle","move":["diffuse"],"easing":"easeOutExpo","colors":["#ff0000"],"number":1,"duration":[1200,1800],"shapeOptions":{"radius":20,"alpha":[0.2,0.5],"lineWidth":6}}]}'))
+  </script>
+
+
+
+
+
+
+
+  
+<script src="https://npm.webcache.cn/quicklink@2.3.0/dist/quicklink.umd.js"></script>
+
+  <script data-pjax>
+    quicklink.listen({
+      timeout: 3000,
+      priority: true,
+      ignores: []
+    });
+  </script>
+
+
+<div id="lazy-script">
+  <div>
+    
+  </div>
+</div>
+
+
+  <script>
+    console.log(String.raw`%c 
+ ______     ______     __     __    __     __  __    
+/\  == \   /\  ___\   /\ \   /\ "-./  \   /\ \/\ \   
+\ \  __<   \ \  __\   \ \ \  \ \ \-./\ \  \ \ \_\ \  
+ \ \_\ \_\  \ \_____\  \ \_\  \ \_\ \ \_\  \ \_____\ 
+  \/_/ /_/   \/_____/   \/_/   \/_/  \/_/   \/_____/ 
+                                                  
+`,'color: #ff5252;')
+    console.log('%c Theme.Reimu v' + '0.3.1' + ' %c https://github.com/D-Sketon/hexo-theme-reimu ', 'color: white; background: #ff5252; padding:5px 0;', 'padding:4px;border:1px solid #ff5252;')
+  </script>
+  
+
+
+
+  
+<script src="https://npm.webcache.cn/busuanzi@2.3.0/bsz.pure.mini.js" async></script>
+
+
+
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then((registrations) => {
+      for (let registration of registrations) {
+        registration.unregister();
+      }
+    });
+  }
+</script>
+
+  <!-- hexo injector body_end start -->
+<script src="js/insert_highlight.js" data-pjax></script>
+<!-- hexo injector body_end end --></body>
+  </html>
+
