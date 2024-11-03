@@ -30,7 +30,7 @@
   
     <meta property="og:type" content="website">
 <meta property="og:title" content="小羽博客">
-<meta property="og:url" content="http://lylikestudy.github.io/index.html">
+<meta property="og:url" content="http://lyxiaoyu0.github.io/index.html">
 <meta property="og:site_name" content="小羽博客">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:author" content="林羽">
@@ -175,12 +175,133 @@
   <div class="post-wrapper">
   <div class="post-wrap-left" data-aos="fade-up">
     
-      <a class="post-link" href="2024/10/27/nacos_openfeign/" aria-label="openFeign + nacos 知识点"></a>
+      <a class="post-link" href="2024/11/03/MQ/" aria-label="MQ 知识点"></a>
     
     
     <div class="post-cover-left">
       
-        <img data-src="/img/springcloud.png" data-sizes="auto" alt="openFeign + nacos 知识点" class="lazyload">
+        <img data-src="/img/MQ_logo.png" data-sizes="auto" alt="MQ 知识点" class="lazyload">
+      
+    </div>
+    <div class="post-info">
+      <div class="post-meta">
+        <span><span class="icon-calendar"></span>2024-11-03</span>
+        <span><span class="icon-pencil"></span>14.3k 字</span>
+        <span><span class="icon-clock"></span>53 分钟</span>
+      </div>
+      <h2 class="post-title">MQ 知识点</h2>
+      <article class="post-article">
+        
+          1. MQ 的基础概念什么是MQ？MQ 全称为 Message Queue 即为 消息队列
+
+消息队列   是在消息队列的传输过程中保存消息的容器
+它是经典的：生产者 ——- 消费者
+
+生产者不断向消息队列中生产消息 ———————— 消费者不断的从队列中获取信息
+好处：
+
+生产者只需要关注发消息，消费者只需要关注收消息
+没有 业务逻辑 侵入，这样就没实现了生产者和消费者的解耦
+
+为什么要使用 MQ？简而言之：削峰限流、异步调用、服务解耦
+AMQP 和 JMS 消息队列协议**AMQP 和 JMS 是目前市面上常见的两种 消息队列协议 **
+
+AMQP 高级消息队列协议是应用层协议的一个开放标
+        
+      </article>
+    </div>
+  </div>
+  </div>
+
+
+  
+  
+  <div class="post-wrapper">
+  <div class="post-wrap-right" data-aos="fade-up">
+    
+    <a class="post-link" href="2024/11/01/nacos/" aria-label="Nacos 知识点"></a>
+    
+    <div class="post-cover-right">
+      
+        <img data-src="/img/0023-nacos_logo.png" data-sizes="auto" alt="Nacos 知识点" class="lazyload">
+      
+    </div>
+    <div class="post-info">
+      <div class="post-meta">
+        <span><span class="icon-calendar"></span>2024-11-01</span>
+        <span><span class="icon-pencil"></span>5.7k 字</span>
+        <span><span class="icon-clock"></span>22 分钟</span>
+      </div>
+      <h2 class="post-title">Nacos 知识点</h2>
+      <article class="post-article">
+        
+          
+官网文档：https://nacos.io/zh-cn/docs/architecture.html
+
+1. 基础概念
+Nacos全称：Dynamic Naming and  Configuration Service  （翻译：动态命名和配置服务）
+Nacos是什么：一个 更易于构建云原生应用 的动态服务发现、配置管理和服务管理平台。
+Nacos —-&amp;gt;  注册中心 + 配置中心的组合
+等价于：
+Nacos &amp;#x3D; Eureka + Config + Bus
+Nacos &amp;#x3D; Spring Cloud Consul
+
+
+能干什么：
+替代 Eureka &amp;#x2F; Co
+        
+      </article>
+    </div>
+  </div>
+  </div>
+
+
+  
+  
+  <div class="post-wrapper">
+  <div class="post-wrap-left" data-aos="fade-up">
+    
+      <a class="post-link" href="2024/11/01/docker_use/" aria-label="Docker_CentOS 安装使用指南"></a>
+    
+    
+    <div class="post-cover-left">
+      
+        <img data-src="/img/docker_logo.png" data-sizes="auto" alt="Docker_CentOS 安装使用指南" class="lazyload">
+      
+    </div>
+    <div class="post-info">
+      <div class="post-meta">
+        <span><span class="icon-calendar"></span>2024-11-01</span>
+        <span><span class="icon-pencil"></span>2.1k 字</span>
+        <span><span class="icon-clock"></span>8 分钟</span>
+      </div>
+      <h2 class="post-title">Docker_CentOS 安装使用指南</h2>
+      <article class="post-article">
+        
+          
+配置好了，可以装个宝塔玩哎，宝塔上面换镜像源容易点（主要是镜像源频繁的封）
+
+1.安装DockerDocker 分为 CE 和 EE 两大版本。CE 即社区版（免费，支持周期 7 个月），EE 即企业版，强调安全，付费使用，支持周期 24 个月。
+Docker CE 分为 stable test 和 nightly 三个更新频道。
+官方网站上有各种环境下的 安装指南，这里主要介绍 Docker CE 在 CentOS上的安装。
+2.CentOS安装DockerDocker CE 支持 64 位版本 CentOS 7，并且要求内核版本不低于 3.10， CentOS 7 满足最低内核的要求，所
+        
+      </article>
+    </div>
+  </div>
+  </div>
+
+
+  
+  
+  <div class="post-wrapper">
+  <div class="post-wrap-right" data-aos="fade-up">
+    
+    <a class="post-link" href="2024/10/27/openFeign(nacos)/" aria-label="openFeign（nacos）—— 知识点"></a>
+    
+    <div class="post-cover-right">
+      
+        <img data-src="/img/springcloud.png" data-sizes="auto" alt="openFeign（nacos）—— 知识点" class="lazyload">
       
     </div>
     <div class="post-info">
@@ -189,7 +310,7 @@
         <span><span class="icon-pencil"></span>2.4k 字</span>
         <span><span class="icon-clock"></span>9 分钟</span>
       </div>
-      <h2 class="post-title">openFeign + nacos 知识点</h2>
+      <h2 class="post-title">openFeign（nacos）—— 知识点</h2>
       <article class="post-article">
         
           1. 基础概念什么是 FeignFeign 是一个声明式的 Web 服务客户端
@@ -208,11 +329,12 @@ Feign 也是 Spring Cloud Netflix 组件之一，结合 Spirng Cloud
   
   
   <div class="post-wrapper">
-  <div class="post-wrap-right" data-aos="fade-up">
+  <div class="post-wrap-left" data-aos="fade-up">
     
-    <a class="post-link" href="2024/10/25/gateway_base/" aria-label="Gateway 知识点"></a>
+      <a class="post-link" href="2024/10/25/gateway_base/" aria-label="Gateway 知识点"></a>
     
-    <div class="post-cover-right">
+    
+    <div class="post-cover-left">
       
         <img data-src="/img/springcloud.png" data-sizes="auto" alt="Gateway 知识点" class="lazyload">
       
@@ -220,8 +342,8 @@ Feign 也是 Spring Cloud Netflix 组件之一，结合 Spirng Cloud
     <div class="post-info">
       <div class="post-meta">
         <span><span class="icon-calendar"></span>2024-10-25</span>
-        <span><span class="icon-pencil"></span>3.4k 字</span>
-        <span><span class="icon-clock"></span>13 分钟</span>
+        <span><span class="icon-pencil"></span>4.8k 字</span>
+        <span><span class="icon-clock"></span>20 分钟</span>
       </div>
       <h2 class="post-title">Gateway 知识点</h2>
       <article class="post-article">
@@ -245,12 +367,11 @@ https://docs.spring.io/spring-cloud-gateway/docs/current/reference/html/#the-aft
   
   
   <div class="post-wrapper">
-  <div class="post-wrap-left" data-aos="fade-up">
+  <div class="post-wrap-right" data-aos="fade-up">
     
-      <a class="post-link" href="2024/10/25/redis/" aria-label="Redis 知识点"></a>
+    <a class="post-link" href="2024/10/25/redis/" aria-label="Redis 知识点"></a>
     
-    
-    <div class="post-cover-left">
+    <div class="post-cover-right">
       
         <img data-src="/img/redis_logo.png" data-sizes="auto" alt="Redis 知识点" class="lazyload">
       
@@ -258,23 +379,43 @@ https://docs.spring.io/spring-cloud-gateway/docs/current/reference/html/#the-aft
     <div class="post-info">
       <div class="post-meta">
         <span><span class="icon-calendar"></span>2024-10-25</span>
-        <span><span class="icon-pencil"></span>255 字</span>
-        <span><span class="icon-clock"></span>1 分钟</span>
+        <span><span class="icon-pencil"></span>6.1k 字</span>
+        <span><span class="icon-clock"></span>22 分钟</span>
       </div>
       <h2 class="post-title">Redis 知识点</h2>
       <article class="post-article">
         
-          Redis 主从复制的实现原理是什么？Redis 的主从复制是指一个 Redis 实例（主节点）可以将数据复制到一个或多个从节点（从节点），从节点 从 主节点获取数据并保持同步。
-主从架构可以实现读写分离：写操作可以请求主节点、读操作可以交给从节点
-复制流程：
-
-连接：从节点通过向主节点发送 PSYNC 命令建立连接
-全量复制：如果是一次连接或之前的连接失效，从节点会请求全量复制，主节点将当前的数据快照（RDB文件）发送给从节点
-增量复制：全量复制完毕后，主从之前会保持一个长连接，主节点会通过这个连接将后续的写操作传递给从节点执行，来保证数据的一致
+          1. 基础概念Redis 通常应用于哪些场景？
+缓存：
 
 
-扩展知识：
-主从复制有两种方式：**全量
+Redis 最常用的场景作为缓存层，以减少数据库的负载，提高数据读取速度。
+例如，常用的用户会话数和页面渲染结果可以存储在 Redis 中
+
+
+
+实时系统：
+
+
+Redis 支持快速的数据写入和读取，非常适合用于实时分析，如网站点击统计，实时排行榜。
+
+
+消息队列：
+
+
+利用 Redis 的 List 和 Pub&amp;#x2F;Sub 功能，可以实现轻量级的消息队列，适用于任务处理和异步消息传递。
+
+
+分布式锁：
+
+
+Redis 可以用作分布式锁的实现，确保在分布式系统资源的安全访问，避免竞态条件。
+
+
+计数器：
+
+
+Redis 的原子性
         
       </article>
     </div>
@@ -285,11 +426,12 @@ https://docs.spring.io/spring-cloud-gateway/docs/current/reference/html/#the-aft
   
   
   <div class="post-wrapper">
-  <div class="post-wrap-right" data-aos="fade-up">
+  <div class="post-wrap-left" data-aos="fade-up">
     
-    <a class="post-link" href="2024/10/22/cloud_base/" aria-label="微服务基础 知识点"></a>
+      <a class="post-link" href="2024/10/22/cloud_base/" aria-label="微服务基础 知识点"></a>
     
-    <div class="post-cover-right">
+    
+    <div class="post-cover-left">
       
         <img data-src="/img/cloud_logo.jpg" data-sizes="auto" alt="微服务基础 知识点" class="lazyload">
       
@@ -297,13 +439,16 @@ https://docs.spring.io/spring-cloud-gateway/docs/current/reference/html/#the-aft
     <div class="post-info">
       <div class="post-meta">
         <span><span class="icon-calendar"></span>2024-10-22</span>
-        <span><span class="icon-pencil"></span>226 字</span>
-        <span><span class="icon-clock"></span>1 分钟</span>
+        <span><span class="icon-pencil"></span>569 字</span>
+        <span><span class="icon-clock"></span>2 分钟</span>
       </div>
       <h2 class="post-title">微服务基础 知识点</h2>
       <article class="post-article">
         
-          1. 认识微服务需要学哪些微服务知识？
+          
+约定 &amp;gt; 配置 &amp;gt; 编码
+
+1. 认识微服务需要学哪些微服务知识？
 学习路线
 分布式架构分布式架构：根据业务功能对系统进行拆分，每个业务模块作为独立项目开发，称为一个服务。
 优点：
@@ -323,8 +468,10 @@ https://docs.spring.io/spring-cloud-gateway/docs/current/reference/html/#the-aft
 自治：团队独立、技术独立、数据独立、部署独立。
 隔离性强：服务调用做好隔离、容错、降级、避免出现级联问题。
 
-服务发现注册Nacos 详解
-单节点启动(bin目录下): startup.cmd -m sta
+2. 无伤速通版本
+版本一：
+
+Java：Java17
         
       </article>
     </div>
@@ -335,12 +482,11 @@ https://docs.spring.io/spring-cloud-gateway/docs/current/reference/html/#the-aft
   
   
   <div class="post-wrapper">
-  <div class="post-wrap-left" data-aos="fade-up">
+  <div class="post-wrap-right" data-aos="fade-up">
     
-      <a class="post-link" href="2024/10/20/openFeign_Dubbo_base/" aria-label="微服务的远程调用"></a>
+    <a class="post-link" href="2024/10/20/openFeign_Dubbo_base/" aria-label="微服务的远程调用"></a>
     
-    
-    <div class="post-cover-left">
+    <div class="post-cover-right">
       
         <img data-src="/img/feign_dubbo_logo.jpg" data-sizes="auto" alt="微服务的远程调用" class="lazyload">
       
@@ -373,11 +519,12 @@ ope
   
   
   <div class="post-wrapper">
-  <div class="post-wrap-right" data-aos="fade-up">
+  <div class="post-wrap-left" data-aos="fade-up">
     
-    <a class="post-link" href="2024/10/15/computer_network/" aria-label="计算机网络 知识点"></a>
+      <a class="post-link" href="2024/10/15/computer_network/" aria-label="计算机网络 知识点"></a>
     
-    <div class="post-cover-right">
+    
+    <div class="post-cover-left">
       
         <img data-src="/img/computer-network-logo.png" data-sizes="auto" alt="计算机网络 知识点" class="lazyload">
       
@@ -411,12 +558,11 @@ HTTP 请求包含哪些内容，请求头和请求体有哪些类型？HTTP 请�
   
   
   <div class="post-wrapper">
-  <div class="post-wrap-left" data-aos="fade-up">
+  <div class="post-wrap-right" data-aos="fade-up">
     
-      <a class="post-link" href="2024/10/10/linux_centos7/" aria-label="Linux_centos7  知识点"></a>
+    <a class="post-link" href="2024/10/10/linux_centos7/" aria-label="Linux_centos7  知识点"></a>
     
-    
-    <div class="post-cover-left">
+    <div class="post-cover-right">
       
         <img data-src="/img/linux_logo.png" data-sizes="auto" alt="Linux_centos7  知识点" class="lazyload">
       
@@ -451,39 +597,12 @@ HTTP 请求包含哪些内容，请求头和请求体有哪些类型？HTTP 请�
 
 
   
-  
-  <div class="post-wrapper">
-  <div class="post-wrap-right" data-aos="fade-up">
+
+
+  <nav id="page-nav" data-aos="fade-up">
     
-    <a class="post-link" href="2024/09/25/mysql_index/" aria-label="MySQL 知识点"></a>
-    
-    <div class="post-cover-right">
-      
-        <img data-src="/img/mysql_logo.png" data-sizes="auto" alt="MySQL 知识点" class="lazyload">
-      
-    </div>
-    <div class="post-info">
-      <div class="post-meta">
-        <span><span class="icon-calendar"></span>2024-09-25</span>
-        <span><span class="icon-pencil"></span>19k 字</span>
-        <span><span class="icon-clock"></span>66 分钟</span>
-      </div>
-      <h2 class="post-title">MySQL 知识点</h2>
-      <article class="post-article">
-        
-          1. MySQL 知识点 — 索引什么是数据库索引？索引的作用是什么？索引适用于哪些场景？ 数据库索引是一种 数据结构，用于提高数据库表的查询效率。
-​		索引可以帮助数据库快速定位和检索存储在表中的数据，从而加快数据查询的速度。在数据量比较大时，使用索引可以极大地提高数据检索的效率。
-​		索引的作用是通过构建一个额外的数据结构（B+tree、哈希表等）来加速数据的检索。它是在数据库表上创建的一种数据结构，它包含一些指向表中数据的指针，可以快速地定位到满足查询条件的数据行，从而提高查询效率。索引可以包含一个或多个列，可以使用 单列索引、组合索引、全文索引 等多种方式来创建。
-适合索引的场景包
-        
-      </article>
-    </div>
-  </div>
-  </div>
-
-
-  
-
+    <span class="page-number current">1</span><a class="page-number" href="page/2/">2</a><a class="extend next" rel="next" href="page/2/">下一页 &raquo;</a>
+  </nav>
 
 
 </section>
@@ -500,15 +619,15 @@ HTTP 请求包含哪些内容，请求头和请求体有哪些类型？HTTP 请�
 <div class="sidebar-state">
   <div class="sidebar-state-article">
     <div>文章</div>
-    <div class="sidebar-state-number">8</div>
+    <div class="sidebar-state-number">12</div>
   </div>
   <div class="sidebar-state-category">
     <div>分类</div>
-    <div class="sidebar-state-number">8</div>
+    <div class="sidebar-state-number">12</div>
   </div>
   <div class="sidebar-state-tag">
     <div>标签</div>
-    <div class="sidebar-state-number">6</div>
+    <div class="sidebar-state-number">7</div>
   </div>
 </div>
 <div class="sidebar-social">
@@ -568,10 +687,10 @@ HTTP 请求包含哪些内容，请求头和请求体有哪些类型？HTTP 请�
     
       <div>
         <span class="icon-brush"></span>
-        34.7k
+        116.6k
         &nbsp;|&nbsp;
         <span class="icon-coffee"></span>
-        02:05
+        07:29
       </div>
     
     
@@ -605,15 +724,15 @@ HTTP 请求包含哪些内容，请求头和请求体有哪些类型？HTTP 请�
 <div class="sidebar-state">
   <div class="sidebar-state-article">
     <div>文章</div>
-    <div class="sidebar-state-number">8</div>
+    <div class="sidebar-state-number">12</div>
   </div>
   <div class="sidebar-state-category">
     <div>分类</div>
-    <div class="sidebar-state-number">8</div>
+    <div class="sidebar-state-number">12</div>
   </div>
   <div class="sidebar-state-tag">
     <div>标签</div>
-    <div class="sidebar-state-number">6</div>
+    <div class="sidebar-state-number">7</div>
   </div>
 </div>
 <div class="sidebar-social">
