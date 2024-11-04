@@ -177,6 +177,84 @@
   <div class="post-wrapper">
   <div class="post-wrap-left" data-aos="fade-up">
     
+      <a class="post-link" href="2024/11/04/sentinel_base/" aria-label="Sentinel 服务熔断与限流 知识点"></a>
+    
+    
+    <div class="post-cover-left">
+      
+        <img data-src="/img/sentinel_logo.png" data-sizes="auto" alt="Sentinel 服务熔断与限流 知识点" class="lazyload">
+      
+    </div>
+    <div class="post-info">
+      <div class="post-meta">
+        <span><span class="icon-calendar"></span>2024-11-04</span>
+        <span><span class="icon-pencil"></span>2.1k 字</span>
+        <span><span class="icon-clock"></span>8 分钟</span>
+      </div>
+      <h2 class="post-title">Sentinel 服务熔断与限流 知识点</h2>
+      <article class="post-article">
+        
+          
+Sentinel 官网：https://sentinelguard.io/zh-cn/docs/introduction.html
+
+1. 为什么要用？2. 基本使用 和 基础概念
+能干嘛？
+从流量路由、流量控制、流量整形、熔断降级、系统自适应过载保护、热点流量防护等多个维度来帮助开发者保障微服务的稳定性。
+
+
+
+基础安装使用：
+去git下载jar包：https://github.com/alibaba/Sentinel/releases
+找个合适版本的 jar 包到本地如：sentinel-dashboard-1.8.6.jar
+
+保证 8080 端口不能被占用，直接 java -jar 
+        
+      </article>
+    </div>
+  </div>
+  </div>
+
+
+  
+  
+  <div class="post-wrapper">
+  <div class="post-wrap-right" data-aos="fade-up">
+    
+      <a class="post-link" href="2024/11/04/spring_base/" aria-label="Spring 知识点"></a>
+    
+    
+    <div class="post-cover-right">
+      
+        <img data-src="/img/spring_logo.jpg" data-sizes="auto" alt="Spring 知识点" class="lazyload">
+      
+    </div>
+    <div class="post-info">
+      <div class="post-meta">
+        <span><span class="icon-calendar"></span>2024-11-04</span>
+        <span><span class="icon-pencil"></span>421 字</span>
+        <span><span class="icon-clock"></span>1 分钟</span>
+      </div>
+      <h2 class="post-title">Spring 知识点</h2>
+      <article class="post-article">
+        
+          1. 基本注意点2. Spring 知识点什么是循环依赖？多模块之间互相引用；比如：模块 A 引用 模块 B，当创建 A 的 Bean 的时候，需要用到 B 但是 B没有创建，此刻去创建 B，但是 创建 B 的时候又需要 A ，但是 A 因为 B 没有创建完成。
+Spring 如何解决循环依赖？关键在于 提前暴露未完全创建完毕的 Bean
+Spring 使用 三级缓存 来解决循环依赖：
+
+一级缓存（Singleton Objects Map）：用于存储完全初始化完成的单例 Bean
+二级缓存（Early Singleton Objects Map）：用于存储尚未完全初始化，但已实例化的 Bea
+        
+      </article>
+    </div>
+  </div>
+  </div>
+
+
+  
+  
+  <div class="post-wrapper">
+  <div class="post-wrap-left" data-aos="fade-up">
+    
       <a class="post-link" href="2024/11/03/MQ/" aria-label="MQ 知识点"></a>
     
     
@@ -527,83 +605,6 @@ Java：Java17
 
 
   
-  
-  <div class="post-wrapper">
-  <div class="post-wrap-left" data-aos="fade-up">
-    
-      <a class="post-link" href="2024/10/20/openFeign_Dubbo_base/" aria-label="微服务的远程调用"></a>
-    
-    
-    <div class="post-cover-left">
-      
-        <img data-src="/img/feign_dubbo_logo.jpg" data-sizes="auto" alt="微服务的远程调用" class="lazyload">
-      
-    </div>
-    <div class="post-info">
-      <div class="post-meta">
-        <span><span class="icon-calendar"></span>2024-10-20</span>
-        <span><span class="icon-pencil"></span>4k 字</span>
-        <span><span class="icon-clock"></span>15 分钟</span>
-      </div>
-      <h2 class="post-title">微服务的远程调用</h2>
-      <article class="post-article">
-        
-          
-微服务远程调用 Dubbo 和 openFeign 怎么选择？优劣？计算机网络七层模型中，越往下数据传输越稳定。
-
-我认为二者各有优缺点：
-
-首先 Dubbo 是基于 TCP 进行数据传输，处于网络模型更底层，所以数据传输相对更加稳定。它还是一个相对独立的 RPC 框架，提供完整的服务治理解决方案，适用于大型的分布式项目中.
-openFeign 是基于 HTTP 进行数据传输,属于应用层,相对来讲数据传输受网络等其他因素影响较大一些.它是 springcloud 生态中的一部分.更适用于构建轻量级的微服务.
-dubbo 虽然支持多种协议,但是需要显示的定义接口和实现类,配置各种参数.
-ope
-        
-      </article>
-    </div>
-  </div>
-  </div>
-
-
-  
-  
-  <div class="post-wrapper">
-  <div class="post-wrap-right" data-aos="fade-up">
-    
-      <a class="post-link" href="2024/10/15/computer_network/" aria-label="计算机网络 知识点"></a>
-    
-    
-    <div class="post-cover-right">
-      
-        <img data-src="/img/computer-network-logo.png" data-sizes="auto" alt="计算机网络 知识点" class="lazyload">
-      
-    </div>
-    <div class="post-info">
-      <div class="post-meta">
-        <span><span class="icon-calendar"></span>2024-10-15</span>
-        <span><span class="icon-pencil"></span>2.4k 字</span>
-        <span><span class="icon-clock"></span>8 分钟</span>
-      </div>
-      <h2 class="post-title">计算机网络 知识点</h2>
-      <article class="post-article">
-        
-          1. HTTP常见的 HTTP 状态码有哪些？http状态码主要包括五类：
-第一类为 1xx：表示信息，例如 103 表示缓存预热。
-第二类为 2xx：一般表示请求成功，例如常见的 200。
-第三类为 3xx：表示重定向。
-第四类为 4xx：表示客户端错误，例如 404。
-第五类为 5xx：表示服务器错误。
-HTTP 请求包含哪些内容，请求头和请求体有哪些类型？HTTP 请求由以下机构部分组成：
-
-请求头（Request Headers）：包含各种键值对，用于传递客户端环境、请求内容、认证信息等。
-请求行（Request Line）：包含请求方法（如GET、POST）、请求的资源路径（如 **
-        
-      </article>
-    </div>
-  </div>
-  </div>
-
-
-  
 
 
   <nav id="page-nav" data-aos="fade-up">
@@ -626,15 +627,15 @@ HTTP 请求包含哪些内容，请求头和请求体有哪些类型？HTTP 请�
 <div class="sidebar-state">
   <div class="sidebar-state-article">
     <div>文章</div>
-    <div class="sidebar-state-number">13</div>
+    <div class="sidebar-state-number">15</div>
   </div>
   <div class="sidebar-state-category">
     <div>分类</div>
-    <div class="sidebar-state-number">13</div>
+    <div class="sidebar-state-number">15</div>
   </div>
   <div class="sidebar-state-tag">
     <div>标签</div>
-    <div class="sidebar-state-number">8</div>
+    <div class="sidebar-state-number">9</div>
   </div>
 </div>
 <div class="sidebar-social">
@@ -694,10 +695,10 @@ HTTP 请求包含哪些内容，请求头和请求体有哪些类型？HTTP 请�
     
       <div>
         <span class="icon-brush"></span>
-        121.1k
+        123.6k
         &nbsp;|&nbsp;
         <span class="icon-coffee"></span>
-        07:49
+        07:58
       </div>
     
     
@@ -731,15 +732,15 @@ HTTP 请求包含哪些内容，请求头和请求体有哪些类型？HTTP 请�
 <div class="sidebar-state">
   <div class="sidebar-state-article">
     <div>文章</div>
-    <div class="sidebar-state-number">13</div>
+    <div class="sidebar-state-number">15</div>
   </div>
   <div class="sidebar-state-category">
     <div>分类</div>
-    <div class="sidebar-state-number">13</div>
+    <div class="sidebar-state-number">15</div>
   </div>
   <div class="sidebar-state-tag">
     <div>标签</div>
-    <div class="sidebar-state-number">8</div>
+    <div class="sidebar-state-number">9</div>
   </div>
 </div>
 <div class="sidebar-social">

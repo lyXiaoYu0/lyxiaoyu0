@@ -1,0 +1,698 @@
+
+  <!DOCTYPE html>
+  <html lang="zh-CN"  >
+  <head>
+  <meta charset="utf-8">
+  
+
+  
+
+  
+
+  
+  <script>window.icon_font = '4552607_tq6stt6tcg';window.clipboard_tips = {"success":"复制成功(*^▽^*)","fail":"复制失败 (ﾟ⊿ﾟ)ﾂ","copyright":{"enable":false,"count":50,"content":"本文版权：本博客所有文章除特别声明外，均采用 BY-NC-SA 许可协议。转载请注明出处！"}};</script>
+  
+  
+  <title>
+    Sentinel 服务熔断与限流 知识点 |
+    
+    小羽博客
+  </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin><link rel="preload" as="style" href="https://fonts.googleapis.com/css?family=Mulish:400,400italic,700,700italic%7CNoto%20Serif%20SC:400,400italic,700,700italic&display=swap"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mulish:400,400italic,700,700italic%7CNoto%20Serif%20SC:400,400italic,700,700italic&display=swap" media="print" onload="this.media&#x3D;&#39;all&#39;">
+  
+    <link rel="preload" href="//at.alicdn.com/t/c/font_4552607_tq6stt6tcg.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  
+  
+    
+<link rel="stylesheet" href="../../../../css/loader.css">
+
+  
+  
+    <meta name="description" content="Sentinel 微服务熔断与限流 知识点">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Sentinel 服务熔断与限流 知识点">
+<meta property="og:url" content="http://lyxiaoyu0.github.io/2024/11/04/sentinel_base/index.html">
+<meta property="og:site_name" content="小羽博客">
+<meta property="og:description" content="Sentinel 微服务熔断与限流 知识点">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-11-04T01:09:13.000Z">
+<meta property="article:modified_time" content="2024-11-04T04:32:32.760Z">
+<meta property="article:author" content="林羽">
+<meta property="article:tag" content="微服务">
+<meta name="twitter:card" content="summary">
+  
+  
+  
+    <link rel="shortcut icon" href="../../../../images/favicon.ico">
+  
+  
+<link rel="stylesheet" href="../../../../css/style.css">
+
+  <link rel="preload" href="https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  
+  
+  
+  
+    
+<script src="https://npm.webcache.cn/pace-js@1.2.4/pace.min.js"></script>
+
+  
+  
+    
+<link rel="stylesheet" href="https://npm.webcache.cn/@reimujs/aos@0.0.1/dist/aos.css">
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+  <body>
+    
+  <div id='loader'>
+    <div class="loading-left-bg loading-bg"></div>
+    <div class="loading-right-bg loading-bg"></div>
+    <div class="spinner-box">
+      <div class="loading-taichi">
+        <svg width="150" height="150" viewBox="0 0 1024 1024" class="icon" version="1.1" xmlns="https://www.w3.org/2000/svg" shape-rendering="geometricPrecision">
+          <path d="M303.5 432A80 80 0 0 1 291.5 592A80 80 0 0 1 303.5 432z" fill="#ff5252" />
+          <path d="M512 65A447 447 0 0 1 512 959L512 929A417 417 0 0 0 512 95A417 417 0 0 0 512 929L512 959A447 447 0 0 1 512 65z 
+         M512 95A417 417 0 0 1 929 512A208.5 208.5 0 0 1 720.5 720.5L720.5 592A80 80 0 0 0 720.5 432A80 80 0 0 0 720.5 592L720.5 720.5A208.5 208.5 0 0 1 512 512A208.5 208.5 0 0 0 303.5 303.5A208.5 208.5 0 0 0 95 512A417 417 0 0 1 512 95z" fill="#ff5252" />
+        </svg>
+      </div>
+      <div class="loading-word">小羽正在努力...</div>
+    </div>
+  </div>
+  </div>
+  <script>
+    var time = null;
+    var startLoading = () => {
+      time = Date.now();
+      document.getElementById('loader').classList.remove("loading");
+    }
+    var endLoading = () => {
+      if (!time) {
+        document.body.style.overflow = 'auto';
+        document.getElementById('loader').classList.add("loading");
+      } else {
+        if (Date.now() - time > 500) {
+          time = null;
+          document.body.style.overflow = 'auto';
+          document.getElementById('loader').classList.add("loading");
+        } else {
+          setTimeout(endLoading, 500 - (Date.now() - time));
+          time = null;
+        }
+      }
+    }
+    window.addEventListener('DOMContentLoaded', endLoading);
+    document.getElementById('loader').addEventListener('click', endLoading);
+  </script>
+
+<div id="copy-tooltip" style="pointer-events: none; opacity: 0; transition: all 0.2s ease; position: fixed;top: 50%;left: 50%;z-index: 999;transform: translate(-50%, -50%);color: white;background: rgba(0, 0, 0, 0.5);padding: 10px 15px;border-radius: 10px;">
+</div>
+
+
+    <div id="container">
+      <div id="wrap">
+        <div id="header-nav">
+  <nav id="main-nav">
+    
+      <span class="main-nav-link-wrap">
+        <div class="main-nav-icon icon-taichi"></div>
+        <a class="main-nav-link" href="../../../../index.html">首页</a>
+      </span>
+    
+      <span class="main-nav-link-wrap">
+        <div class="main-nav-icon icon-taichi"></div>
+        <a class="main-nav-link" href="../../../../archives">归档</a>
+      </span>
+    
+      <span class="main-nav-link-wrap">
+        <div class="main-nav-icon icon-taichi"></div>
+        <a class="main-nav-link" href="../../../../about">关于</a>
+      </span>
+    
+      <span class="main-nav-link-wrap">
+        <div class="main-nav-icon icon-taichi"></div>
+        <a class="main-nav-link" href="../../../../friend">友链</a>
+      </span>
+    
+    <a id="main-nav-toggle" class="nav-icon"></a>
+  </nav>
+  <nav id="sub-nav">
+    
+    
+    
+  </nav>
+</div>
+<header id="header">
+  
+    <img fetchpriority="high" src="/img/sentinel_logo.png" alt="Sentinel 服务熔断与限流 知识点">
+  
+  <div id="header-outer">
+    <div id="header-title">
+      
+        
+        
+          <a href="../../../../index.html" id="logo">
+            <h1 data-aos="slide-up">Sentinel 服务熔断与限流 知识点</h1>
+          </a>
+        
+      
+      
+        
+        <h2 id="subtitle-wrap" data-aos="slide-down">
+          
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+        <div id="content">
+          
+          <section id="main"><article id="post-sentinel_base" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-inner" data-aos="fade-up">
+    <div class="article-meta">
+      <div class="article-date">
+  <a href="" class="article-date-link" data-aos="zoom-in">
+    <time datetime="2024-11-04T01:09:13.000Z" itemprop="datePublished">2024-11-04</time>
+    <time style="display: none;" id="post-update-time">2024-11-04</time>
+  </a>
+</div>
+
+      
+  <div class="article-category">
+    <a class="article-category-link" href="categories/Sentinel-%E5%BE%AE%E6%9C%8D%E5%8A%A1%E7%86%94%E6%96%AD%E4%B8%8E%E9%99%90%E6%B5%81/" data-aos="zoom-in">Sentinel 微服务熔断与限流</a>
+  </div>
+
+
+    </div>
+    <div class="hr-line"></div>
+    
+
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+      
+        <blockquote>
+<p>Sentinel 官网：<a target="_blank" rel="noopener" href="https://sentinelguard.io/zh-cn/docs/introduction.html">https://sentinelguard.io/zh-cn/docs/introduction.html</a></p>
+</blockquote>
+<h1 id="1-为什么要用？"><a href="#1-为什么要用？" class="headerlink" title="1. 为什么要用？"></a>1. 为什么要用？</h1><h1 id="2-基本使用-和-基础概念"><a href="#2-基本使用-和-基础概念" class="headerlink" title="2. 基本使用 和 基础概念"></a>2. 基本使用 和 基础概念</h1><ul>
+<li><h3 id="能干嘛？"><a href="#能干嘛？" class="headerlink" title="能干嘛？"></a>能干嘛？</h3><ul>
+<li>从流量路由、流量控制、流量整形、熔断降级、系统自适应过载保护、热点流量防护等多个维度来帮助开发者保障微服务的稳定性。</li>
+</ul>
+</li>
+</ul>
+<h2 id="基础安装使用："><a href="#基础安装使用：" class="headerlink" title="基础安装使用："></a>基础安装使用：</h2><ol>
+<li><p>去git下载jar包：<a target="_blank" rel="noopener" href="https://github.com/alibaba/Sentinel/releases">https://github.com/alibaba/Sentinel/releases</a></p>
+<p>找个合适版本的 jar 包到本地如：sentinel-dashboard-1.8.6.jar</p>
+</li>
+<li><p>保证 8080 端口不能被占用，直接 <code>java -jar  xxxxxxx.jar</code> 启动</p>
+</li>
+<li><p>账号密码均为：sentinel</p>
+</li>
+<li><p>启动 nacos（单节点启动：<code>startup.cmd -m standalone</code>）</p>
+</li>
+<li><p>导入依赖（主要是 Sentinel 的依赖）：</p>
+</li>
+</ol>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 服务熔断降级限流 --&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--SpringCloud alibaba sentinel --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-alibaba-sentinel<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>2021.0.5.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 负载均衡 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-loadbalancer<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.1.7<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!-- nacos注册中心 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-alibaba-nacos-discovery<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>2021.0.5.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!--nacos-config--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-alibaba-nacos-config<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>2021.0.5.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ol start="6">
+<li>YML 配置：</li>
+</ol>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">server:</span></span><br><span class="line">  <span class="attr">port:</span> <span class="number">8401</span></span><br><span class="line"></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">application:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">sentinel-service</span></span><br><span class="line">  <span class="attr">cloud:</span></span><br><span class="line">    <span class="attr">nacos:</span></span><br><span class="line">      <span class="attr">discovery:</span></span><br><span class="line">        <span class="attr">server-addr:</span> <span class="string">localhost:8848</span></span><br><span class="line">    <span class="attr">sentinel:</span></span><br><span class="line">      <span class="attr">transport:</span></span><br><span class="line">        <span class="attr">dashboard:</span> <span class="string">localhost:8080</span> <span class="comment"># 配置 Sentinel dashboard 控制台服务地址</span></span><br><span class="line">        <span class="attr">port:</span> <span class="number">8719</span> <span class="comment"># 默认 8719 端口，假如被占用会自动从 8719 开</span></span><br></pre></td></tr></table></figure>
+
+<ol start="7">
+<li><p>主启动类加一个 Nacos 服务发现的注解：@EnableDiscoveryClient</p>
+</li>
+<li><p>Sentinel 控制台默认 8080 端口，因为 Sentinel 是懒加载的，所以你需要调一次接口才能在控制台显示</p>
+</li>
+<li><p>像那些流控规则配置很简单的，这里就不在赘述了，看看控制台，记得利用 <code>Apache JMeter</code> 进行压力测试，才能看到效果</p>
+</li>
+</ol>
+<h2 id="其余使用说明："><a href="#其余使用说明：" class="headerlink" title="其余使用说明："></a>其余使用说明：</h2><h3 id="流控规则中的链路规则："><a href="#流控规则中的链路规则：" class="headerlink" title="流控规则中的链路规则："></a>流控规则中的链路规则：</h3><ol>
+<li>YML 配置：</li>
+</ol>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">sentinel:</span></span><br><span class="line">  <span class="attr">transport:</span></span><br><span class="line">    <span class="attr">dashboard:</span> <span class="string">localhost:8080</span> <span class="comment"># 配置 Sentinel dashboard 控制台服务地址</span></span><br><span class="line">    <span class="attr">port:</span> <span class="number">8719</span> <span class="comment"># 默认 8719 端口，假如被占用会自动从 8719 开</span></span><br><span class="line">  <span class="attr">web-context-unify:</span> <span class="literal">false</span> <span class="comment"># controller 层的方法对 service 层调用不认为是同一根链路</span></span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><p>控制台面板配置：</p>
+<p>在 流控规则的链路规则下，入口资源就是你的接口，设置这玩意，当请求达到阈值后，<strong>只限制这设置的接口</strong>，对其余的接口不进行限制，设置资源名 <strong>common</strong> 也就是以下注解需要用的</p>
+</li>
+<li><p>新建业务类，使用，@SentinelResource(value &#x3D; <strong>“common”</strong>) 标记方法名</p>
+</li>
+</ol>
+<blockquote>
+<h3 id="流控规则中的流控效果"><a href="#流控规则中的流控效果" class="headerlink" title="流控规则中的流控效果"></a>流控规则中的流控效果</h3><ol>
+<li><h4 id="直接：快速失败（默认）"><a href="#直接：快速失败（默认）" class="headerlink" title="直接：快速失败（默认）"></a>直接：快速失败（默认）</h4><p>直接失败，抛出异常：Blocked by Sentinel（flow limiting）</p>
+</li>
+<li><h4 id="预热-WarmUp（冷启动-预热）："><a href="#预热-WarmUp（冷启动-预热）：" class="headerlink" title="预热 WarmUp（冷启动 预热）："></a>预热 WarmUp（冷启动 预热）：</h4></li>
+</ol>
+<ul>
+<li><strong>概念：</strong> 当流量突然增大的时候，希望系统从空闲状态到繁忙状态的切换时间长一些，希望的是处理请求的数量是缓步增多的，经过预热时间后，到达系统处理请求个数的最大值。</li>
+<li><strong>配置：</strong><ul>
+<li>说明：公式—&gt; 阈值 除以 冷却因子coldFactor（默认为3，源码中默认3），经过预热时长后才会达到阈值。</li>
+<li><strong>控制台配置：</strong> 编辑流控规则有一个流控效果的设置</li>
+<li>案例：比如 —&gt; 单机阈值为 10，预热时长设置 5 秒，所以初始的时候阈值为 10 &#x2F;3 &#x3D; 3，缓步提升，5秒后到达QPS 10。</li>
+</ul>
+</li>
+<li>应用场景：秒杀系统在开启的瞬间，会有很多流量上来，很有可能把系统打死，预热方式就是为了保护系统，可慢慢的把流量放进来，慢慢的把阈值增到设置的阈值。</li>
+</ul>
+<h4 id="3-排队等待"><a href="#3-排队等待" class="headerlink" title="3. 排队等待:"></a>3. 排队等待:</h4><ul>
+<li><p><strong>概念：</strong> 主要用于间隔突发的流量，例如消息队列；</p>
+<p>​			比如：<strong>阈值 QPS&#x3D;2 时，每隔500ms才允许通过下一个请求</strong></p>
+<p>​			But，<strong>匀速排队模式暂时不支持 QPS &gt; 1000 的场景</strong></p>
+</li>
+<li><p><strong>配置：</strong> 直接设置就可以了，但是注意就是有一个配置  <strong>超时时间，当请求排队超过超时时间会直接被超处理，放弃</strong></p>
+</li>
+</ul>
+<h3 id="流控规则阈值类型：并发线程数（道理一致）"><a href="#流控规则阈值类型：并发线程数（道理一致）" class="headerlink" title="流控规则阈值类型：并发线程数（道理一致）"></a>流控规则阈值类型：并发线程数（道理一致）</h3></blockquote>
+<h3 id="熔断规则："><a href="#熔断规则：" class="headerlink" title="熔断规则："></a>熔断规则：</h3><p>熔断策略：慢比例调用<code>SLOW_REQUEST_RATIO</code> 、异常比例<code>ERROR_RATIO</code> 、异常数<code>ERROR_COUNT</code></p>
+<ol>
+<li><h4 id="慢比例调用SLOW-REQUEST-RATIO"><a href="#慢比例调用SLOW-REQUEST-RATIO" class="headerlink" title="慢比例调用SLOW_REQUEST_RATIO"></a>慢比例调用<code>SLOW_REQUEST_RATIO</code></h4>选择以慢调用比例作为阈值，需要设置允许的慢调用 RT (即最大的相应时间)，请求的响应时间大于该值则统计为慢调用。当单位统计时长（<code>statIntervalMs</code>） 内请求数目大于设置的最小请求数目，并且慢调用的比例大于阈值，则接下来的熔断时长内请求会自动被熔断。经过熔断时长后熔断器hi进入探测恢复状态（HALF-OPEN状态），若接下来的一个请求响应时间小于设置的慢调用 RT 则结束熔断，若大于设置的慢调用 RT 则会再次被熔断。</li>
+</ol>
+<ul>
+<li>进入熔断状态判断依据：在统计时长内，实际请求数目 &gt; 设定的最小请求数 且 实际慢调用比例 &gt; 比例阈值，进入熔断状态。<ul>
+<li>调用：一个请求发送到服务器，服务器给与响应，一个响应就是一个调用</li>
+<li>最大RT：即最大的响应时间，指系统对请求做出响应的业务处理时间</li>
+<li>慢调用：处理业务逻辑的实际时间 &gt; 设置的最大RT时间，这个调用叫做慢调用</li>
+<li>慢调用比例：在所以调用中，慢调用占有实际的比例 &#x3D; 慢调用次数 &#x2F; 总调用次数</li>
+<li>比例阈值：自己设定的，比例阈值 &#x3D; 慢调用次数 &#x2F; 调用次数</li>
+<li>统计时长：时间判断依据</li>
+<li>最小请求数：设置的调用最小请求数</li>
+</ul>
+</li>
+<li><strong>熔断状态：</strong><ol>
+<li>熔断状态（保险丝跳闸断电，不可访问）：在接下来的熔断时长内请求会自动被熔断</li>
+<li>探测恢复状态（探路先锋）：熔断时长结束后进入探测恢复状态</li>
+<li>结束熔断（保险丝闭合恢复，可以访问）：在探测恢复状态，如果接下来的一个请求响应时间小于设置的慢调用RT，则结束熔断，否则继续熔断。</li>
+</ol>
+</li>
+</ul>
+<ol start="2">
+<li><h4 id="异常比例ERROR-RATIO"><a href="#异常比例ERROR-RATIO" class="headerlink" title="异常比例ERROR_RATIO"></a>异常比例<code>ERROR_RATIO</code></h4><p>当单位统计时长（<code>statIntervalMs</code>）内请求数目大于设置的最小请求数目，并且异常的比例大于阈值，则接下来的熔断时长内请求会自动被熔断。经过熔断时长后熔断器会进入探测恢复状态（HALF-OPEN 状态），若接下来的一个请求成功完成（没有错误）则结束熔断，否则会再次被熔断。异常比率的阈值范围是<code>[0.0,1.0]</code> ，代表 0% ~100%</p>
+</li>
+<li><h4 id="异常数ERROR-COUNT"><a href="#异常数ERROR-COUNT" class="headerlink" title="异常数ERROR_COUNT"></a>异常数<code>ERROR_COUNT</code></h4><p>当单位统计时长内异常数目超过阈值之后会自动进行熔断。经过熔断时长后熔断器会进入探测恢复状态（HALF-OPEN状态），若接下来的一个请求成功完成（没有错误）则结束熔断，否则会再次被熔断。</p>
+</li>
+</ol>
+<h3 id="SentinelResource-注解"><a href="#SentinelResource-注解" class="headerlink" title="@SentinelResource 注解"></a>@SentinelResource 注解</h3><p>@SentinelReousrce 是一个流量防卫防护组件注解，用于指定防护资源，对配置的资源进行流量控制、熔断降级等功能。<strong>基于服务限流的降级逻辑（openfeign 那个是保证的服务崩溃的降级逻辑）</strong></p>
+<ul>
+<li><strong>注解用法：</strong>value —-&gt; 对应资源名（Sentinel控制面板上的）； blockHandler ——&gt; 指定失败降级的方法名</li>
+</ul>
+<p>使用代码案例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> com.alibaba.csp.sentinel.annotation.SentinelResource;</span><br><span class="line"><span class="keyword">import</span> com.alibaba.csp.sentinel.slots.block.BlockException;</span><br><span class="line"><span class="keyword">import</span> lombok.extern.slf4j.Slf4j;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.GetMapping;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.RestController;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@auther</span> zzyy</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@create</span> 2023-05-30 16:13</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RateLimitController</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="meta">@GetMapping(&quot;/rateLimit/byResource&quot;)</span></span><br><span class="line">    <span class="meta">@SentinelResource(value = &quot;byResourceSentinelResource&quot;,blockHandler = &quot;handleException&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">byResource</span><span class="params">()</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;按资源名称SentinelResource限流测试OK&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">handleException</span><span class="params">(BlockException exception)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;服务不可用@SentinelResource启动&quot;</span>+<span class="string">&quot;\t&quot;</span>+<span class="string">&quot;o(╥﹏╥)o&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>效果提示：</p>
+<ul>
+<li><strong>未</strong>使用这个注解声明降级方法（为默认）：Blocked by Sentine(flow limiting)</li>
+<li><strong>使用</strong>了这个注解声明降级方法：<strong>服务不可用@SentinelResource启动”+”\t”+”o(╥﹏╥)o</strong></li>
+</ul>
+<h1 id="3-知识点总结"><a href="#3-知识点总结" class="headerlink" title="3. 知识点总结"></a>3. 知识点总结</h1>
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+      
+      
+      
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" rel="tag">微服务</a></li></ul>
+
+
+    </footer>
+  </div>
+  
+    
+  <nav id="article-nav" data-aos="fade-up">
+    
+    
+    <div class="article-nav-link-wrap article-nav-link-right">
+      
+        <img data-src="/img/spring_logo.jpg" data-sizes="auto" alt="Spring 知识点" class="lazyload">
+      
+      <a href="../spring_base/"></a>
+      <div class="article-nav-caption">后一篇</div>
+      <h3 class="article-nav-title">
+        
+          Spring 知识点
+        
+      </h3>
+    </div>
+    
+  </nav>
+
+
+  
+</article>
+
+
+
+
+
+
+</section>
+          
+            <aside id="sidebar">
+  <div class="sidebar-wrapper wrap-sticky">
+    <div class="sidebar-wrap" data-aos="fade-up">
+      
+        <div class="sidebar-toc-sidebar"><div class="sidebar-toc">
+  <h3 class="toc-title">文章目录</h3>
+  <div class="sidebar-toc-wrapper toc-div-class" >
+      
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E7%94%A8%EF%BC%9F"><span class="toc-number">1.</span> <span class="toc-text">1. 为什么要用？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8-%E5%92%8C-%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5"><span class="toc-number">2.</span> <span class="toc-text">2. 基本使用 和 基础概念</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%83%BD%E5%B9%B2%E5%98%9B%EF%BC%9F"><span class="toc-number">2.0.1.</span> <span class="toc-text">能干嘛？</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8%EF%BC%9A"><span class="toc-number">2.1.</span> <span class="toc-text">基础安装使用：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BD%99%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E%EF%BC%9A"><span class="toc-number">2.2.</span> <span class="toc-text">其余使用说明：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%81%E6%8E%A7%E8%A7%84%E5%88%99%E4%B8%AD%E7%9A%84%E9%93%BE%E8%B7%AF%E8%A7%84%E5%88%99%EF%BC%9A"><span class="toc-number">2.2.1.</span> <span class="toc-text">流控规则中的链路规则：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%81%E6%8E%A7%E8%A7%84%E5%88%99%E4%B8%AD%E7%9A%84%E6%B5%81%E6%8E%A7%E6%95%88%E6%9E%9C"><span class="toc-number">2.2.2.</span> <span class="toc-text">流控规则中的流控效果</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%9B%B4%E6%8E%A5%EF%BC%9A%E5%BF%AB%E9%80%9F%E5%A4%B1%E8%B4%A5%EF%BC%88%E9%BB%98%E8%AE%A4%EF%BC%89"><span class="toc-number">2.2.2.1.</span> <span class="toc-text">直接：快速失败（默认）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%A2%84%E7%83%AD-WarmUp%EF%BC%88%E5%86%B7%E5%90%AF%E5%8A%A8-%E9%A2%84%E7%83%AD%EF%BC%89%EF%BC%9A"><span class="toc-number">2.2.2.2.</span> <span class="toc-text">预热 WarmUp（冷启动 预热）：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E6%8E%92%E9%98%9F%E7%AD%89%E5%BE%85"><span class="toc-number">2.2.2.3.</span> <span class="toc-text">3. 排队等待:</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%81%E6%8E%A7%E8%A7%84%E5%88%99%E9%98%88%E5%80%BC%E7%B1%BB%E5%9E%8B%EF%BC%9A%E5%B9%B6%E5%8F%91%E7%BA%BF%E7%A8%8B%E6%95%B0%EF%BC%88%E9%81%93%E7%90%86%E4%B8%80%E8%87%B4%EF%BC%89"><span class="toc-number">2.2.3.</span> <span class="toc-text">流控规则阈值类型：并发线程数（道理一致）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%86%94%E6%96%AD%E8%A7%84%E5%88%99%EF%BC%9A"><span class="toc-number">2.2.4.</span> <span class="toc-text">熔断规则：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%85%A2%E6%AF%94%E4%BE%8B%E8%B0%83%E7%94%A8SLOW-REQUEST-RATIO"><span class="toc-number">2.2.4.1.</span> <span class="toc-text">慢比例调用SLOW_REQUEST_RATIO</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BC%82%E5%B8%B8%E6%AF%94%E4%BE%8BERROR-RATIO"><span class="toc-number">2.2.4.2.</span> <span class="toc-text">异常比例ERROR_RATIO</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BC%82%E5%B8%B8%E6%95%B0ERROR-COUNT"><span class="toc-number">2.2.4.3.</span> <span class="toc-text">异常数ERROR_COUNT</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SentinelResource-%E6%B3%A8%E8%A7%A3"><span class="toc-number">2.2.5.</span> <span class="toc-text">@SentinelResource 注解</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93"><span class="toc-number">3.</span> <span class="toc-text">3. 知识点总结</span></a></li></ol>
+      
+  </div>
+</div>
+</div>
+        <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img data-src="/avatar/my_logo.jpg" data-sizes="auto" alt="林羽" class="lazyload">
+  <div class="sidebar-author-name">林羽</div>
+  <div class="sidebar-description"></div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>文章</div>
+    <div class="sidebar-state-number">15</div>
+  </div>
+  <div class="sidebar-state-category">
+    <div>分类</div>
+    <div class="sidebar-state-number">15</div>
+  </div>
+  <div class="sidebar-state-tag">
+    <div>标签</div>
+    <div class="sidebar-state-number">9</div>
+  </div>
+</div>
+<div class="sidebar-social">
+  
+</div>
+<div class="sidebar-menu">
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="../../../../index.html" aria-label="首页"></a>
+      <div class="sidebar-menu-icon icon-taichi"></div>
+      <div class="sidebar-menu-link">首页</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="../../../../archives" aria-label="归档"></a>
+      <div class="sidebar-menu-icon icon-taichi"></div>
+      <div class="sidebar-menu-link">归档</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="../../../../about" aria-label="关于"></a>
+      <div class="sidebar-menu-icon icon-taichi"></div>
+      <div class="sidebar-menu-link">关于</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="../../../../friend" aria-label="友链"></a>
+      <div class="sidebar-menu-icon icon-taichi"></div>
+      <div class="sidebar-menu-link">友链</div>
+    </div>
+  
+</div>
+</div>
+      
+      
+        <div class="sidebar-btn-wrapper" style="position:static">
+          <div class="sidebar-toc-btn current"></div>
+          <div class="sidebar-common-btn"></div>
+        </div>
+      
+    </div>
+  </div>
+
+  
+</aside>
+
+          
+        </div>
+        <footer id="footer">
+  <div style="width: 100%; overflow: hidden">
+    <div class="footer-line"></div>
+  </div>
+  <div id="footer-info">
+    
+    <div>
+      <span class="icon-copyright"></span>
+      2020-2024
+      <span class="footer-info-sep"></span>
+      林羽
+    </div>
+    
+    
+      <div>
+        <span class="icon-brush"></span>
+        123.6k
+        &nbsp;|&nbsp;
+        <span class="icon-coffee"></span>
+        07:58
+      </div>
+    
+    
+    
+    
+      <div>
+        <span class="icon-eye"></span>
+        <span id="busuanzi_container_site_pv">总访问量&nbsp;<span id="busuanzi_value_site_pv"></span></span>
+        &nbsp;|&nbsp;
+        <span class="icon-user"></span>
+        <span id="busuanzi_container_site_uv">总访客量&nbsp;<span id="busuanzi_value_site_uv"></span></span>
+      </div>
+    
+  </div>
+</footer>
+
+        <div class="sidebar-top">
+          <img src="/images/taichi.png" height="50" width="50" alt="backtop" />
+          <div class="arrow-up"></div>
+        </div>
+        <div id="mask"></div>
+      </div>
+      <nav id="mobile-nav">
+  <div class="sidebar-wrap">
+    
+      <div class="sidebar-toc-sidebar"><div class="sidebar-toc">
+  <h3 class="toc-title">文章目录</h3>
+  <div class="sidebar-toc-wrapper toc-div-class" >
+      
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E7%94%A8%EF%BC%9F"><span class="toc-number">1.</span> <span class="toc-text">1. 为什么要用？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8-%E5%92%8C-%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5"><span class="toc-number">2.</span> <span class="toc-text">2. 基本使用 和 基础概念</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%83%BD%E5%B9%B2%E5%98%9B%EF%BC%9F"><span class="toc-number">2.0.1.</span> <span class="toc-text">能干嘛？</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8%EF%BC%9A"><span class="toc-number">2.1.</span> <span class="toc-text">基础安装使用：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BD%99%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E%EF%BC%9A"><span class="toc-number">2.2.</span> <span class="toc-text">其余使用说明：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%81%E6%8E%A7%E8%A7%84%E5%88%99%E4%B8%AD%E7%9A%84%E9%93%BE%E8%B7%AF%E8%A7%84%E5%88%99%EF%BC%9A"><span class="toc-number">2.2.1.</span> <span class="toc-text">流控规则中的链路规则：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%81%E6%8E%A7%E8%A7%84%E5%88%99%E4%B8%AD%E7%9A%84%E6%B5%81%E6%8E%A7%E6%95%88%E6%9E%9C"><span class="toc-number">2.2.2.</span> <span class="toc-text">流控规则中的流控效果</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%9B%B4%E6%8E%A5%EF%BC%9A%E5%BF%AB%E9%80%9F%E5%A4%B1%E8%B4%A5%EF%BC%88%E9%BB%98%E8%AE%A4%EF%BC%89"><span class="toc-number">2.2.2.1.</span> <span class="toc-text">直接：快速失败（默认）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%A2%84%E7%83%AD-WarmUp%EF%BC%88%E5%86%B7%E5%90%AF%E5%8A%A8-%E9%A2%84%E7%83%AD%EF%BC%89%EF%BC%9A"><span class="toc-number">2.2.2.2.</span> <span class="toc-text">预热 WarmUp（冷启动 预热）：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E6%8E%92%E9%98%9F%E7%AD%89%E5%BE%85"><span class="toc-number">2.2.2.3.</span> <span class="toc-text">3. 排队等待:</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%81%E6%8E%A7%E8%A7%84%E5%88%99%E9%98%88%E5%80%BC%E7%B1%BB%E5%9E%8B%EF%BC%9A%E5%B9%B6%E5%8F%91%E7%BA%BF%E7%A8%8B%E6%95%B0%EF%BC%88%E9%81%93%E7%90%86%E4%B8%80%E8%87%B4%EF%BC%89"><span class="toc-number">2.2.3.</span> <span class="toc-text">流控规则阈值类型：并发线程数（道理一致）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%86%94%E6%96%AD%E8%A7%84%E5%88%99%EF%BC%9A"><span class="toc-number">2.2.4.</span> <span class="toc-text">熔断规则：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%85%A2%E6%AF%94%E4%BE%8B%E8%B0%83%E7%94%A8SLOW-REQUEST-RATIO"><span class="toc-number">2.2.4.1.</span> <span class="toc-text">慢比例调用SLOW_REQUEST_RATIO</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BC%82%E5%B8%B8%E6%AF%94%E4%BE%8BERROR-RATIO"><span class="toc-number">2.2.4.2.</span> <span class="toc-text">异常比例ERROR_RATIO</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BC%82%E5%B8%B8%E6%95%B0ERROR-COUNT"><span class="toc-number">2.2.4.3.</span> <span class="toc-text">异常数ERROR_COUNT</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SentinelResource-%E6%B3%A8%E8%A7%A3"><span class="toc-number">2.2.5.</span> <span class="toc-text">@SentinelResource 注解</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93"><span class="toc-number">3.</span> <span class="toc-text">3. 知识点总结</span></a></li></ol>
+      
+  </div>
+</div>
+</div>
+      <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img data-src="/avatar/my_logo.jpg" data-sizes="auto" alt="林羽" class="lazyload">
+  <div class="sidebar-author-name">林羽</div>
+  <div class="sidebar-description"></div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>文章</div>
+    <div class="sidebar-state-number">15</div>
+  </div>
+  <div class="sidebar-state-category">
+    <div>分类</div>
+    <div class="sidebar-state-number">15</div>
+  </div>
+  <div class="sidebar-state-tag">
+    <div>标签</div>
+    <div class="sidebar-state-number">9</div>
+  </div>
+</div>
+<div class="sidebar-social">
+  
+</div>
+<div class="sidebar-menu">
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="../../../../index.html" aria-label="首页"></a>
+      <div class="sidebar-menu-icon icon-taichi"></div>
+      <div class="sidebar-menu-link">首页</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="../../../../archives" aria-label="归档"></a>
+      <div class="sidebar-menu-icon icon-taichi"></div>
+      <div class="sidebar-menu-link">归档</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="../../../../about" aria-label="关于"></a>
+      <div class="sidebar-menu-icon icon-taichi"></div>
+      <div class="sidebar-menu-link">关于</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="../../../../friend" aria-label="友链"></a>
+      <div class="sidebar-menu-icon icon-taichi"></div>
+      <div class="sidebar-menu-link">友链</div>
+    </div>
+  
+</div>
+</div>
+    
+  </div>
+  
+    <div class="sidebar-btn-wrapper">
+      <div class="sidebar-toc-btn current"></div>
+      <div class="sidebar-common-btn"></div>
+    </div>
+  
+</nav>
+
+    </div>
+    
+    
+<script src="https://npm.webcache.cn/lazysizes@5.3.2/lazysizes.min.js"></script>
+
+
+<script src="https://npm.webcache.cn/clipboard@2.0.11/dist/clipboard.min.js"></script>
+
+
+
+<script src="../../../../js/script.js"></script>
+
+
+
+  
+<script src="../../../../js/aos.js"></script>
+
+  <script>
+    var aosInit = () => {
+      AOS.init({
+        duration: 1000,
+        easing: "ease",
+        once: true,
+        offset: 50,
+      });
+    };
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', aosInit);
+    } else {
+      aosInit();
+    }
+  </script>
+
+
+
+<script src="../../../../js/pjax_script.js" data-pjax></script>
+
+
+<script type="module" data-pjax>
+  import PhotoSwipeLightbox from "https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe-lightbox.esm.min.js";
+  
+  const pswp = () => {
+    if (_$$('.article-entry a.article-gallery-item').length > 0) {
+      new PhotoSwipeLightbox({
+        gallery: '.article-entry',
+        children: 'a.article-gallery-item',
+        pswpModule: () => import("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.esm.min.js")
+      }).init();
+    }
+    if(_$$('.article-gallery a.article-gallery-item').length > 0) {
+      new PhotoSwipeLightbox({
+        gallery: '.article-gallery',
+        children: 'a.article-gallery-item',
+        pswpModule: () => import("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.esm.min.js")
+      }).init();
+    }
+    window.lightboxStatus = 'done';
+    window.removeEventListener('lightbox:ready', pswp);
+  }
+  if(window.lightboxStatus === 'ready') {
+    pswp()
+  } else {
+    window.addEventListener('lightbox:ready', pswp);
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<script src="https://npm.webcache.cn/mouse-firework@0.0.4/dist/index.umd.js"></script>
+
+  <script>
+    window.firework && window.firework(JSON.parse('{"excludeElements":["a","button"],"particles":[{"shape":"circle","move":["emit"],"easing":"easeOutExpo","colors":["#ff5252","#ff7c7c","#ffafaf","#ffd0d0"],"number":20,"duration":[1200,1800],"shapeOptions":{"radius":[16,32],"alpha":[0.3,0.5]}},{"shape":"circle","move":["diffuse"],"easing":"easeOutExpo","colors":["#ff0000"],"number":1,"duration":[1200,1800],"shapeOptions":{"radius":20,"alpha":[0.2,0.5],"lineWidth":6}}]}'))
+  </script>
+
+
+
+
+
+
+
+  
+<script src="https://npm.webcache.cn/quicklink@2.3.0/dist/quicklink.umd.js"></script>
+
+  <script data-pjax>
+    window.quicklink?.listen({
+      timeout: 3000,
+      priority: true,
+      ignores: []
+    });
+  </script>
+
+
+<div id="lazy-script">
+  <div>
+    
+  </div>
+</div>
+
+
+  <script>
+    console.log(String.raw`%c 
+ ______     ______     __     __    __     __  __    
+/\  == \   /\  ___\   /\ \   /\ "-./  \   /\ \/\ \   
+\ \  __<   \ \  __\   \ \ \  \ \ \-./\ \  \ \ \_\ \  
+ \ \_\ \_\  \ \_____\  \ \_\  \ \_\ \ \_\  \ \_____\ 
+  \/_/ /_/   \/_____/   \/_/   \/_/  \/_/   \/_____/ 
+                                                  
+`,'color: #ff5252;')
+    console.log('%c Theme.Reimu v' + '0.3.3' + ' %c https://github.com/D-Sketon/hexo-theme-reimu ', 'color: white; background: #ff5252; padding:5px 0;', 'padding:4px;border:1px solid #ff5252;')
+  </script>
+  
+
+
+
+  
+<script src="https://npm.webcache.cn/busuanzi@2.3.0/bsz.pure.mini.js" async></script>
+
+
+
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then((registrations) => {
+      for (let registration of registrations) {
+        registration.unregister();
+      }
+    });
+  }
+</script>
+
+  <!-- hexo injector body_end start -->
+<script src="js/insert_highlight.js" data-pjax></script>
+<!-- hexo injector body_end end --></body>
+  </html>
+
