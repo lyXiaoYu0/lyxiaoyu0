@@ -1,0 +1,694 @@
+
+  <!DOCTYPE html>
+  <html lang="zh-CN"  >
+  <head>
+  <meta charset="utf-8">
+  
+
+  
+
+  
+
+  
+  <script>window.icon_font = '4552607_tq6stt6tcg';window.clipboard_tips = {"success":"复制成功(*^▽^*)","fail":"复制失败 (ﾟ⊿ﾟ)ﾂ","copyright":{"enable":false,"count":50,"content":"本文版权：本博客所有文章除特别声明外，均采用 BY-NC-SA 许可协议。转载请注明出处！"}};</script>
+  
+  
+  <title>
+    Seata 分布式事务 知识点 |
+    
+    小羽博客
+  </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin><link rel="preload" as="style" href="https://fonts.googleapis.com/css?family=Mulish:400,400italic,700,700italic%7CNoto%20Serif%20SC:400,400italic,700,700italic&display=swap"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mulish:400,400italic,700,700italic%7CNoto%20Serif%20SC:400,400italic,700,700italic&display=swap" media="print" onload="this.media&#x3D;&#39;all&#39;">
+  
+    <link rel="preload" href="//at.alicdn.com/t/c/font_4552607_tq6stt6tcg.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  
+  
+    
+<link rel="stylesheet" href="../../../../css/loader.css">
+
+  
+  
+    <meta name="description" content="Seata 分布式事务 知识点">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Seata 分布式事务 知识点">
+<meta property="og:url" content="http://lyxiaoyu0.github.io/2024/11/06/seata_base/index.html">
+<meta property="og:site_name" content="小羽博客">
+<meta property="og:description" content="Seata 分布式事务 知识点">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://lyxiaoyu0.github.io/img/image-20210622202515014.png">
+<meta property="og:image" content="http://lyxiaoyu0.github.io/img/image-20210622202622874.png">
+<meta property="og:image" content="http://lyxiaoyu0.github.io/img/image-20210622203609227.png">
+<meta property="og:image" content="http://lyxiaoyu0.github.io/img/image-20210622204145159.png">
+<meta property="og:image" content="http://lyxiaoyu0.github.io/img/image-20210622205427318.png">
+<meta property="og:image" content="http://lyxiaoyu0.github.io/img/image-20210622205901450.png">
+<meta property="og:image" content="http://lyxiaoyu0.github.io/img/image-20210624151150840.png">
+<meta property="og:image" content="http://lyxiaoyu0.github.io/img/image-20210624151221747.png">
+<meta property="og:image" content="http://lyxiaoyu0.github.io/img/image-20210624151507072.png">
+<meta property="article:published_time" content="2024-11-06T02:46:22.000Z">
+<meta property="article:modified_time" content="2024-11-06T10:10:17.784Z">
+<meta property="article:author" content="林羽">
+<meta property="article:tag" content="微服务">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://lyxiaoyu0.github.io/img/image-20210622202515014.png">
+  
+  
+  
+    <link rel="shortcut icon" href="../../../../images/favicon.ico">
+  
+  
+<link rel="stylesheet" href="../../../../css/style.css">
+
+  <link rel="preload" href="https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  
+  
+  
+  
+    
+<script src="https://npm.webcache.cn/pace-js@1.2.4/pace.min.js"></script>
+
+  
+  
+    
+<link rel="stylesheet" href="https://npm.webcache.cn/@reimujs/aos@0.0.1/dist/aos.css">
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+  <body>
+    
+  <div id='loader'>
+    <div class="loading-left-bg loading-bg"></div>
+    <div class="loading-right-bg loading-bg"></div>
+    <div class="spinner-box">
+      <div class="loading-taichi">
+        <svg width="150" height="150" viewBox="0 0 1024 1024" class="icon" version="1.1" xmlns="https://www.w3.org/2000/svg" shape-rendering="geometricPrecision">
+          <path d="M303.5 432A80 80 0 0 1 291.5 592A80 80 0 0 1 303.5 432z" fill="#ff5252" />
+          <path d="M512 65A447 447 0 0 1 512 959L512 929A417 417 0 0 0 512 95A417 417 0 0 0 512 929L512 959A447 447 0 0 1 512 65z 
+         M512 95A417 417 0 0 1 929 512A208.5 208.5 0 0 1 720.5 720.5L720.5 592A80 80 0 0 0 720.5 432A80 80 0 0 0 720.5 592L720.5 720.5A208.5 208.5 0 0 1 512 512A208.5 208.5 0 0 0 303.5 303.5A208.5 208.5 0 0 0 95 512A417 417 0 0 1 512 95z" fill="#ff5252" />
+        </svg>
+      </div>
+      <div class="loading-word">小羽正在努力...</div>
+    </div>
+  </div>
+  </div>
+  <script>
+    var time = null;
+    var startLoading = () => {
+      time = Date.now();
+      document.getElementById('loader').classList.remove("loading");
+    }
+    var endLoading = () => {
+      if (!time) {
+        document.body.style.overflow = 'auto';
+        document.getElementById('loader').classList.add("loading");
+      } else {
+        if (Date.now() - time > 500) {
+          time = null;
+          document.body.style.overflow = 'auto';
+          document.getElementById('loader').classList.add("loading");
+        } else {
+          setTimeout(endLoading, 500 - (Date.now() - time));
+          time = null;
+        }
+      }
+    }
+    window.addEventListener('DOMContentLoaded', endLoading);
+    document.getElementById('loader').addEventListener('click', endLoading);
+  </script>
+
+<div id="copy-tooltip" style="pointer-events: none; opacity: 0; transition: all 0.2s ease; position: fixed;top: 50%;left: 50%;z-index: 999;transform: translate(-50%, -50%);color: white;background: rgba(0, 0, 0, 0.5);padding: 10px 15px;border-radius: 10px;">
+</div>
+
+
+    <div id="container">
+      <div id="wrap">
+        <div id="header-nav">
+  <nav id="main-nav">
+    
+      <span class="main-nav-link-wrap">
+        <div class="main-nav-icon icon-taichi"></div>
+        <a class="main-nav-link" href="../../../../index.html">首页</a>
+      </span>
+    
+      <span class="main-nav-link-wrap">
+        <div class="main-nav-icon icon-taichi"></div>
+        <a class="main-nav-link" href="../../../../archives">归档</a>
+      </span>
+    
+      <span class="main-nav-link-wrap">
+        <div class="main-nav-icon icon-taichi"></div>
+        <a class="main-nav-link" href="../../../../about">关于</a>
+      </span>
+    
+      <span class="main-nav-link-wrap">
+        <div class="main-nav-icon icon-taichi"></div>
+        <a class="main-nav-link" href="../../../../friend">友链</a>
+      </span>
+    
+    <a id="main-nav-toggle" class="nav-icon"></a>
+  </nav>
+  <nav id="sub-nav">
+    
+    
+    
+  </nav>
+</div>
+<header id="header">
+  
+    <img fetchpriority="high" src="/img/sentinel_logo.png" alt="Seata 分布式事务 知识点">
+  
+  <div id="header-outer">
+    <div id="header-title">
+      
+        
+        
+          <a href="../../../../index.html" id="logo">
+            <h1 data-aos="slide-up">Seata 分布式事务 知识点</h1>
+          </a>
+        
+      
+      
+        
+        <h2 id="subtitle-wrap" data-aos="slide-down">
+          
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+        <div id="content">
+          
+          <section id="main"><article id="post-seata_base" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-inner" data-aos="fade-up">
+    <div class="article-meta">
+      <div class="article-date">
+  <a href="" class="article-date-link" data-aos="zoom-in">
+    <time datetime="2024-11-06T02:46:22.000Z" itemprop="datePublished">2024-11-06</time>
+    <time style="display: none;" id="post-update-time">2024-11-06</time>
+  </a>
+</div>
+
+      
+  <div class="article-category">
+    <a class="article-category-link" href="categories/Seata-%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/" data-aos="zoom-in">Seata 分布式事务</a>
+  </div>
+
+
+    </div>
+    <div class="hr-line"></div>
+    
+
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+      
+        <blockquote>
+<p>Seata中文文档地址：<a target="_blank" rel="noopener" href="https://seata.apache.org/zh-cn/docs/ops/deploy-guide-beginner">https://seata.apache.org/zh-cn/docs/ops/deploy-guide-beginner</a></p>
+</blockquote>
+<p>这里不赘述 Seata 的知识，我感觉官方文档记录的非常详细</p>
+<p>这里就只记录我在网络免费资源中所寻找到简单配置 Seata 的流程</p>
+<h1 id="seata的部署和集成"><a href="#seata的部署和集成" class="headerlink" title="seata的部署和集成"></a>seata的部署和集成</h1><h1 id="一、部署Seata的tc-server"><a href="#一、部署Seata的tc-server" class="headerlink" title="一、部署Seata的tc-server"></a>一、部署Seata的tc-server</h1><h2 id="1-下载"><a href="#1-下载" class="headerlink" title="1.下载"></a>1.下载</h2><p>首先我们要下载seata-server包，地址在<a target="_blank" rel="noopener" href="http://seata.io/zh-cn/blog/download.html">http</a><a target="_blank" rel="noopener" href="http://seata.io/zh-cn/blog/download.html">:&#x2F;&#x2F;seata.io&#x2F;zh-cn&#x2F;blog&#x2F;download</a><a target="_blank" rel="noopener" href="http://seata.io/zh-cn/blog/download.html">.</a><a target="_blank" rel="noopener" href="http://seata.io/zh-cn/blog/download.html">html</a> </p>
+<h2 id="2-解压"><a href="#2-解压" class="headerlink" title="2.解压"></a>2.解压</h2><p>在非中文目录解压缩这个zip包，其目录结构如下：</p>
+<p><img src="/img/image-20210622202515014.png"></p>
+<h2 id="3-修改配置"><a href="#3-修改配置" class="headerlink" title="3.修改配置"></a>3.修改配置</h2><p>修改conf目录下的registry.conf文件：</p>
+<p><img src="/img/image-20210622202622874.png"></p>
+<p>内容如下：</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">registry</span> <span class="string">&#123;</span></span><br><span class="line"><span class="comment">  # tc服务的注册中心类，这里选择nacos，也可以是eureka、zookeeper等</span></span><br><span class="line">  <span class="attr">type</span> = <span class="string">&quot;nacos&quot;</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">nacos</span> <span class="string">&#123;</span></span><br><span class="line"><span class="comment">    # seata tc 服务注册到 nacos的服务名称，可以自定义</span></span><br><span class="line">    <span class="attr">application</span> = <span class="string">&quot;seata-tc-server&quot;</span></span><br><span class="line">    <span class="attr">serverAddr</span> = <span class="string">&quot;127.0.0.1:8848&quot;</span></span><br><span class="line">    <span class="attr">group</span> = <span class="string">&quot;DEFAULT_GROUP&quot;</span></span><br><span class="line">    <span class="attr">namespace</span> = <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="attr">cluster</span> = <span class="string">&quot;SH&quot;</span></span><br><span class="line">    <span class="attr">username</span> = <span class="string">&quot;nacos&quot;</span></span><br><span class="line">    <span class="attr">password</span> = <span class="string">&quot;nacos&quot;</span></span><br><span class="line">  <span class="attr">&#125;</span></span><br><span class="line"><span class="attr">&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="attr">config</span> <span class="string">&#123;</span></span><br><span class="line"><span class="comment">  # 读取tc服务端的配置文件的方式，这里是从nacos配置中心读取，这样如果tc是集群，可以共享配置</span></span><br><span class="line">  <span class="attr">type</span> = <span class="string">&quot;nacos&quot;</span></span><br><span class="line"><span class="comment">  # 配置nacos地址等信息</span></span><br><span class="line">  <span class="attr">nacos</span> <span class="string">&#123;</span></span><br><span class="line">    <span class="attr">serverAddr</span> = <span class="string">&quot;127.0.0.1:8848&quot;</span></span><br><span class="line">    <span class="attr">namespace</span> = <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="attr">group</span> = <span class="string">&quot;SEATA_GROUP&quot;</span></span><br><span class="line">    <span class="attr">username</span> = <span class="string">&quot;nacos&quot;</span></span><br><span class="line">    <span class="attr">password</span> = <span class="string">&quot;nacos&quot;</span></span><br><span class="line">    <span class="attr">dataId</span> = <span class="string">&quot;seataServer.properties&quot;</span></span><br><span class="line">  <span class="attr">&#125;</span></span><br><span class="line"><span class="attr">&#125;</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="4-在nacos添加配置"><a href="#4-在nacos添加配置" class="headerlink" title="4.在nacos添加配置"></a>4.在nacos添加配置</h2><p>特别注意，为了让tc服务的集群可以共享配置，我们选择了nacos作为统一配置中心。因此服务端配置文件seataServer.properties文件需要在nacos中配好。</p>
+<p>格式如下：</p>
+<p><img src="/img/image-20210622203609227.png"></p>
+<p>配置内容如下：</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 数据存储方式，db代表数据库</span></span><br><span class="line"><span class="attr">store.mode</span>=<span class="string">db</span></span><br><span class="line"><span class="attr">store.db.datasource</span>=<span class="string">druid</span></span><br><span class="line"><span class="attr">store.db.dbType</span>=<span class="string">mysql</span></span><br><span class="line"><span class="attr">store.db.driverClassName</span>=<span class="string">com.mysql.jdbc.Driver</span></span><br><span class="line"><span class="attr">store.db.url</span>=<span class="string">jdbc:mysql://127.0.0.1:3306/seata?useUnicode=true&amp;rewriteBatchedStatements=true</span></span><br><span class="line"><span class="attr">store.db.user</span>=<span class="string">root</span></span><br><span class="line"><span class="attr">store.db.password</span>=<span class="string">1234</span></span><br><span class="line"><span class="attr">store.db.minConn</span>=<span class="string">5</span></span><br><span class="line"><span class="attr">store.db.maxConn</span>=<span class="string">30</span></span><br><span class="line"><span class="attr">store.db.globalTable</span>=<span class="string">global_table</span></span><br><span class="line"><span class="attr">store.db.branchTable</span>=<span class="string">branch_table</span></span><br><span class="line"><span class="attr">store.db.queryLimit</span>=<span class="string">100</span></span><br><span class="line"><span class="attr">store.db.lockTable</span>=<span class="string">lock_table</span></span><br><span class="line"><span class="attr">store.db.maxWait</span>=<span class="string">5000</span></span><br><span class="line"><span class="comment"># 事务、日志等配置</span></span><br><span class="line"><span class="attr">server.recovery.committingRetryPeriod</span>=<span class="string">1000</span></span><br><span class="line"><span class="attr">server.recovery.asynCommittingRetryPeriod</span>=<span class="string">1000</span></span><br><span class="line"><span class="attr">server.recovery.rollbackingRetryPeriod</span>=<span class="string">1000</span></span><br><span class="line"><span class="attr">server.recovery.timeoutRetryPeriod</span>=<span class="string">1000</span></span><br><span class="line"><span class="attr">server.maxCommitRetryTimeout</span>=<span class="string">-1</span></span><br><span class="line"><span class="attr">server.maxRollbackRetryTimeout</span>=<span class="string">-1</span></span><br><span class="line"><span class="attr">server.rollbackRetryTimeoutUnlockEnable</span>=<span class="string">false</span></span><br><span class="line"><span class="attr">server.undo.logSaveDays</span>=<span class="string">7</span></span><br><span class="line"><span class="attr">server.undo.logDeletePeriod</span>=<span class="string">86400000</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"># 客户端与服务端传输方式</span></span><br><span class="line"><span class="attr">transport.serialization</span>=<span class="string">seata</span></span><br><span class="line"><span class="attr">transport.compressor</span>=<span class="string">none</span></span><br><span class="line"><span class="comment"># 关闭metrics功能，提高性能</span></span><br><span class="line"><span class="attr">metrics.enabled</span>=<span class="string">false</span></span><br><span class="line"><span class="attr">metrics.registryType</span>=<span class="string">compact</span></span><br><span class="line"><span class="attr">metrics.exporterList</span>=<span class="string">prometheus</span></span><br><span class="line"><span class="attr">metrics.exporterPrometheusPort</span>=<span class="string">9898</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>&#x3D;&#x3D;其中的数据库地址、用户名、密码都需要修改成你自己的数据库信息。&#x3D;&#x3D;</p>
+<h2 id="5-创建数据库表"><a href="#5-创建数据库表" class="headerlink" title="5.创建数据库表"></a>5.创建数据库表</h2><p>特别注意：tc服务在管理分布式事务时，需要记录事务相关数据到数据库中，你需要提前创建好这些表。</p>
+<p>新建一个名为seata的数据库，运行课前资料提供的sql文件：</p>
+<p><img src="/img/image-20210622204145159.png"></p>
+<p>这些表主要记录全局事务、分支事务、全局锁信息：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">SET NAMES utf8mb4;</span><br><span class="line">SET FOREIGN_KEY_CHECKS = 0;</span><br><span class="line"></span><br><span class="line">-- ----------------------------</span><br><span class="line">-- 分支事务表</span><br><span class="line">-- ----------------------------</span><br><span class="line">DROP TABLE IF EXISTS `branch_table`;</span><br><span class="line">CREATE TABLE `branch_table`  (</span><br><span class="line">  `branch_id` bigint(20) NOT NULL,</span><br><span class="line">  `xid` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,</span><br><span class="line">  `transaction_id` bigint(20) NULL DEFAULT NULL,</span><br><span class="line">  `resource_group_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,</span><br><span class="line">  `resource_id` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,</span><br><span class="line">  `branch_type` varchar(8) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,</span><br><span class="line">  `status` tinyint(4) NULL DEFAULT NULL,</span><br><span class="line">  `client_id` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,</span><br><span class="line">  `application_data` varchar(2000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,</span><br><span class="line">  `gmt_create` datetime(6) NULL DEFAULT NULL,</span><br><span class="line">  `gmt_modified` datetime(6) NULL DEFAULT NULL,</span><br><span class="line">  PRIMARY KEY (`branch_id`) USING BTREE,</span><br><span class="line">  INDEX `idx_xid`(`xid`) USING BTREE</span><br><span class="line">) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;</span><br><span class="line"></span><br><span class="line">-- ----------------------------</span><br><span class="line">-- 全局事务表</span><br><span class="line">-- ----------------------------</span><br><span class="line">DROP TABLE IF EXISTS `global_table`;</span><br><span class="line">CREATE TABLE `global_table`  (</span><br><span class="line">  `xid` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,</span><br><span class="line">  `transaction_id` bigint(20) NULL DEFAULT NULL,</span><br><span class="line">  `status` tinyint(4) NOT NULL,</span><br><span class="line">  `application_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,</span><br><span class="line">  `transaction_service_group` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,</span><br><span class="line">  `transaction_name` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,</span><br><span class="line">  `timeout` int(11) NULL DEFAULT NULL,</span><br><span class="line">  `begin_time` bigint(20) NULL DEFAULT NULL,</span><br><span class="line">  `application_data` varchar(2000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,</span><br><span class="line">  `gmt_create` datetime NULL DEFAULT NULL,</span><br><span class="line">  `gmt_modified` datetime NULL DEFAULT NULL,</span><br><span class="line">  PRIMARY KEY (`xid`) USING BTREE,</span><br><span class="line">  INDEX `idx_gmt_modified_status`(`gmt_modified`, `status`) USING BTREE,</span><br><span class="line">  INDEX `idx_transaction_id`(`transaction_id`) USING BTREE</span><br><span class="line">) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;</span><br><span class="line"></span><br><span class="line">SET FOREIGN_KEY_CHECKS = 1;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="6-启动TC服务"><a href="#6-启动TC服务" class="headerlink" title="6.启动TC服务"></a>6.启动TC服务</h2><p>进入bin目录，运行其中的seata-server.bat即可：</p>
+<p><img src="/img/image-20210622205427318.png"></p>
+<p>启动成功后，seata-server应该已经注册到nacos注册中心了。</p>
+<p>打开浏览器，访问nacos地址：<a href="http://localhost:8848，然后进入服务列表页面，可以看到seata-tc-server的信息：">http://localhost:8848，然后进入服务列表页面，可以看到seata-tc-server的信息：</a></p>
+<p><img src="/img/image-20210622205901450.png"></p>
+<h1 id="二、微服务集成seata"><a href="#二、微服务集成seata" class="headerlink" title="二、微服务集成seata"></a>二、微服务集成seata</h1><h2 id="1-引入依赖"><a href="#1-引入依赖" class="headerlink" title="1.引入依赖"></a>1.引入依赖</h2><p>首先，我们需要在微服务中引入seata依赖：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-alibaba-seata<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">exclusions</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!--版本较低，1.3.0，因此排除--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">exclusion</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>seata-spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.seata<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">exclusion</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">exclusions</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--seata starter 采用1.4.2版本--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.seata<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>seata-spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>$&#123;seata.version&#125;<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="2-修改配置文件"><a href="#2-修改配置文件" class="headerlink" title="2.修改配置文件"></a>2.修改配置文件</h2><p>需要修改application.yml文件，添加一些配置：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">seata:</span></span><br><span class="line">  <span class="attr">registry:</span> <span class="comment"># TC服务注册中心的配置，微服务根据这些信息去注册中心获取tc服务地址</span></span><br><span class="line">    <span class="comment"># 参考tc服务自己的registry.conf中的配置</span></span><br><span class="line">    <span class="attr">type:</span> <span class="string">nacos</span></span><br><span class="line">    <span class="attr">nacos:</span> <span class="comment"># tc</span></span><br><span class="line">      <span class="attr">server-addr:</span> <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span><span class="string">:8848</span></span><br><span class="line">      <span class="attr">namespace:</span> <span class="string">&quot;&quot;</span></span><br><span class="line">      <span class="attr">group:</span> <span class="string">DEFAULT_GROUP</span></span><br><span class="line">      <span class="attr">application:</span> <span class="string">seata-tc-server</span> <span class="comment"># tc服务在nacos中的服务名称</span></span><br><span class="line">      <span class="attr">cluster:</span> <span class="string">SH</span></span><br><span class="line">  <span class="attr">tx-service-group:</span> <span class="string">seata-demo</span> <span class="comment"># 事务组，根据这个获取tc服务的cluster名称</span></span><br><span class="line">  <span class="attr">service:</span></span><br><span class="line">    <span class="attr">vgroup-mapping:</span> <span class="comment"># 事务组与TC服务cluster的映射关系</span></span><br><span class="line">      <span class="attr">seata-demo:</span> <span class="string">SH</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="三、TC服务的高可用和异地容灾"><a href="#三、TC服务的高可用和异地容灾" class="headerlink" title="三、TC服务的高可用和异地容灾"></a>三、TC服务的高可用和异地容灾</h1><h2 id="1-模拟异地容灾的TC集群"><a href="#1-模拟异地容灾的TC集群" class="headerlink" title="1.模拟异地容灾的TC集群"></a>1.模拟异地容灾的TC集群</h2><p>计划启动两台seata的tc服务节点：</p>
+<table>
+<thead>
+<tr>
+<th>节点名称</th>
+<th>ip地址</th>
+<th>端口号</th>
+<th>集群名称</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>seata</td>
+<td>127.0.0.1</td>
+<td>8091</td>
+<td>SH</td>
+</tr>
+<tr>
+<td>seata2</td>
+<td>127.0.0.1</td>
+<td>8092</td>
+<td>HZ</td>
+</tr>
+</tbody></table>
+<p>之前我们已经启动了一台seata服务，端口是8091，集群名为SH。</p>
+<p>现在，将seata目录复制一份，起名为seata2</p>
+<p>修改seata2&#x2F;conf&#x2F;registry.conf内容如下：</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">registry</span> &#123;</span><br><span class="line">  <span class="comment"># tc服务的注册中心类，这里选择nacos，也可以是eureka、zookeeper等</span></span><br><span class="line">  <span class="attribute">type</span> = <span class="string">&quot;nacos&quot;</span></span><br><span class="line"></span><br><span class="line">  nacos &#123;</span><br><span class="line">    <span class="comment"># seata tc 服务注册到 nacos的服务名称，可以自定义</span></span><br><span class="line">    <span class="attribute">application</span> = <span class="string">&quot;seata-tc-server&quot;</span></span><br><span class="line">    serverAddr = <span class="string">&quot;127.0.0.1:8848&quot;</span></span><br><span class="line">    group = <span class="string">&quot;DEFAULT_GROUP&quot;</span></span><br><span class="line">    namespace = <span class="string">&quot;&quot;</span></span><br><span class="line">    cluster = <span class="string">&quot;HZ&quot;</span></span><br><span class="line">    username = <span class="string">&quot;nacos&quot;</span></span><br><span class="line">    password = <span class="string">&quot;nacos&quot;</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">config &#123;</span><br><span class="line">  <span class="comment"># 读取tc服务端的配置文件的方式，这里是从nacos配置中心读取，这样如果tc是集群，可以共享配置</span></span><br><span class="line">  <span class="attribute">type</span> = <span class="string">&quot;nacos&quot;</span></span><br><span class="line">  <span class="comment"># 配置nacos地址等信息</span></span><br><span class="line">  nacos &#123;</span><br><span class="line">    <span class="attribute">serverAddr</span> = <span class="string">&quot;127.0.0.1:8848&quot;</span></span><br><span class="line">    namespace = <span class="string">&quot;&quot;</span></span><br><span class="line">    group = <span class="string">&quot;SEATA_GROUP&quot;</span></span><br><span class="line">    username = <span class="string">&quot;nacos&quot;</span></span><br><span class="line">    password = <span class="string">&quot;nacos&quot;</span></span><br><span class="line">    dataId = <span class="string">&quot;seataServer.properties&quot;</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>进入seata2&#x2F;bin目录，然后运行命令：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">seata<span class="literal">-server</span>.bat <span class="literal">-p</span> <span class="number">8092</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>打开nacos控制台，查看服务列表：</p>
+<p><img src="/img/image-20210624151150840.png"></p>
+<p>点进详情查看：</p>
+<p><img src="/img/image-20210624151221747.png"></p>
+<h2 id="2-将事务组映射配置到nacos"><a href="#2-将事务组映射配置到nacos" class="headerlink" title="2.将事务组映射配置到nacos"></a>2.将事务组映射配置到nacos</h2><p>接下来，我们需要将tx-service-group与cluster的映射关系都配置到nacos配置中心。</p>
+<p>新建一个配置：</p>
+<p><img src="/img/image-20210624151507072.png"></p>
+<p>配置的内容如下：</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 事务组映射关系</span></span><br><span class="line"><span class="attr">service.vgroupMapping.seata-demo</span>=<span class="string">SH</span></span><br><span class="line"></span><br><span class="line"><span class="attr">service.enableDegrade</span>=<span class="string">false</span></span><br><span class="line"><span class="attr">service.disableGlobalTransaction</span>=<span class="string">false</span></span><br><span class="line"><span class="comment"># 与TC服务的通信配置</span></span><br><span class="line"><span class="attr">transport.type</span>=<span class="string">TCP</span></span><br><span class="line"><span class="attr">transport.server</span>=<span class="string">NIO</span></span><br><span class="line"><span class="attr">transport.heartbeat</span>=<span class="string">true</span></span><br><span class="line"><span class="attr">transport.enableClientBatchSendRequest</span>=<span class="string">false</span></span><br><span class="line"><span class="attr">transport.threadFactory.bossThreadPrefix</span>=<span class="string">NettyBoss</span></span><br><span class="line"><span class="attr">transport.threadFactory.workerThreadPrefix</span>=<span class="string">NettyServerNIOWorker</span></span><br><span class="line"><span class="attr">transport.threadFactory.serverExecutorThreadPrefix</span>=<span class="string">NettyServerBizHandler</span></span><br><span class="line"><span class="attr">transport.threadFactory.shareBossWorker</span>=<span class="string">false</span></span><br><span class="line"><span class="attr">transport.threadFactory.clientSelectorThreadPrefix</span>=<span class="string">NettyClientSelector</span></span><br><span class="line"><span class="attr">transport.threadFactory.clientSelectorThreadSize</span>=<span class="string">1</span></span><br><span class="line"><span class="attr">transport.threadFactory.clientWorkerThreadPrefix</span>=<span class="string">NettyClientWorkerThread</span></span><br><span class="line"><span class="attr">transport.threadFactory.bossThreadSize</span>=<span class="string">1</span></span><br><span class="line"><span class="attr">transport.threadFactory.workerThreadSize</span>=<span class="string">default</span></span><br><span class="line"><span class="attr">transport.shutdown.wait</span>=<span class="string">3</span></span><br><span class="line"><span class="comment"># RM配置</span></span><br><span class="line"><span class="attr">client.rm.asyncCommitBufferLimit</span>=<span class="string">10000</span></span><br><span class="line"><span class="attr">client.rm.lock.retryInterval</span>=<span class="string">10</span></span><br><span class="line"><span class="attr">client.rm.lock.retryTimes</span>=<span class="string">30</span></span><br><span class="line"><span class="attr">client.rm.lock.retryPolicyBranchRollbackOnConflict</span>=<span class="string">true</span></span><br><span class="line"><span class="attr">client.rm.reportRetryCount</span>=<span class="string">5</span></span><br><span class="line"><span class="attr">client.rm.tableMetaCheckEnable</span>=<span class="string">false</span></span><br><span class="line"><span class="attr">client.rm.tableMetaCheckerInterval</span>=<span class="string">60000</span></span><br><span class="line"><span class="attr">client.rm.sqlParserType</span>=<span class="string">druid</span></span><br><span class="line"><span class="attr">client.rm.reportSuccessEnable</span>=<span class="string">false</span></span><br><span class="line"><span class="attr">client.rm.sagaBranchRegisterEnable</span>=<span class="string">false</span></span><br><span class="line"><span class="comment"># TM配置</span></span><br><span class="line"><span class="attr">client.tm.commitRetryCount</span>=<span class="string">5</span></span><br><span class="line"><span class="attr">client.tm.rollbackRetryCount</span>=<span class="string">5</span></span><br><span class="line"><span class="attr">client.tm.defaultGlobalTransactionTimeout</span>=<span class="string">60000</span></span><br><span class="line"><span class="attr">client.tm.degradeCheck</span>=<span class="string">false</span></span><br><span class="line"><span class="attr">client.tm.degradeCheckAllowTimes</span>=<span class="string">10</span></span><br><span class="line"><span class="attr">client.tm.degradeCheckPeriod</span>=<span class="string">2000</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"># undo日志配置</span></span><br><span class="line"><span class="attr">client.undo.dataValidation</span>=<span class="string">true</span></span><br><span class="line"><span class="attr">client.undo.logSerialization</span>=<span class="string">jackson</span></span><br><span class="line"><span class="attr">client.undo.onlyCareUpdateColumns</span>=<span class="string">true</span></span><br><span class="line"><span class="attr">client.undo.logTable</span>=<span class="string">undo_log</span></span><br><span class="line"><span class="attr">client.undo.compress.enable</span>=<span class="string">true</span></span><br><span class="line"><span class="attr">client.undo.compress.type</span>=<span class="string">zip</span></span><br><span class="line"><span class="attr">client.undo.compress.threshold</span>=<span class="string">64k</span></span><br><span class="line"><span class="attr">client.log.exceptionRate</span>=<span class="string">100</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="3-微服务读取nacos配置"><a href="#3-微服务读取nacos配置" class="headerlink" title="3.微服务读取nacos配置"></a>3.微服务读取nacos配置</h2><p>接下来，需要修改每一个微服务的application.yml文件，让微服务读取nacos中的client.properties文件：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">seata:</span></span><br><span class="line">  <span class="attr">config:</span></span><br><span class="line">    <span class="attr">type:</span> <span class="string">nacos</span></span><br><span class="line">    <span class="attr">nacos:</span></span><br><span class="line">      <span class="attr">server-addr:</span> <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span><span class="string">:8848</span></span><br><span class="line">      <span class="attr">username:</span> <span class="string">nacos</span></span><br><span class="line">      <span class="attr">password:</span> <span class="string">nacos</span></span><br><span class="line">      <span class="attr">group:</span> <span class="string">SEATA_GROUP</span></span><br><span class="line">      <span class="attr">data-id:</span> <span class="string">client.properties</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>重启微服务，现在微服务到底是连接tc的SH集群，还是tc的HZ集群，都统一由nacos的client.properties来决定了。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+      
+      
+      
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item" data-aos="zoom-in"><a class="article-tag-list-link" href="tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" rel="tag">微服务</a></li></ul>
+
+
+    </footer>
+  </div>
+  
+    
+  <nav id="article-nav" data-aos="fade-up">
+    
+    
+    <div class="article-nav-link-wrap article-nav-link-right">
+      
+        <img data-src="/img/sentinel_logo.png" data-sizes="auto" alt="Sentinel 服务熔断与限流 知识点" class="lazyload">
+      
+      <a href="../../04/sentinel_base/"></a>
+      <div class="article-nav-caption">后一篇</div>
+      <h3 class="article-nav-title">
+        
+          Sentinel 服务熔断与限流 知识点
+        
+      </h3>
+    </div>
+    
+  </nav>
+
+
+  
+</article>
+
+
+
+
+
+
+</section>
+          
+            <aside id="sidebar">
+  <div class="sidebar-wrapper wrap-sticky">
+    <div class="sidebar-wrap" data-aos="fade-up">
+      
+        <div class="sidebar-toc-sidebar"><div class="sidebar-toc">
+  <h3 class="toc-title">文章目录</h3>
+  <div class="sidebar-toc-wrapper toc-div-class" >
+      
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#seata%E7%9A%84%E9%83%A8%E7%BD%B2%E5%92%8C%E9%9B%86%E6%88%90"><span class="toc-number">1.</span> <span class="toc-text">seata的部署和集成</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E9%83%A8%E7%BD%B2Seata%E7%9A%84tc-server"><span class="toc-number">2.</span> <span class="toc-text">一、部署Seata的tc-server</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%B8%8B%E8%BD%BD"><span class="toc-number">2.1.</span> <span class="toc-text">1.下载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E8%A7%A3%E5%8E%8B"><span class="toc-number">2.2.</span> <span class="toc-text">2.解压</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE"><span class="toc-number">2.3.</span> <span class="toc-text">3.修改配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%9C%A8nacos%E6%B7%BB%E5%8A%A0%E9%85%8D%E7%BD%AE"><span class="toc-number">2.4.</span> <span class="toc-text">4.在nacos添加配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E5%BA%93%E8%A1%A8"><span class="toc-number">2.5.</span> <span class="toc-text">5.创建数据库表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E5%90%AF%E5%8A%A8TC%E6%9C%8D%E5%8A%A1"><span class="toc-number">2.6.</span> <span class="toc-text">6.启动TC服务</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%9B%86%E6%88%90seata"><span class="toc-number">3.</span> <span class="toc-text">二、微服务集成seata</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%BC%95%E5%85%A5%E4%BE%9D%E8%B5%96"><span class="toc-number">3.1.</span> <span class="toc-text">1.引入依赖</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">3.2.</span> <span class="toc-text">2.修改配置文件</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81TC%E6%9C%8D%E5%8A%A1%E7%9A%84%E9%AB%98%E5%8F%AF%E7%94%A8%E5%92%8C%E5%BC%82%E5%9C%B0%E5%AE%B9%E7%81%BE"><span class="toc-number">4.</span> <span class="toc-text">三、TC服务的高可用和异地容灾</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E6%A8%A1%E6%8B%9F%E5%BC%82%E5%9C%B0%E5%AE%B9%E7%81%BE%E7%9A%84TC%E9%9B%86%E7%BE%A4"><span class="toc-number">4.1.</span> <span class="toc-text">1.模拟异地容灾的TC集群</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%B0%86%E4%BA%8B%E5%8A%A1%E7%BB%84%E6%98%A0%E5%B0%84%E9%85%8D%E7%BD%AE%E5%88%B0nacos"><span class="toc-number">4.2.</span> <span class="toc-text">2.将事务组映射配置到nacos</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%BE%AE%E6%9C%8D%E5%8A%A1%E8%AF%BB%E5%8F%96nacos%E9%85%8D%E7%BD%AE"><span class="toc-number">4.3.</span> <span class="toc-text">3.微服务读取nacos配置</span></a></li></ol></li></ol>
+      
+  </div>
+</div>
+</div>
+        <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img data-src="/avatar/my_logo.jpg" data-sizes="auto" alt="林羽" class="lazyload">
+  <div class="sidebar-author-name">林羽</div>
+  <div class="sidebar-description"></div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>文章</div>
+    <div class="sidebar-state-number">16</div>
+  </div>
+  <div class="sidebar-state-category">
+    <div>分类</div>
+    <div class="sidebar-state-number">16</div>
+  </div>
+  <div class="sidebar-state-tag">
+    <div>标签</div>
+    <div class="sidebar-state-number">9</div>
+  </div>
+</div>
+<div class="sidebar-social">
+  
+</div>
+<div class="sidebar-menu">
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="../../../../index.html" aria-label="首页"></a>
+      <div class="sidebar-menu-icon icon-taichi"></div>
+      <div class="sidebar-menu-link">首页</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="../../../../archives" aria-label="归档"></a>
+      <div class="sidebar-menu-icon icon-taichi"></div>
+      <div class="sidebar-menu-link">归档</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="../../../../about" aria-label="关于"></a>
+      <div class="sidebar-menu-icon icon-taichi"></div>
+      <div class="sidebar-menu-link">关于</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="../../../../friend" aria-label="友链"></a>
+      <div class="sidebar-menu-icon icon-taichi"></div>
+      <div class="sidebar-menu-link">友链</div>
+    </div>
+  
+</div>
+</div>
+      
+      
+        <div class="sidebar-btn-wrapper" style="position:static">
+          <div class="sidebar-toc-btn current"></div>
+          <div class="sidebar-common-btn"></div>
+        </div>
+      
+    </div>
+  </div>
+
+  
+</aside>
+
+          
+        </div>
+        <footer id="footer">
+  <div style="width: 100%; overflow: hidden">
+    <div class="footer-line"></div>
+  </div>
+  <div id="footer-info">
+    
+    <div>
+      <span class="icon-copyright"></span>
+      2020-2024
+      <span class="footer-info-sep"></span>
+      林羽
+    </div>
+    
+    
+      <div>
+        <span class="icon-brush"></span>
+        127.7k
+        &nbsp;|&nbsp;
+        <span class="icon-coffee"></span>
+        08:17
+      </div>
+    
+    
+    
+    
+      <div>
+        <span class="icon-eye"></span>
+        <span id="busuanzi_container_site_pv">总访问量&nbsp;<span id="busuanzi_value_site_pv"></span></span>
+        &nbsp;|&nbsp;
+        <span class="icon-user"></span>
+        <span id="busuanzi_container_site_uv">总访客量&nbsp;<span id="busuanzi_value_site_uv"></span></span>
+      </div>
+    
+  </div>
+</footer>
+
+        <div class="sidebar-top">
+          <img src="/images/taichi.png" height="50" width="50" alt="backtop" />
+          <div class="arrow-up"></div>
+        </div>
+        <div id="mask"></div>
+      </div>
+      <nav id="mobile-nav">
+  <div class="sidebar-wrap">
+    
+      <div class="sidebar-toc-sidebar"><div class="sidebar-toc">
+  <h3 class="toc-title">文章目录</h3>
+  <div class="sidebar-toc-wrapper toc-div-class" >
+      
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#seata%E7%9A%84%E9%83%A8%E7%BD%B2%E5%92%8C%E9%9B%86%E6%88%90"><span class="toc-number">1.</span> <span class="toc-text">seata的部署和集成</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E9%83%A8%E7%BD%B2Seata%E7%9A%84tc-server"><span class="toc-number">2.</span> <span class="toc-text">一、部署Seata的tc-server</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%B8%8B%E8%BD%BD"><span class="toc-number">2.1.</span> <span class="toc-text">1.下载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E8%A7%A3%E5%8E%8B"><span class="toc-number">2.2.</span> <span class="toc-text">2.解压</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE"><span class="toc-number">2.3.</span> <span class="toc-text">3.修改配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%9C%A8nacos%E6%B7%BB%E5%8A%A0%E9%85%8D%E7%BD%AE"><span class="toc-number">2.4.</span> <span class="toc-text">4.在nacos添加配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E5%BA%93%E8%A1%A8"><span class="toc-number">2.5.</span> <span class="toc-text">5.创建数据库表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E5%90%AF%E5%8A%A8TC%E6%9C%8D%E5%8A%A1"><span class="toc-number">2.6.</span> <span class="toc-text">6.启动TC服务</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%9B%86%E6%88%90seata"><span class="toc-number">3.</span> <span class="toc-text">二、微服务集成seata</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%BC%95%E5%85%A5%E4%BE%9D%E8%B5%96"><span class="toc-number">3.1.</span> <span class="toc-text">1.引入依赖</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">3.2.</span> <span class="toc-text">2.修改配置文件</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81TC%E6%9C%8D%E5%8A%A1%E7%9A%84%E9%AB%98%E5%8F%AF%E7%94%A8%E5%92%8C%E5%BC%82%E5%9C%B0%E5%AE%B9%E7%81%BE"><span class="toc-number">4.</span> <span class="toc-text">三、TC服务的高可用和异地容灾</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E6%A8%A1%E6%8B%9F%E5%BC%82%E5%9C%B0%E5%AE%B9%E7%81%BE%E7%9A%84TC%E9%9B%86%E7%BE%A4"><span class="toc-number">4.1.</span> <span class="toc-text">1.模拟异地容灾的TC集群</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%B0%86%E4%BA%8B%E5%8A%A1%E7%BB%84%E6%98%A0%E5%B0%84%E9%85%8D%E7%BD%AE%E5%88%B0nacos"><span class="toc-number">4.2.</span> <span class="toc-text">2.将事务组映射配置到nacos</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%BE%AE%E6%9C%8D%E5%8A%A1%E8%AF%BB%E5%8F%96nacos%E9%85%8D%E7%BD%AE"><span class="toc-number">4.3.</span> <span class="toc-text">3.微服务读取nacos配置</span></a></li></ol></li></ol>
+      
+  </div>
+</div>
+</div>
+      <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img data-src="/avatar/my_logo.jpg" data-sizes="auto" alt="林羽" class="lazyload">
+  <div class="sidebar-author-name">林羽</div>
+  <div class="sidebar-description"></div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>文章</div>
+    <div class="sidebar-state-number">16</div>
+  </div>
+  <div class="sidebar-state-category">
+    <div>分类</div>
+    <div class="sidebar-state-number">16</div>
+  </div>
+  <div class="sidebar-state-tag">
+    <div>标签</div>
+    <div class="sidebar-state-number">9</div>
+  </div>
+</div>
+<div class="sidebar-social">
+  
+</div>
+<div class="sidebar-menu">
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="../../../../index.html" aria-label="首页"></a>
+      <div class="sidebar-menu-icon icon-taichi"></div>
+      <div class="sidebar-menu-link">首页</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="../../../../archives" aria-label="归档"></a>
+      <div class="sidebar-menu-icon icon-taichi"></div>
+      <div class="sidebar-menu-link">归档</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="../../../../about" aria-label="关于"></a>
+      <div class="sidebar-menu-icon icon-taichi"></div>
+      <div class="sidebar-menu-link">关于</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="../../../../friend" aria-label="友链"></a>
+      <div class="sidebar-menu-icon icon-taichi"></div>
+      <div class="sidebar-menu-link">友链</div>
+    </div>
+  
+</div>
+</div>
+    
+  </div>
+  
+    <div class="sidebar-btn-wrapper">
+      <div class="sidebar-toc-btn current"></div>
+      <div class="sidebar-common-btn"></div>
+    </div>
+  
+</nav>
+
+    </div>
+    
+    
+<script src="https://npm.webcache.cn/lazysizes@5.3.2/lazysizes.min.js"></script>
+
+
+<script src="https://npm.webcache.cn/clipboard@2.0.11/dist/clipboard.min.js"></script>
+
+
+
+<script src="../../../../js/script.js"></script>
+
+
+
+  
+<script src="../../../../js/aos.js"></script>
+
+  <script>
+    var aosInit = () => {
+      AOS.init({
+        duration: 1000,
+        easing: "ease",
+        once: true,
+        offset: 50,
+      });
+    };
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', aosInit);
+    } else {
+      aosInit();
+    }
+  </script>
+
+
+
+<script src="../../../../js/pjax_script.js" data-pjax></script>
+
+
+<script type="module" data-pjax>
+  import PhotoSwipeLightbox from "https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe-lightbox.esm.min.js";
+  
+  const pswp = () => {
+    if (_$$('.article-entry a.article-gallery-item').length > 0) {
+      new PhotoSwipeLightbox({
+        gallery: '.article-entry',
+        children: 'a.article-gallery-item',
+        pswpModule: () => import("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.esm.min.js")
+      }).init();
+    }
+    if(_$$('.article-gallery a.article-gallery-item').length > 0) {
+      new PhotoSwipeLightbox({
+        gallery: '.article-gallery',
+        children: 'a.article-gallery-item',
+        pswpModule: () => import("https://npm.webcache.cn/photoswipe@5.4.4/dist/photoswipe.esm.min.js")
+      }).init();
+    }
+    window.lightboxStatus = 'done';
+    window.removeEventListener('lightbox:ready', pswp);
+  }
+  if(window.lightboxStatus === 'ready') {
+    pswp()
+  } else {
+    window.addEventListener('lightbox:ready', pswp);
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<script src="https://npm.webcache.cn/mouse-firework@0.0.4/dist/index.umd.js"></script>
+
+  <script>
+    window.firework && window.firework(JSON.parse('{"excludeElements":["a","button"],"particles":[{"shape":"circle","move":["emit"],"easing":"easeOutExpo","colors":["#ff5252","#ff7c7c","#ffafaf","#ffd0d0"],"number":20,"duration":[1200,1800],"shapeOptions":{"radius":[16,32],"alpha":[0.3,0.5]}},{"shape":"circle","move":["diffuse"],"easing":"easeOutExpo","colors":["#ff0000"],"number":1,"duration":[1200,1800],"shapeOptions":{"radius":20,"alpha":[0.2,0.5],"lineWidth":6}}]}'))
+  </script>
+
+
+
+
+
+
+
+  
+<script src="https://npm.webcache.cn/quicklink@2.3.0/dist/quicklink.umd.js"></script>
+
+  <script data-pjax>
+    window.quicklink?.listen({
+      timeout: 3000,
+      priority: true,
+      ignores: []
+    });
+  </script>
+
+
+<div id="lazy-script">
+  <div>
+    
+  </div>
+</div>
+
+
+  <script>
+    console.log(String.raw`%c 
+ ______     ______     __     __    __     __  __    
+/\  == \   /\  ___\   /\ \   /\ "-./  \   /\ \/\ \   
+\ \  __<   \ \  __\   \ \ \  \ \ \-./\ \  \ \ \_\ \  
+ \ \_\ \_\  \ \_____\  \ \_\  \ \_\ \ \_\  \ \_____\ 
+  \/_/ /_/   \/_____/   \/_/   \/_/  \/_/   \/_____/ 
+                                                  
+`,'color: #ff5252;')
+    console.log('%c Theme.Reimu v' + '0.3.3' + ' %c https://github.com/D-Sketon/hexo-theme-reimu ', 'color: white; background: #ff5252; padding:5px 0;', 'padding:4px;border:1px solid #ff5252;')
+  </script>
+  
+
+
+
+  
+<script src="https://npm.webcache.cn/busuanzi@2.3.0/bsz.pure.mini.js" async></script>
+
+
+
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then((registrations) => {
+      for (let registration of registrations) {
+        registration.unregister();
+      }
+    });
+  }
+</script>
+
+  <!-- hexo injector body_end start -->
+<script src="js/insert_highlight.js" data-pjax></script>
+<!-- hexo injector body_end end --></body>
+  </html>
+
