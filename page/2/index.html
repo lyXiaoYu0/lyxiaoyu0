@@ -177,10 +177,52 @@
   <div class="post-wrapper">
   <div class="post-wrap-left" data-aos="fade-up">
     
-      <a class="post-link" href="../../2024/10/22/cloud_base/" aria-label="微服务基础 知识点"></a>
+      <a class="post-link" href="../../2024/10/25/spring_log/" aria-label="Spring 的日志系统"></a>
     
     
     <div class="post-cover-left">
+      
+        <img data-src="/img/spring_log.jpg" data-sizes="auto" alt="Spring 的日志系统" class="lazyload">
+      
+    </div>
+    <div class="post-info">
+      <div class="post-meta">
+        <span><span class="icon-calendar"></span>2024-10-25</span>
+        <span><span class="icon-pencil"></span>4.2k 字</span>
+        <span><span class="icon-clock"></span>18 分钟</span>
+      </div>
+      <h2 class="post-title">Spring 的日志系统</h2>
+      <article class="post-article">
+        
+          1. logback 配置说明更换依赖（spring 默认使用的是 logback）
+
+配置文件yml：
+
+（注意：一旦配置了logback.xml这个文件，其余这里的配置会失效，以 log4j2.xml 文件中的配置为基准）
+12logging:  config: classpath:logback.xml # log4j2 日志配置文件
+
+
+将 文件中的 logback.xml 文件粘贴到resource文件目录中
+
+日志生成位置：项目根目录下的 log 文件中 ，分层记录
+
+logback.xml 文件内容如下：12345678910111213141516171819202122232
+        
+      </article>
+    </div>
+  </div>
+  </div>
+
+
+  
+  
+  <div class="post-wrapper">
+  <div class="post-wrap-right" data-aos="fade-up">
+    
+      <a class="post-link" href="../../2024/10/22/cloud_base/" aria-label="微服务基础 知识点"></a>
+    
+    
+    <div class="post-cover-right">
       
         <img data-src="/img/cloud_logo.jpg" data-sizes="auto" alt="微服务基础 知识点" class="lazyload">
       
@@ -231,12 +273,12 @@ Java：Java17
   
   
   <div class="post-wrapper">
-  <div class="post-wrap-right" data-aos="fade-up">
+  <div class="post-wrap-left" data-aos="fade-up">
     
       <a class="post-link" href="../../2024/10/20/openFeign_Dubbo_base/" aria-label="微服务的远程调用"></a>
     
     
-    <div class="post-cover-right">
+    <div class="post-cover-left">
       
         <img data-src="/img/feign_dubbo_logo.jpg" data-sizes="auto" alt="微服务的远程调用" class="lazyload">
       
@@ -269,12 +311,12 @@ ope
   
   
   <div class="post-wrapper">
-  <div class="post-wrap-left" data-aos="fade-up">
+  <div class="post-wrap-right" data-aos="fade-up">
     
       <a class="post-link" href="../../2024/10/15/computer_network/" aria-label="计算机网络 知识点"></a>
     
     
-    <div class="post-cover-left">
+    <div class="post-cover-right">
       
         <img data-src="/img/computer-network-logo.png" data-sizes="auto" alt="计算机网络 知识点" class="lazyload">
       
@@ -308,12 +350,12 @@ HTTP 请求包含哪些内容，请求头和请求体有哪些类型？HTTP 请�
   
   
   <div class="post-wrapper">
-  <div class="post-wrap-right" data-aos="fade-up">
+  <div class="post-wrap-left" data-aos="fade-up">
     
       <a class="post-link" href="../../2024/10/10/linux_centos7/" aria-label="Linux_centos7  知识点"></a>
     
     
-    <div class="post-cover-right">
+    <div class="post-cover-left">
       
         <img data-src="/img/linux_logo.png" data-sizes="auto" alt="Linux_centos7  知识点" class="lazyload">
       
@@ -350,12 +392,12 @@ HTTP 请求包含哪些内容，请求头和请求体有哪些类型？HTTP 请�
   
   
   <div class="post-wrapper">
-  <div class="post-wrap-left" data-aos="fade-up">
+  <div class="post-wrap-right" data-aos="fade-up">
     
       <a class="post-link" href="../../2024/09/25/mysql_index/" aria-label="MySQL 知识点"></a>
     
     
-    <div class="post-cover-left">
+    <div class="post-cover-right">
       
         <img data-src="/img/mysql_logo.png" data-sizes="auto" alt="MySQL 知识点" class="lazyload">
       
@@ -383,12 +425,12 @@ HTTP 请求包含哪些内容，请求头和请求体有哪些类型？HTTP 请�
   
   
   <div class="post-wrapper">
-  <div class="post-wrap-right" data-aos="fade-up">
+  <div class="post-wrap-left" data-aos="fade-up">
     
       <a class="post-link" href="../../2024/07/12/design_pattern/" aria-label="设计模式 知识点"></a>
     
     
-    <div class="post-cover-right">
+    <div class="post-cover-left">
       
         <img data-src="/img/design_pattern_logo.jpg" data-sizes="auto" alt="设计模式 知识点" class="lazyload">
       
@@ -439,15 +481,15 @@ HTTP 请求包含哪些内容，请求头和请求体有哪些类型？HTTP 请�
 <div class="sidebar-state">
   <div class="sidebar-state-article">
     <div>文章</div>
-    <div class="sidebar-state-number">16</div>
+    <div class="sidebar-state-number">17</div>
   </div>
   <div class="sidebar-state-category">
     <div>分类</div>
-    <div class="sidebar-state-number">16</div>
+    <div class="sidebar-state-number">17</div>
   </div>
   <div class="sidebar-state-tag">
     <div>标签</div>
-    <div class="sidebar-state-number">9</div>
+    <div class="sidebar-state-number">10</div>
   </div>
 </div>
 <div class="sidebar-social">
@@ -507,10 +549,10 @@ HTTP 请求包含哪些内容，请求头和请求体有哪些类型？HTTP 请�
     
       <div>
         <span class="icon-brush"></span>
-        129.9k
+        133.6k
         &nbsp;|&nbsp;
         <span class="icon-coffee"></span>
-        08:26
+        08:41
       </div>
     
     
@@ -544,15 +586,15 @@ HTTP 请求包含哪些内容，请求头和请求体有哪些类型？HTTP 请�
 <div class="sidebar-state">
   <div class="sidebar-state-article">
     <div>文章</div>
-    <div class="sidebar-state-number">16</div>
+    <div class="sidebar-state-number">17</div>
   </div>
   <div class="sidebar-state-category">
     <div>分类</div>
-    <div class="sidebar-state-number">16</div>
+    <div class="sidebar-state-number">17</div>
   </div>
   <div class="sidebar-state-tag">
     <div>标签</div>
-    <div class="sidebar-state-number">9</div>
+    <div class="sidebar-state-number">10</div>
   </div>
 </div>
 <div class="sidebar-social">

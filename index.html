@@ -177,32 +177,50 @@
   <div class="post-wrapper">
   <div class="post-wrap-left" data-aos="fade-up">
     
-      <a class="post-link" href="2024/11/06/seata_base/" aria-label="Seata 分布式事务 知识点"></a>
+      <a class="post-link" href="2024/11/10/es-easy-ues/" aria-label="Elasticsearch 简单快速使用"></a>
     
     
     <div class="post-cover-left">
       
-        <img data-src="/img/sentinel_logo.png" data-sizes="auto" alt="Seata 分布式事务 知识点" class="lazyload">
+        <img data-src="/img/es_logo.jpg" data-sizes="auto" alt="Elasticsearch 简单快速使用" class="lazyload">
       
     </div>
     <div class="post-info">
       <div class="post-meta">
-        <span><span class="icon-calendar"></span>2024-11-06</span>
-        <span><span class="icon-pencil"></span>1.9k 字</span>
-        <span><span class="icon-clock"></span>9 分钟</span>
+        <span><span class="icon-calendar"></span>2024-11-10</span>
+        <span><span class="icon-pencil"></span>2.5k 字</span>
+        <span><span class="icon-clock"></span>11 分钟</span>
       </div>
-      <h2 class="post-title">Seata 分布式事务 知识点</h2>
+      <h2 class="post-title">Elasticsearch 简单快速使用</h2>
       <article class="post-article">
         
           
-Seata中文文档地址：https://seata.apache.org/zh-cn/docs/ops/deploy-guide-beginner
+Eass-es 官网地址：https://www.easy-es.cn
 
-这里不赘述 Seata 的知识，我感觉官方文档记录的非常详细
-这里就只记录我在网络免费资源中所寻找到简单配置 Seata 的流程
-seata的部署和集成一、部署Seata的tc-server1.下载首先我们要下载seata-server包，地址在http:&amp;#x2F;&amp;#x2F;seata.io&amp;#x2F;zh-cn&amp;#x2F;blog&amp;#x2F;download.html 
-2.解压在非中文目录解压缩这个zip包，其目录结构如下：
+1、基本概念
+这里我个人是不准备学 ES 的哈，所以这里没去整理，可以找一下资料，互联网时代资料很全的
 
-3.修改
+与 MP 的差异：
+
+
+
+
+MP
+EE
+差异原因
+
+
+
+启动类注解
+@MapperScan(“xxx”)
+@EsMapperScan(“xxx”)
+一个项目中可能会同时用到MP和EE,避免同一系统中同时引入同名注解时,需要加全路径区分
+
+
+父类Mapper命名
+BaseMapper&amp;lt;T&amp;gt;
+BaseEsMapper&amp;lt;T&amp;gt;
+一个项目中可能会同时用到MP和EE,避免继承时误继承到MP的Mapper
         
       </article>
     </div>
@@ -215,10 +233,49 @@ seata的部署和集成一、部署Seata的tc-server1.下载首先我们要下�
   <div class="post-wrapper">
   <div class="post-wrap-right" data-aos="fade-up">
     
-      <a class="post-link" href="2024/11/04/sentinel_base/" aria-label="Sentinel 服务熔断与限流 知识点"></a>
+      <a class="post-link" href="2024/11/06/seata_base/" aria-label="Seata 分布式事务 知识点"></a>
     
     
     <div class="post-cover-right">
+      
+        <img data-src="/img/sentinel_logo.png" data-sizes="auto" alt="Seata 分布式事务 知识点" class="lazyload">
+      
+    </div>
+    <div class="post-info">
+      <div class="post-meta">
+        <span><span class="icon-calendar"></span>2024-11-06</span>
+        <span><span class="icon-pencil"></span>3k 字</span>
+        <span><span class="icon-clock"></span>13 分钟</span>
+      </div>
+      <h2 class="post-title">Seata 分布式事务 知识点</h2>
+      <article class="post-article">
+        
+          
+Seata中文文档地址：https://seata.apache.org/zh-cn/docs/ops/deploy-guide-beginner
+
+我感觉官方文档记录的非常详细
+Seata —&amp;gt; Simple Extensible Autonomous Transaction Architecture（简单可扩展的自治事务架构）
+历史发展：
+
+2014 年，阿里中间件团队发布 TXC（Taobao Transaction Constructor）
+2016 年，TXC 在经过产品化改造后，以 GTS（Global Transaction Service） 的身份登陆阿里云
+2019 
+        
+      </article>
+    </div>
+  </div>
+  </div>
+
+
+  
+  
+  <div class="post-wrapper">
+  <div class="post-wrap-left" data-aos="fade-up">
+    
+      <a class="post-link" href="2024/11/04/sentinel_base/" aria-label="Sentinel 服务熔断与限流 知识点"></a>
+    
+    
+    <div class="post-cover-left">
       
         <img data-src="/img/sentinel_logo.png" data-sizes="auto" alt="Sentinel 服务熔断与限流 知识点" class="lazyload">
       
@@ -256,12 +313,12 @@ Sentinel 官网：https://sentinelguard.io/zh-cn/docs/introduction.html
   
   
   <div class="post-wrapper">
-  <div class="post-wrap-left" data-aos="fade-up">
+  <div class="post-wrap-right" data-aos="fade-up">
     
       <a class="post-link" href="2024/11/04/spring_base/" aria-label="Spring 知识点"></a>
     
     
-    <div class="post-cover-left">
+    <div class="post-cover-right">
       
         <img data-src="/img/spring_logo.jpg" data-sizes="auto" alt="Spring 知识点" class="lazyload">
       
@@ -291,12 +348,12 @@ Spring 使用 三级缓存 来解决循环依赖：
   
   
   <div class="post-wrapper">
-  <div class="post-wrap-right" data-aos="fade-up">
+  <div class="post-wrap-left" data-aos="fade-up">
     
       <a class="post-link" href="2024/11/03/MQ/" aria-label="MQ 知识点"></a>
     
     
-    <div class="post-cover-right">
+    <div class="post-cover-left">
       
         <img data-src="/img/MQ_logo.png" data-sizes="auto" alt="MQ 知识点" class="lazyload">
       
@@ -335,12 +392,12 @@ AMQP 高级消息队列协议是应用层协议的一个开放标
   
   
   <div class="post-wrapper">
-  <div class="post-wrap-left" data-aos="fade-up">
+  <div class="post-wrap-right" data-aos="fade-up">
     
       <a class="post-link" href="2024/11/01/nacos/" aria-label="Nacos 知识点"></a>
     
     
-    <div class="post-cover-left">
+    <div class="post-cover-right">
       
         <img data-src="/img/0023-nacos_logo.png" data-sizes="auto" alt="Nacos 知识点" class="lazyload">
       
@@ -378,12 +435,12 @@ Nacos &amp;#x3D; Spring Cloud Consul
   
   
   <div class="post-wrapper">
-  <div class="post-wrap-right" data-aos="fade-up">
+  <div class="post-wrap-left" data-aos="fade-up">
     
       <a class="post-link" href="2024/11/01/docker_use/" aria-label="Docker_CentOS 安装使用指南"></a>
     
     
-    <div class="post-cover-right">
+    <div class="post-cover-left">
       
         <img data-src="/img/docker_logo.png" data-sizes="auto" alt="Docker_CentOS 安装使用指南" class="lazyload">
       
@@ -414,12 +471,12 @@ Docker CE 分为 stable test 和 nightly 三个更新频道。
   
   
   <div class="post-wrapper">
-  <div class="post-wrap-left" data-aos="fade-up">
+  <div class="post-wrap-right" data-aos="fade-up">
     
       <a class="post-link" href="2024/10/27/openFeign(nacos)/" aria-label="openFeign（nacos）—— 知识点"></a>
     
     
-    <div class="post-cover-left">
+    <div class="post-cover-right">
       
         <img data-src="/img/springcloud.png" data-sizes="auto" alt="openFeign（nacos）—— 知识点" class="lazyload">
       
@@ -449,12 +506,12 @@ Feign 也是 Spring Cloud Netflix 组件之一，结合 Spirng Cloud
   
   
   <div class="post-wrapper">
-  <div class="post-wrap-right" data-aos="fade-up">
+  <div class="post-wrap-left" data-aos="fade-up">
     
       <a class="post-link" href="2024/10/25/gateway_base/" aria-label="Gateway 知识点"></a>
     
     
-    <div class="post-cover-right">
+    <div class="post-cover-left">
       
         <img data-src="/img/springcloud.png" data-sizes="auto" alt="Gateway 知识点" class="lazyload">
       
@@ -487,12 +544,12 @@ https://docs.spring.io/spring-cloud-gateway/docs/current/reference/html/#the-aft
   
   
   <div class="post-wrapper">
-  <div class="post-wrap-left" data-aos="fade-up">
+  <div class="post-wrap-right" data-aos="fade-up">
     
       <a class="post-link" href="2024/10/25/redis/" aria-label="Redis 知识点"></a>
     
     
-    <div class="post-cover-left">
+    <div class="post-cover-right">
       
         <img data-src="/img/redis_logo.png" data-sizes="auto" alt="Redis 知识点" class="lazyload">
       
@@ -545,48 +602,6 @@ Redis 的原子性
 
 
   
-  
-  <div class="post-wrapper">
-  <div class="post-wrap-right" data-aos="fade-up">
-    
-      <a class="post-link" href="2024/10/25/spring_log/" aria-label="Spring 的日志系统"></a>
-    
-    
-    <div class="post-cover-right">
-      
-        <img data-src="/img/spring_log.jpg" data-sizes="auto" alt="Spring 的日志系统" class="lazyload">
-      
-    </div>
-    <div class="post-info">
-      <div class="post-meta">
-        <span><span class="icon-calendar"></span>2024-10-25</span>
-        <span><span class="icon-pencil"></span>4.2k 字</span>
-        <span><span class="icon-clock"></span>18 分钟</span>
-      </div>
-      <h2 class="post-title">Spring 的日志系统</h2>
-      <article class="post-article">
-        
-          1. logback 配置说明更换依赖（spring 默认使用的是 logback）
-
-配置文件yml：
-
-（注意：一旦配置了logback.xml这个文件，其余这里的配置会失效，以 log4j2.xml 文件中的配置为基准）
-12logging:  config: classpath:logback.xml # log4j2 日志配置文件
-
-
-将 文件中的 logback.xml 文件粘贴到resource文件目录中
-
-日志生成位置：项目根目录下的 log 文件中 ，分层记录
-
-logback.xml 文件内容如下：12345678910111213141516171819202122232
-        
-      </article>
-    </div>
-  </div>
-  </div>
-
-
-  
 
 
   <nav id="page-nav" data-aos="fade-up">
@@ -609,15 +624,15 @@ logback.xml 文件内容如下：12345678910111213141516171819202122232
 <div class="sidebar-state">
   <div class="sidebar-state-article">
     <div>文章</div>
-    <div class="sidebar-state-number">16</div>
+    <div class="sidebar-state-number">17</div>
   </div>
   <div class="sidebar-state-category">
     <div>分类</div>
-    <div class="sidebar-state-number">16</div>
+    <div class="sidebar-state-number">17</div>
   </div>
   <div class="sidebar-state-tag">
     <div>标签</div>
-    <div class="sidebar-state-number">9</div>
+    <div class="sidebar-state-number">10</div>
   </div>
 </div>
 <div class="sidebar-social">
@@ -677,10 +692,10 @@ logback.xml 文件内容如下：12345678910111213141516171819202122232
     
       <div>
         <span class="icon-brush"></span>
-        129.9k
+        133.6k
         &nbsp;|&nbsp;
         <span class="icon-coffee"></span>
-        08:26
+        08:41
       </div>
     
     
@@ -714,15 +729,15 @@ logback.xml 文件内容如下：12345678910111213141516171819202122232
 <div class="sidebar-state">
   <div class="sidebar-state-article">
     <div>文章</div>
-    <div class="sidebar-state-number">16</div>
+    <div class="sidebar-state-number">17</div>
   </div>
   <div class="sidebar-state-category">
     <div>分类</div>
-    <div class="sidebar-state-number">16</div>
+    <div class="sidebar-state-number">17</div>
   </div>
   <div class="sidebar-state-tag">
     <div>标签</div>
-    <div class="sidebar-state-number">9</div>
+    <div class="sidebar-state-number">10</div>
   </div>
 </div>
 <div class="sidebar-social">
